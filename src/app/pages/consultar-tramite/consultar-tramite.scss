@@ -1,0 +1,171 @@
+/* Usamos las variables globales de styles.scss */
+
+/* Contenedor para centrar la tarjeta */
+.page-container {
+  max-width: 600px; // Más chico que el de "iniciar"
+  margin: 2rem auto;
+}
+
+/* ---------------------------------- */
+/* 1. ESTILOS DE FORMULARIO "PREMIUM"
+/* (Copiados de iniciar-reclamo para consistencia)
+/* ---------------------------------- */
+.form-field {
+  margin-bottom: 1.5rem;
+  text-align: left;
+
+  label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+
+  input[type="text"] {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--color-borde-suave);
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+
+    &:focus {
+      outline: none;
+      border-color: var(--color-primario);
+      /* ¡ARREGLO! Usamos RGBA con 40% de opacidad */
+      box-shadow: 0 0 0 3px rgba(26, 35, 126, 0.4); 
+    }
+  }
+
+  .error {
+    color: var(--color-error);
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+  }
+}
+
+/* Estilo para el input con ícono */
+.form-field.icon-field {
+  position: relative; 
+  .icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(50%); // <--- ¡¡¡EL BUG ESTÁ ACÁ!!!
+    height: 20px;
+    width: 20px;
+    color: #9e9e9e;
+  }
+  input[type="text"] { padding-left: 2.5rem; }
+}
+
+/* ---------------------------------- */
+/* 2. ESTILOS DE RESULTADOS
+/* ---------------------------------- */
+.resultado-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1rem 0;
+}
+
+/* Spinner de carga (reutilizamos el de 'iniciar-reclamo') */
+.spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Animación de giro */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Spinner GRANDE para la vista de "Cargando..." */
+.spinner-grande {
+  width: 50px;
+  height: 50px;
+  border: 5px solid var(--color-borde-suave);
+  border-top-color: var(--color-primario);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1.5rem;
+}
+
+/* ---------------------------------- */
+/* Vista de ÉXITO
+/* ---------------------------------- */
+.exito {
+  .success-subtitle {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--color-texto-secundario);
+    margin-bottom: 0.5rem;
+  }
+
+  .estado-box {
+    font-family: 'monospace', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-exito); // ¡Verde!
+    
+    /* ¡ARREGLO! Usamos RGBA (el color verde con transparencia) */
+    background-color: rgba(40, 167, 69, 0.15); // 15% de opacidad para el fondo
+    border: 2px dashed rgba(40, 167, 69, 0.4); // 40% de opacidad para el borde
+
+    padding: 1rem 2.5rem;
+    margin: 0.5rem 0 1.5rem 0;
+    border-radius: var(--borde-redondeado);
+  }
+
+  .detalle {
+    font-size: 0.9rem;
+    color: var(--color-texto-secundario);
+  }
+}
+
+/* ---------------------------------- */
+/* Vista de ERROR
+/* ---------------------------------- */
+.error-mensaje {
+  .error-icon {
+    color: var(--color-error);
+    margin-bottom: 1rem;
+    svg {
+      width: 50px;
+      height: 50px;
+    }
+  }
+  .error-title {
+    color: var(--color-error);
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  p {
+    font-size: 1.1rem;
+    color: var(--color-texto-principal);
+    margin-bottom: 2rem;
+  }
+}
+
+/* ---------------------------------- */
+/* Botones (reusamos los globales)
+/* ---------------------------------- */
+.btn-largo {
+  width: 100%;
+  margin-top: 1.5rem; // Espacio antes del botón
+}
+
+.btn-secondary {
+  background-color: var(--color-secundario); // Esto es #424242
+  color: white;
+  
+  /* ¡ARREGLO! Usamos un color harcodeado más oscuro */
+  &:hover { 
+    background-color: #2b2b2b; 
+  }
+}

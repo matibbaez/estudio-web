@@ -1,0 +1,92 @@
+/* ¡¡¡FIX: VERSIÓN CON COLORES HARCODEADOS!!!
+  Ignoramos las variables de styles.scss por si no las está levantando.
+*/
+
+/* ---------------------------------- */
+/* Animaciones (Estas quedan igual)
+/* ---------------------------------- */
+@keyframes slideInLeft {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
+
+/* ---------------------------------- */
+/* Estilos del Toast (Con colores forzados)
+/* ---------------------------------- */
+.toast {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 8px; /* Borde redondeado */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Sombra */
+  background-color: #ffffff; /* ¡FORZAMOS FONDO BLANCO! */
+  border-left: 5px solid;
+  width: 350px;
+  
+  animation: slideInLeft 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+
+  &.fade-out {
+    animation: fadeOut 0.5s ease-out both;
+  }
+}
+
+.toast-icon {
+  flex-shrink: 0;
+  margin-right: 0.75rem;
+  
+  svg {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+.toast-message {
+  flex-grow: 1;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #212121; /* ¡¡¡FORZAMOS TEXTO NEGRO!!! */
+}
+
+.toast-close {
+  flex-shrink: 0;
+  margin-left: 1rem;
+  background: none;
+  border: none;
+  color: #757575; /* ¡FORZAMOS COLOR GRIS PARA LA 'X'! */
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.3s;
+  
+  svg { width: 20px; height: 20px; }
+  &:hover { opacity: 1; }
+}
+
+/* ---------------------------------- */
+/* Variantes de Color (FORZADAS)
+/* ---------------------------------- */
+.toast.success {
+  border-left-color: #28a745; /* Verde */
+  .toast-icon { color: #28a745; }
+}
+
+.toast.error {
+  border-left-color: #dc3545; /* Rojo */
+  .toast-icon { color: #dc3545; }
+}

@@ -1,0 +1,65 @@
+<div class="page-container">
+  <app-card [titulo]="'Consultar Estado del Trámite'">
+
+    <ng-container *ngIf="!isLoading && !resultado && !errorMensaje">
+      <p>Ingrese el código de seguimiento que recibió al iniciar su reclamo.</p>
+      
+      <form class="consulta-form" [formGroup]="consultaForm" (ngSubmit)="onSubmit()">
+        
+        <div class="form-field icon-field">
+          <label for="codigo">Código de Seguimiento *</label>
+          <span class="icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M1.5 6.375c0-1.036.84-1.875 1.875-1.875h13.25c1.035 0 1.875.84 1.875 1.875v7.25c0 1.035-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 011.5 13.625v-7.25zm1.875-.375a.375.375 0 00-.375.375v7.25c0 .207.168.375.375.375h13.25a.375.375 0 00.375-.375v-7.25a.375.375 0 00-.375-.375H3.375z" clip-rule="evenodd" />
+              <path d="M9.172 8.172a.75.75 0 011.06 0l1.25 1.25a.75.75 0 11-1.06 1.06L10 9.793l-.422.421a.75.75 0 01-1.06-1.06l.654-.654zM7 11.25a.75.75 0 000 1.5h6a.75.75 0 000-1.5H7z" />
+            </svg>
+          </span>
+          <input id="codigo" type="text" formControlName="codigo" placeholder="ABC-12345">
+          <div *ngIf="consultaForm.get('codigo')?.invalid && consultaForm.get('codigo')?.touched" class="error">
+            El código es obligatorio.
+          </div>
+        </div>
+
+        <button type="submit" [disabled]="consultaForm.invalid || isLoading" class="btn btn-primary btn-largo">
+          <span *ngIf="!isLoading">Consultar</span>
+          <span *ngIf="isLoading"><div class="spinner"></div></span>
+        </button>
+      </form>
+    </ng-container>
+
+    <div *ngIf="isLoading" class="resultado-container loading">
+      <div class="spinner-grande"></div>
+      <p>Buscando información...</p>
+    </div>
+
+    <div *ngIf="resultado" class="resultado-container exito">
+      <p class="success-subtitle">Estado de su trámite:</p>
+      
+      <div class="estado-box">
+        {{ resultado.estado | uppercase }}
+      </div>
+      
+      <p class="detalle">Iniciado el: {{ resultado.fecha_creacion | date:'dd/MM/yyyy' }}</p>
+      <p class="detalle">Código: {{ resultado.codigo_seguimiento }}</p>
+      
+      <button (click)="resetForm()" class="btn btn-secondary btn-largo">
+        Consultar otro código
+      </button>
+    </div>
+
+    <div *ngIf="errorMensaje && !isLoading" class="resultado-container error-mensaje">
+      <div class="error-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+        </svg>
+      </div>
+      <h2 class="error-title">Error en la consulta</h2>
+      <p>{{ errorMensaje }}</p>
+      
+      <button (click)="resetForm()" class="btn btn-primary btn-largo">
+        Intentar de nuevo
+      </button>
+    </div>
+
+  </app-card>
+</div>

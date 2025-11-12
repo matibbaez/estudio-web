@@ -1,0 +1,33 @@
+<nav class="navbar" [class.menu-abierto]="menuAbierto">
+  <div class="navbar-container">
+    
+    <a class="navbar-brand" routerLink="/" (click)="cerrarMenu()">
+      Estudio Jurídico
+    </a>
+    
+    <div class="navbar-links-desktop">
+      <a routerLink="/iniciar-reclamo" routerLinkActive="active">
+        Iniciar Reclamo
+      </a>
+      <a routerLink="/consultar-tramite" routerLinkActive="active">
+        Consultar Trámite
+      </a>
+    </div>
+
+    <button class="mobile-menu-button" (click)="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+  </div>
+
+  <div class="mobile-menu-links" [class.abierto]="menuAbierto">
+    <a routerLink="/iniciar-reclamo" routerLinkActive="active" (click)="cerrarMenu()">
+      Iniciar Reclamo
+    </a>
+    <a routerLink="/consultar-tramite" routerLinkActive="active" (click)="cerrarMenu()">
+      Consultar Trámite
+    </a>
+  </div>
+</nav>

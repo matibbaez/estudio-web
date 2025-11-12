@@ -1,0 +1,176 @@
+<div class="page-container">
+
+  <app-card [titulo]="isSubmitted ? '¡Reclamo Enviado con Éxito!' : 'Iniciar un Nuevo Reclamo'">
+
+    <ng-container *ngIf="!isSubmitted">
+
+      <p>Complete el formulario. Los campos con * son obligatorios.</p>
+
+      <p class="links-formularios">
+        ¿No tenés los formularios?
+        <a href="[LINK_PDF_1]" target="_blank">Descargá el Formulario 1</a> |
+        <a href="[LINK_PDF_2]" target="_blank">Descargá el Formulario 2</a>
+      </p>
+
+      <form [formGroup]="reclamoForm" (ngSubmit)="onSubmit()" class="form-moderno">
+
+        <fieldset>
+          <legend>Datos Personales</legend>
+          
+          <div class="form-field icon-field">
+            <label for="nombre">Nombre Completo *</label>
+            <span class="icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M10 8a3 3 0 100-6 3 3 0 000 6zM3.465 14.493a1.23 1.23 0 00.41 1.412A9.957 9.957 0 0010 18c2.31 0 4.438-.78 6.125-2.095a1.23 1.23 0 00.41-1.412A9.99 9.99 0 0010 12.75a9.99 9.99 0 00-6.535 1.743z" /></svg>
+            </span>
+            <input id="nombre" type="text" formControlName="nombre" placeholder="Juan Pérez">
+            <div *ngIf="reclamoForm.get('nombre')?.invalid && reclamoForm.get('nombre')?.touched" class="error">
+              El nombre es obligatorio.
+            </div>
+          </div>
+
+          <div class="form-field icon-field">
+            <label for="dni">DNI *</label>
+            <span class="icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M2.5 3A1.5 1.5 0 001 4.5v11A1.5 1.5 0 002.5 17h15a1.5 1.5 0 001.5-1.5v-11A1.5 1.5 0 0017.5 3h-15zM2 4.5a.5.5 0 01.5-.5h15a.5.5 0 01.5.5v2.39l-8.18 5.454a.75.75 0 01-.76.02L2 6.872V4.5zm0 3.528l7.67 5.113a2.25 2.25 0 002.26 0L18 8.028v7.472a.5.5 0 01-.5.5h-15a.5.5 0 01-.5-.5V8.028z" /></svg>
+            </span>
+            <input id="dni" type="text" formControlName="dni" placeholder="Sin puntos ni espacios">
+            <div *ngIf="reclamoForm.get('dni')?.invalid && reclamoForm.get('dni')?.touched" class="error">
+              El DNI es obligatorio.
+            </div>
+          </div>
+          
+          <div class="form-field icon-field">
+            <label for="email">Email *</label>
+            <span class="icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M3 4a2 2 0 00-2 2v1.161l8.441 4.221a1.25 1.25 0 001.118 0L19 7.161V6a2 2 0 00-2-2H3zM19 8.839l-7.77 3.885a2.75 2.75 0 01-2.46 0L1 8.839V14a2 2 0 002 2h14a2 2 0 002-2V8.839z" /></svg>
+            </span>
+            <input id="email" type="email" formControlName="email" placeholder="juan.perez@email.com">
+            <div *ngIf="reclamoForm.get('email')?.invalid && reclamoForm.get('email')?.touched" class="error">
+              Email inválido.
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Documentación Requerida</legend>
+          
+          <div class="form-field-file">
+            <label for="fileDNI">1. DNI (frente y dorso en un PDF) *</label>
+            <label class="file-upload-label" for="fileDNI">
+                <span class="btn-file">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M9.25 13.25a.75.75 0 001.5 0V4.636l2.955 3.129a.75.75 0 001.09-1.03l-4.25-4.5a.75.75 0 00-1.09 0l-4.25 4.5a.75.75 0 101.09 1.03L9.25 4.636V13.25z" /><path d="M3.5 12.75a.75.75 0 00-1.5 0v2.5A2.75 2.75 0 004.75 18h10.5A2.75 2.75 0 0018 15.25v-2.5a.75.75 0 00-1.5 0v2.5c0 .69-.56 1.25-1.25 1.25H4.75c-.69 0-1.25-.56-1.25-1.25v-2.5z" /></svg>
+                  Seleccionar Archivo
+                </span>
+                <span class="file-name">
+                  {{ reclamoForm.get('fileDNI')?.value?.name || 'Aún no se seleccionó...' }}
+                </span>
+            </label>
+            <input id="fileDNI" type="file" (change)="onFileChange($event, 'fileDNI')" class="file-input-hidden">
+            <div *ngIf="reclamoForm.get('fileDNI')?.invalid && reclamoForm.get('fileDNI')?.touched" class="error error-file">
+              El archivo del DNI es obligatorio.
+            </div>
+          </div>
+          
+          <div class="form-field-file">
+            <label for="fileRecibo">2. Recibo de Sueldo (PDF) *</label>
+            <label class="file-upload-label" for="fileRecibo">
+                <span class="btn-file">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M9.25 13.25a.75.75 0 001.5 0V4.636l2.955 3.129a.75.75 0 001.09-1.03l-4.25-4.5a.75.75 0 00-1.09 0l-4.25 4.5a.75.75 0 101.09 1.03L9.25 4.636V13.25z" /><path d="M3.5 12.75a.75.75 0 00-1.5 0v2.5A2.75 2.75 0 004.75 18h10.5A2.75 2.75 0 0018 15.25v-2.5a.75.75 0 00-1.5 0v2.5c0 .69-.56 1.25-1.25 1.25H4.75c-.69 0-1.25-.56-1.25-1.25v-2.5z" /></svg>
+                  Seleccionar Archivo
+                </span>
+                <span class="file-name">
+                  {{ reclamoForm.get('fileRecibo')?.value?.name || 'Aún no se seleccionó...' }}
+                </span>
+            </label>
+            <input id="fileRecibo" type="file" (change)="onFileChange($event, 'fileRecibo')" class="file-input-hidden">
+            <div *ngIf="reclamoForm.get('fileRecibo')?.invalid && reclamoForm.get('fileRecibo')?.touched" class="error error-file">
+              El Recibo de Sueldo es obligatorio.
+            </div>
+          </div>
+          
+          <div class="form-field-file">
+            <label for="fileAlta">3. Alta Médica (Opcional)</label>
+            <label class="file-upload-label" for="fileAlta">
+                <span class="btn-file">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M9.25 13.25a.75.75 0 001.5 0V4.636l2.955 3.129a.75.75 0 001.09-1.03l-4.25-4.5a.75.75 0 00-1.09 0l-4.25 4.5a.75.75 0 101.09 1.03L9.25 4.636V13.25z" /><path d="M3.5 12.75a.75.75 0 00-1.5 0v2.5A2.75 2.75 0 004.75 18h10.5A2.75 2.75 0 0018 15.25v-2.5a.75.75 0 00-1.5 0v2.5c0 .69-.56 1.25-1.25 1.25H4.75c-.69 0-1.25-.56-1.25-1.25v-2.5z" /></svg>
+                  Seleccionar Archivo
+                </span>
+                <span class="file-name">
+                  {{ reclamoForm.get('fileAlta')?.value?.name || 'Aún no se seleccionó...' }}
+                </span>
+            </label>
+            <input id="fileAlta" type="file" (change)="onFileChange($event, 'fileAlta')" class="file-input-hidden">
+          </div>
+
+          <div class="form-field-file">
+            <label for="fileForm1">4. Formulario Superintendencia 1 *</label>
+            <label class="file-upload-label" for="fileForm1">
+                <span class="btn-file">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M9.25 13.25a.75.75 0 001.5 0V4.636l2.955 3.129a.75.75 0 001.09-1.03l-4.25-4.5a.75.75 0 00-1.09 0l-4.25 4.5a.75.75 0 101.09 1.03L9.25 4.636V13.25z" /><path d="M3.5 12.75a.75.75 0 00-1.5 0v2.5A2.75 2.75 0 004.75 18h10.5A2.75 2.75 0 0018 15.25v-2.5a.75.75 0 00-1.5 0v2.5c0 .69-.56 1.25-1.25 1.25H4.75c-.69 0-1.25-.56-1.25-1.25v-2.5z" /></svg>
+                  Seleccionar Archivo
+                </span>
+                <span class="file-name">
+                  {{ reclamoForm.get('fileForm1')?.value?.name || 'Aún no se seleccionó...' }}
+                </span>
+            </label>
+            <input id="fileForm1" type="file" (change)="onFileChange($event, 'fileForm1')" class="file-input-hidden">
+            <div *ngIf="reclamoForm.get('fileForm1')?.invalid && reclamoForm.get('fileForm1')?.touched" class="error error-file">
+              El Formulario 1 es obligatorio.
+            </div>
+          </div>
+
+          <div class="form-field-file">
+            <label for="fileForm2">5. Formulario Superintendencia 2 *</label>
+            <label class="file-upload-label" for="fileForm2">
+                <span class="btn-file">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M9.25 13.25a.75.75 0 001.5 0V4.636l2.955 3.129a.75.75 0 001.09-1.03l-4.25-4.5a.75.75 0 00-1.09 0l-4.25 4.5a.75.75 0 101.09 1.03L9.25 4.636V13.25z" /><path d="M3.5 12.75a.75.75 0 00-1.5 0v2.5A2.75 2.75 0 004.75 18h10.5A2.75 2.75 0 0018 15.25v-2.5a.75.75 0 00-1.5 0v2.5c0 .69-.56 1.25-1.25 1.25H4.75c-.69 0-1.25-.56-1.25-1.25v-2.5z" /></svg>
+                  Seleccionar Archivo
+                </span>
+                <span class="file-name">
+                  {{ reclamoForm.get('fileForm2')?.value?.name || 'Aún no se seleccionó...' }}
+                </span>
+            </label>
+            <input id="fileForm2" type="file" (change)="onFileChange($event, 'fileForm2')" class="file-input-hidden">
+            <div *ngIf="reclamoForm.get('fileForm2')?.invalid && reclamoForm.get('fileForm2')?.touched" class="error error-file">
+              El Formulario 2 es obligatorio.
+            </div>
+          </div>
+          
+        </fieldset>
+
+        <button type="submit" [disabled]="reclamoForm.invalid || isLoading" class="btn btn-primary btn-largo">
+          <span *ngIf="!isLoading">Enviar Reclamo</span>
+          <span *ngIf="isLoading"><div class="spinner"></div></span>
+        </button>
+      </form>
+    </ng-container>
+
+    <ng-container *ngIf="isSubmitted">
+      <div class="success-container">
+        
+        <div class="success-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        
+        <p class="success-message">
+          Su reclamo fue iniciado correctamente. Hemos guardado sus datos y archivos de forma segura.
+        </p>
+
+        <p class="success-subtitle">Este es su código de seguimiento:</p>
+        <div class="success-code-box">
+          {{ codigoExito }}
+        </div>
+        <p class="success-note">
+          Por favor, anote este código. Lo necesitará para consultar el estado de su trámite.
+        </p>
+
+        <button (click)="iniciarOtroReclamo()" class="btn btn-secondary btn-largo">
+          Iniciar un Nuevo Reclamo
+        </button>
+      </div>
+    </ng-container>
+
+  </app-card>
+</div>

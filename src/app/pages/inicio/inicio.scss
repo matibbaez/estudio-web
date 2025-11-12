@@ -1,0 +1,67 @@
+/* Usamos las mismas variables que en el Navbar para consistencia */
+$color-primario: #1a237e;
+$color-secundario: #424242; // Un gris oscuro para el botón secundario
+$color-texto-claro: #ffffff;
+
+.inicio-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 80px); // Restamos la altura aprox del navbar
+  text-align: center;
+  padding: 2rem;
+}
+
+.hero-content {
+  max-width: 700px;
+}
+
+.hero-title {
+  font-size: 3rem;
+  font-weight: bold;
+  color: $color-primario;
+  margin-bottom: 1rem;
+}
+
+.hero-subtitle {
+  font-size: 1.25rem;
+  color: #333;
+  margin-bottom: 2.5rem;
+}
+
+.hero-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem; // Espacio entre los botones
+}
+
+/* Estilos base para los botones */
+.btn {
+  display: inline-block;
+  padding: 0.75rem 2rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 4px;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  cursor: pointer;
+
+  &.btn-primary {
+    background-color: $color-primario;
+    color: $color-texto-claro;
+
+    &:hover {
+      background-color: darken($color-primario, 10%);
+    }
+  }
+
+  &.btn-secondary {
+    background-color: $color-secundario;
+    color: $color-texto-claro;
+
+    &:hover {
+      background-color: darken($color-secundario, 10%);
+    }
+  }
+}

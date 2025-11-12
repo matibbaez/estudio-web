@@ -1,1 +1,84 @@
-/* You can add global styles to this file, and also import other style files */
+/* ---------------------------------- */
+/* 1. VARIABLES GLOBALES (Nuestro Sistema de Diseño)
+/* ---------------------------------- */
+:root {
+  // Paleta de Colores
+  --color-primario: #1a237e;     // El azul oscuro que definimos
+  --color-primario-hover: #534bae;
+  --color-secundario: #424242;
+  --color-error: #dc3545;
+  --color-exito: #28a745;
+
+  // Colores de UI (La clave)
+  --color-fondo-pagina: #f4f7f6;  // Un gris muy suave, no blanco
+  --color-fondo-tarjeta: #ffffff; // Las tarjetas SÍ son blancas
+  --color-texto-principal: #212121;
+  --color-texto-secundario: #555;
+  --color-borde-suave: #eeeeee;
+
+  // Tipografía
+  --font-familia-principal: 'Roboto', sans-serif;
+
+  // Efectos (La magia)
+  --sombra-tarjeta: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --borde-redondeado: 8px;
+}
+
+/* ---------------------------------- */
+/* 2. RESETEO GLOBAL
+/* ---------------------------------- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  font-family: var(--font-familia-principal);
+  background-color: var(--color-fondo-pagina); // ¡Fondo nuevo!
+  color: var(--color-texto-principal);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 500;
+  color: var(--color-primario);
+}
+
+p {
+  color: var(--color-texto-secundario);
+  line-height: 1.6;
+}
+
+a {
+  text-decoration: none;
+  color: var(--color-primario);
+}
+
+/* ---------------------------------- */
+/* 3. CLASES DE BOTONES GLOBALES
+/* ---------------------------------- */
+/* (Para reusar en Inicio, etc.) */
+.btn {
+  display: inline-block;
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+  font-weight: 500;
+  text-decoration: none;
+  border-radius: var(--borde-redondeado);
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  text-align: center;
+
+  &.btn-primary {
+    background-color: var(--color-primario);
+    color: white;
+    &:hover { background-color: var(--color-primario-hover); }
+  }
+
+  &.btn-secondary {
+    background-color: var(--color-secundario);
+    color: white;
+    &:hover { background-color: var(--color-secundario), 10%; }
+  }
+}
