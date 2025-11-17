@@ -1,6 +1,55 @@
 <div class="page-container">
   <app-card [titulo]="'Panel de Administración'">
-    <h2>¡Bienvenido, Admin!</h2>
-    <p>Próximamente: la tabla de reclamos.</p>
+    
+    <div *ngIf="reclamos$ | async as reclamos; else loading">
+
+      <table class="admin-table" *ngIf="reclamos.length > 0; else noReclamos">
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Código</th>
+            <th>Nombre</th>
+            <th>DNI</th>
+            <th>Email</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let reclamo of reclamos">
+            <td>{{ reclamo.fecha_creacion | date:'dd/MM/yyyy HH:mm' }}</td>
+            <td>{{ reclamo.codigo_seguimiento }}</td>
+            <td>{{ reclamo.nombre }}</td>
+            <td>{{ reclamo.dni }}</td>
+            <td>{{ reclamo.email }}</td>
+            <td>
+              <span class="status-tag" [ngClass]="reclamo.estado | lowercase">
+                {{ reclamo.estado }}
+              </span>
+            </td>
+            <td>
+              <button class="btn btn-primary btn-chico" (click)="actualizarEstado(reclamo.id)">
+                Gestionar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <ng-template #noReclamos>
+        <div class="no-reclamos-box">
+          <p>🎉 ¡Bandeja limpia! No hay reclamos nuevos.</p>
+        </div>
+      </ng-template>
+
+    </div>
+
+    <ng-template #loading>
+      <div class="loading-container">
+        <div class="spinner-grande"></div>
+        <p>Cargando reclamos desde el servidor...</p>
+      </div>
+    </ng-template>
+
   </app-card>
 </div>

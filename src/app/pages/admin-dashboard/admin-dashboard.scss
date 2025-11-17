@@ -1,4 +1,106 @@
+/* Usamos las variables globales de styles.scss */
+
 .page-container {
   max-width: 1200px;
   margin: 2rem auto;
+}
+
+/* ---------------------------------- */
+/* ESTILOS PARA LA TABLA "PREMIUM"
+/* ---------------------------------- */
+.admin-table {
+  width: 100%;
+  border-collapse: collapse; // Bordes limpios
+  font-size: 0.9rem;
+  
+  thead tr {
+    background-color: var(--color-fondo-pagina); // Grisecito
+    color: var(--color-texto-secundario);
+    text-align: left;
+    border-bottom: 2px solid var(--color-borde-suave);
+  }
+
+  th, td {
+    padding: 0.75rem 1rem;
+    vertical-align: middle;
+  }
+
+  tbody tr {
+    border-bottom: 1px solid var(--color-borde-suave);
+    transition: background-color 0.2s ease;
+
+    &:last-of-type {
+      border-bottom: none;
+    }
+
+    &:hover {
+      background-color: var(--color-primario), 45%;
+    }
+  }
+
+  // El botón de "Gestionar" (chiquito)
+  .btn-chico {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+}
+
+/* ---------------------------------- */
+/* ESTILOS PARA LAS "ETIQUETAS DE ESTADO"
+/* ---------------------------------- */
+.status-tag {
+  padding: 0.25rem 0.6rem;
+  border-radius: 12px; // Píldora
+  font-weight: 700;
+  font-size: 0.75rem;
+  
+  // Estado "Recibido" (Azul)
+  &.recibido {
+    background-color: rgba(26, 35, 126, 0.1); // 10% de --color-primario
+    color: var(--color-primario);
+  }
+  
+  // Estado "En Proceso" (Naranja)
+  &.en { // (Ojo: [ngClass] va a fallar con "En Proceso", ¡lo arreglamos después!)
+    background-color: rgba(245, 124, 0, 0.1);
+    color: #f57c00;
+  }
+  
+  // Estado "Finalizado" (Verde)
+  &.finalizado {
+    background-color: rgba(40, 167, 69, 0.1);
+    color: var(--color-exito);
+  }
+}
+
+/* ---------------------------------- */
+/* ESTILOS PARA LOS ESTADOS DE CARGA
+/* ---------------------------------- */
+.loading-container, .no-reclamos-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  color: var(--color-texto-secundario);
+  
+  p {
+    margin-top: 1rem;
+    font-size: 1.1rem;
+  }
+}
+
+/* (Copiamos el spinner-grande de 'consultar-tramite') */
+.spinner-grande {
+  width: 50px;
+  height: 50px;
+  border: 5px solid var(--color-borde-suave);
+  border-top-color: var(--color-primario);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
