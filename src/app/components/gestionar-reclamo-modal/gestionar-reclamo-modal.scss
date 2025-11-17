@@ -1,0 +1,207 @@
+/* Usamos las variables globales de styles.scss */
+
+:host {
+  // El componente ocupa toda la pantalla
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000; // Por encima del navbar
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 1. El Fondo Oscuro */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6); // Negro translúcido
+  animation: fadeIn 0.3s ease;
+}
+
+/* 2. El Contenido (La "Tarjeta" flotante) */
+.modal-content {
+  position: relative;
+  z-index: 1001; // Por encima del fondo
+  background-color: var(--color-fondo-tarjeta);
+  border-radius: var(--borde-redondeado);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 500px;
+  animation: slideInUp 0.3s ease-out;
+}
+
+/* 3. El Encabezado */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--color-borde-suave);
+
+  h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: var(--color-primario);
+  }
+
+  .close-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-texto-secundario);
+    transition: color 0.3s;
+    svg { width: 24px; height: 24px; }
+    &:hover { color: var(--color-primario); }
+  }
+}
+
+/* 4. El Cuerpo */
+.modal-body {
+  padding: 1.5rem;
+  
+  .detalle-cliente {
+    background-color: var(--color-fondo-pagina);
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+    color: var(--color-texto-secundario);
+    
+    strong {
+      color: var(--color-texto-principal);
+    }
+  }
+
+  .form-field {
+    label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+    
+    select {
+      width: 100%;
+      padding: 0.75rem;
+      font-size: 1rem;
+      border: 1px solid var(--color-borde-suave);
+      border-radius: 4px;
+      background-color: #fff;
+
+      &:focus {
+        outline: none;
+        border-color: var(--color-primario);
+        box-shadow: 0 0 0 3px rgba(26, 35, 126, 0.4);
+      }
+    }
+  }
+}
+
+/* 5. El Pie */
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding: 1.5rem;
+  background-color: var(--color-fondo-pagina);
+  border-top: 1px solid var(--color-borde-suave);
+  border-bottom-left-radius: var(--borde-redondeado);
+  border-bottom-right-radius: var(--borde-redondeado);
+
+  .btn {
+    padding: 0.5rem 1.5rem;
+  }
+  
+  .btn-secondary {
+    background-color: #6c757d;
+    color: white;
+    &:hover { background-color: darken(#6c757d, 10%); }
+  }
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes slideInUp {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* ---------------------------------- */
+/* ¡NUEVOS ESTILOS PARA LA DESCARGA!
+/* ---------------------------------- */
+.fieldset-archivos {
+  border: none;
+  padding: 0;
+  margin-bottom: 1.5rem;
+
+  legend {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--color-primario);
+    margin-bottom: 1rem;
+    width: 100%;
+    border-bottom: 1px solid var(--color-borde-suave);
+  }
+}
+
+.lista-archivos {
+  display: flex;
+  flex-wrap: wrap; // Para que se acomoden en móvil
+  gap: 0.75rem; // Espacio entre botones
+}
+
+.btn-archivo {
+  display: inline-flex; // Para alinear el ícono y el texto
+  align-items: center;
+  gap: 0.5rem; // Espacio entre ícono y texto
+  background-color: var(--color-fondo-pagina);
+  border: 1px solid var(--color-borde-suave);
+  padding: 0.5rem 1rem;
+  border-radius: var(--borde-redondeado);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-texto-principal);
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  svg {
+    width: 16px;
+    height: 16px;
+    color: var(--color-primario);
+  }
+
+  &:hover {
+    background-color: #e8eaf6; // Un azulito claro
+    border-color: var(--color-primario);
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+}
+
+/* ---------------------------------- */
+/* SPINNER CHICO PARA BOTÓN (Copiado)
+/* ---------------------------------- */
+.spinner-chico {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(0, 0, 0, 0.2); // Borde oscuro (para fondo claro)
+  border-top-color: var(--color-primario); // Color primario
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto; // Centrarlo
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

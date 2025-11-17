@@ -1,0 +1,80 @@
+<div class="modal-backdrop" (click)="cerrarModal()"></div>
+<div class="modal-content">
+  
+  <div class="modal-header">
+    <h3>Gestionar Trámite</h3>
+    <button class="close-btn" (click)="cerrarModal()">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <div class="detalle-cliente">
+      <strong>Cliente:</strong> {{ reclamo.nombre }} <br>
+      <strong>DNI:</strong> {{ reclamo.dni }} <br>
+      <strong>Código:</strong> {{ reclamo.codigo_seguimiento }}
+    </div>
+
+    <fieldset class="fieldset-archivos">
+      <legend>Archivos Adjuntos</legend>
+      <div class="lista-archivos">
+        
+        <button class="btn-archivo" (click)="descargarArchivo('dni')" [disabled]="descargando === 'dni'">
+          <span *ngIf="descargando !== 'dni'">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M2.5 3A1.5 1.5 0 001 4.5v11A1.5 1.5 0 002.5 17h15a1.5 1.5 0 001.5-1.5v-11A1.5 1.5 0 0017.5 3h-15zM2 4.5a.5.5 0 01.5-.5h15a.5.5 0 01.5.5v2.39l-8.18 5.454a.75.75 0 01-.76.02L2 6.872V4.5zm0 3.528l7.67 5.113a2.25 2.25 0 002.26 0L18 8.028v7.472a.5.5 0 01-.5.5h-15a.5.5 0 01-.5-.5V8.028z" /></svg>
+            Ver DNI
+          </span>
+          <span *ngIf="descargando === 'dni'"><div class="spinner-chico"></div></span>
+        </button>
+
+        <button class="btn-archivo" (click)="descargarArchivo('recibo')" [disabled]="descargando === 'recibo'">
+          <span *ngIf="descargando !== 'recibo'">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M11.35 1.223a.75.75 0 00-1.114 0l-7.5 9.25a.75.75 0 00.557 1.277h4.557l-1.636 4.1a.75.75 0 001.114.976l7.5-9.25a.75.75 0 00-.557-1.277H9.443l1.636-4.1a.75.75 0 00-1.114-.976z" /></svg>
+            Ver Recibo
+          </span>
+          <span *ngIf="descargando === 'recibo'"><div class="spinner-chico"></div></span>
+        </button>
+
+        <button class="btn-archivo" (click)="descargarArchivo('form1')" [disabled]="descargando === 'form1'">
+          <span *ngIf="descargando !== 'form1'">📄 Ver Formulario 1</span>
+          <span *ngIf="descargando === 'form1'"><div class="spinner-chico"></div></span>
+        </button>
+
+        <button class="btn-archivo" (click)="descargarArchivo('form2')" [disabled]="descargando === 'form2'">
+          <span *ngIf="descargando !== 'form2'">📄 Ver Formulario 2</span>
+          <span *ngIf="descargando === 'form2'"><div class="spinner-chico"></div></span>
+        </button>
+
+        <button *ngIf="reclamo.path_alta_medica" class="btn-archivo" (click)="descargarArchivo('alta')" [disabled]="descargando === 'alta'">
+          <span *ngIf="descargando !== 'alta'">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M10 3.5a1.5 1.5 0 01.5 2.9v.5h.5a1.5 1.5 0 010 3H9v.5a1.5 1.5 0 01-3 0V10H5.5a1.5 1.5 0 010-3H6v-.5a1.5 1.5 0 013-2.9V.5a.75.75 0 011.5 0v3zM10 6.5V10h1.55a.75.75 0 000-1.5H10V6.5zm-1.5 0V8.5H8a.75.75 0 000 1.5h.5V13a.75.75 0 001.5 0V10h.5a.75.75 0 000-1.5H10V6.5a.75.75 0 00-1.5 0z" /></svg>
+            Ver Alta Médica
+          </span>
+          <span *ngIf="descargando === 'alta'"><div class="spinner-chico"></div></span>
+        </button>
+
+      </div>
+    </fieldset>
+
+    <form [formGroup]="estadoForm" (ngSubmit)="guardarCambios()">
+      <div class="form-field">
+        <label for="estado">Actualizar Estado:</label>
+        <select id="estado" formControlName="estado">
+          <option value="Recibido">Recibido</option>
+          <option value="En Proceso">En Proceso</option>
+          <option value="Finalizado">Finalizado</option>
+        </select>
+      </div>
+    </form>
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn btn-secondary" (click)="cerrarModal()">
+      Cancelar
+    </button>
+    <button class="btn btn-primary" (click)="guardarCambios()" [disabled]="estadoForm.invalid">
+      Guardar Cambios
+    </button>
+  </div>
+
+</div>

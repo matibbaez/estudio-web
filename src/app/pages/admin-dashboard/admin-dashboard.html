@@ -2,19 +2,9 @@
   <app-card [titulo]="'Panel de Administración'">
     
     <div *ngIf="reclamos$ | async as reclamos; else loading">
-
       <table class="admin-table" *ngIf="reclamos.length > 0; else noReclamos">
         <thead>
-          <tr>
-            <th>Fecha</th>
-            <th>Código</th>
-            <th>Nombre</th>
-            <th>DNI</th>
-            <th>Email</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
+          </thead>
         <tbody>
           <tr *ngFor="let reclamo of reclamos">
             <td>{{ reclamo.fecha_creacion | date:'dd/MM/yyyy HH:mm' }}</td>
@@ -27,9 +17,16 @@
                 {{ reclamo.estado }}
               </span>
             </td>
+
             <td>
-              <button class="btn btn-primary btn-chico" (click)="actualizarEstado(reclamo.id)">
-                Gestionar
+              <button 
+                class="btn btn-primary btn-chico" 
+                (click)="abrirModal(reclamo)" [disabled]="actualizandoId === reclamo.id">
+                
+                <span *ngIf="actualizandoId !== reclamo.id">Gestionar</span>
+                <span *ngIf="actualizandoId === reclamo.id">
+                  <div class="spinner-chico"></div>
+                </span>
               </button>
             </td>
           </tr>
@@ -53,3 +50,10 @@
 
   </app-card>
 </div>
+
+<app-gestionar-reclamo-modal
+  *ngIf="reclamoSeleccionado"
+  [reclamo]="reclamoSeleccionado"
+  (close)="cerrarModal()"
+  (save)="guardarCambiosModal($event)"
+></app-gestionar-reclamo-modal>

@@ -7,6 +7,13 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { CardComponent } from '../../components/card/card';
 import { NotificacionService } from '../../services/notificacion';
 
+const MAX_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB
+const ALLOWED_MIME_TYPES = [
+  'application/pdf',
+  'image/jpeg',
+  'image/png',
+];
+
 @Component({
   selector: 'app-iniciar-reclamo',
   standalone: true,
@@ -95,12 +102,35 @@ export class IniciarReclamoComponent {
 
   // (Tu función onFileChange queda 100% igual)
   onFileChange(event: any, controlName: string) {
-    if (event.target.files.length > 0) {
-      const file = event.target.files[0];
-      this.reclamoForm.patchValue({
-        [controlName]: file
-      });
-      this.reclamoForm.get(controlName)?.updateValueAndValidity();
+    
+    // Si el usuario cancela la subida (no hay archivos)
+    if (event.target.files.length === 0) {
+      this.reclamoForm.get(controlName)?.reset(); // Reseteamos ese control
+      return;
     }
+
+    const file = event.target.files[0];
+
+    // --- ¡VALIDACIÓN N°1: TIPO DE ARCHIVO! ---
+    if (!ALLOWED_MIME_TYPES.includes(file.type)) {
+      this.notificacionService.showError(`Tipo de archivo no permitido. Solo se aceptan PDF, JPG o PNG.`);
+      this.reclamoForm.get(controlName)?.reset(); // Reseteamos
+      event.target.value = null; // ¡Borramos el input!
+      return;
+    }
+
+    // --- ¡VALIDACIÓN N°2: TAMAÑO DE ARCHIVO! ---
+    if (file.size > MAX_SIZE_BYTES) {
+      this.notificacionService.showError(`Archivo demasiado grande. El límite es 5 MB.`);
+      this.reclamoForm.get(controlName)?.reset(); // Reseteamos
+      event.target.value = null; // ¡Borramos el input!
+      return;
+    }
+
+    // --- ¡ÉXITO! El archivo es válido ---
+    this.reclamoForm.patchValue({
+      [controlName]: file
+    });
+    this.reclamoForm.get(controlName)?.updateValueAndValidity();
   }
 }
