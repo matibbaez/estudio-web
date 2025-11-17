@@ -4,12 +4,8 @@ import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { CardComponent } from '../../components/card/card';
 import { NotificacionService } from '../../services/notificacion';
-
-// --- ¡CAMBIOS ACÁ! ---
-// Importamos la magia de RxJS
 import { forkJoin, timer, of } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
-// ----------------------
 
 @Component({
   selector: 'app-consultar-tramite',
@@ -34,7 +30,6 @@ export class ConsultarTramiteComponent {
 
   constructor() {}
 
-  // --- ¡MÉTODO onSubmit() 100% MEJORADO! ---
   onSubmit() {
     this.resultado = null;
     this.errorMensaje = null;
@@ -45,20 +40,16 @@ export class ConsultarTramiteComponent {
       return;
     }
 
-    this.isLoading = true; // 1. ¡Spinner ENCENDIDO!
+    this.isLoading = true; 
     const codigo = this.consultaForm.value.codigo!.trim().toUpperCase();
     const url = `http://localhost:3000/reclamos/consultar/${codigo}`;
 
-    // --- ¡LA NUEVA LÓGICA DE TIEMPO MÍNIMO! ---
-
-    // 1. Creamos el Observable del timer (2000ms = 2 segundos)
     const minTime = timer(2000); 
 
     // 2. Creamos el Observable de la API
     // (Usamos catchError para que 'forkJoin' no se rompa si la API falla)
     const apiCall = this.http.get(url).pipe(
       catchError((err: HttpErrorResponse) => {
-        // Si falla, devolvemos un objeto de error en lugar de "romper"
         return of({ error: err });
       })
     );
@@ -66,13 +57,13 @@ export class ConsultarTramiteComponent {
     // 3. Usamos forkJoin para esperar a que AMBOS terminen
     // (Tanto la API como el timer de 2 segundos)
     forkJoin({
-      response: apiCall, // La respuesta de la API (o el error)
-      timer: minTime     // El timer
+      response: apiCall, 
+      timer: minTime    
     })
     .pipe(
       // 4. finalize() se ejecuta SIEMPRE (éxito o error) al final
       finalize(() => {
-        this.isLoading = false; // ¡Spinner APAGADO!
+        this.isLoading = false; 
         console.log('Finalizado, spinner apagado.');
       })
     )

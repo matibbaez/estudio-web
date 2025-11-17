@@ -27,15 +27,23 @@ export class IniciarReclamoComponent {
   private http = inject(HttpClient); 
   private notificacionService = inject(NotificacionService);
 
-  // --- ¡CAMBIOS AQUÍ! (Nuevas variables de estado) ---
   isLoading = false;
-  isSubmitted = false; // <-- Para mostrar la pantalla de éxito
-  codigoExito: string | null = null; // <-- Para guardar el código
+  isSubmitted = false; 
+  codigoExito: string | null = null; 
 
-  // (Tu reclamoForm está perfecto como lo tenías)
   reclamoForm = this.fb.group({
-    nombre: ['', Validators.required],
-    dni: ['', Validators.required],
+    nombre: ['', [
+      Validators.required,
+      Validators.minLength(3), 
+      Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/) 
+    ]],
+    dni: ['', [
+      Validators.required,
+      Validators.minLength(7), 
+      Validators.maxLength(8), 
+      Validators.pattern(/^[0-9]*$/) 
+    ]],
+    
     email: ['', [Validators.required, Validators.email]],
     fileDNI: [null as File | null, Validators.required],
     fileRecibo: [null as File | null, Validators.required],
@@ -46,7 +54,6 @@ export class IniciarReclamoComponent {
 
   constructor() {}
 
-  // --- ¡CAMBIOS AQUÍ! (Lógica de envío actualizada) ---
   onSubmit() {
     if (this.reclamoForm.invalid) {
       this.reclamoForm.markAllAsTouched();
@@ -76,14 +83,11 @@ export class IniciarReclamoComponent {
       next: (response: any) => {
         this.isLoading = false;
         
-        // --- ¡LA NUEVA LÓGICA DE ÉXITO! ---
-        this.isSubmitted = true; // 1. Ocultamos el form
-        this.codigoExito = response.codigo_seguimiento; // 2. Guardamos el código
+        this.isSubmitted = true; 
+        this.codigoExito = response.codigo_seguimiento; 
         
-        // 3. El toast ahora es más simple (¡el código se ve en la pantalla!)
         this.notificacionService.showSuccess('¡Reclamo enviado con éxito!');
         
-        // 4. ¡YA NO HACEMOS reset() AQUÍ!
       },
       error: (error) => {
         this.isLoading = false;
@@ -93,41 +97,35 @@ export class IniciarReclamoComponent {
     });
   }
 
-  // --- ¡CAMBIOS AQUÍ! (Nuevo método para resetear) ---
   iniciarOtroReclamo() {
     this.isSubmitted = false;
     this.codigoExito = null;
     this.reclamoForm.reset();
   }
 
-  // (Tu función onFileChange queda 100% igual)
   onFileChange(event: any, controlName: string) {
     
-    // Si el usuario cancela la subida (no hay archivos)
     if (event.target.files.length === 0) {
-      this.reclamoForm.get(controlName)?.reset(); // Reseteamos ese control
+      this.reclamoForm.get(controlName)?.reset(); 
       return;
     }
 
     const file = event.target.files[0];
 
-    // --- ¡VALIDACIÓN N°1: TIPO DE ARCHIVO! ---
     if (!ALLOWED_MIME_TYPES.includes(file.type)) {
       this.notificacionService.showError(`Tipo de archivo no permitido. Solo se aceptan PDF, JPG o PNG.`);
-      this.reclamoForm.get(controlName)?.reset(); // Reseteamos
-      event.target.value = null; // ¡Borramos el input!
+      this.reclamoForm.get(controlName)?.reset(); 
+      event.target.value = null; 
       return;
     }
 
-    // --- ¡VALIDACIÓN N°2: TAMAÑO DE ARCHIVO! ---
     if (file.size > MAX_SIZE_BYTES) {
       this.notificacionService.showError(`Archivo demasiado grande. El límite es 5 MB.`);
-      this.reclamoForm.get(controlName)?.reset(); // Reseteamos
-      event.target.value = null; // ¡Borramos el input!
+      this.reclamoForm.get(controlName)?.reset(); 
+      event.target.value = null;
       return;
     }
 
-    // --- ¡ÉXITO! El archivo es válido ---
     this.reclamoForm.patchValue({
       [controlName]: file
     });

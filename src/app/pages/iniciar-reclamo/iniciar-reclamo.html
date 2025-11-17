@@ -26,6 +26,12 @@
             <div *ngIf="reclamoForm.get('nombre')?.invalid && reclamoForm.get('nombre')?.touched" class="error">
               El nombre es obligatorio.
             </div>
+            <div *ngIf="reclamoForm.get('nombre')?.errors?.['minlength']" class="error">
+              Debe tener al menos 3 caracteres.
+            </div>
+            <div *ngIf="reclamoForm.get('nombre')?.errors?.['pattern']" class="error">
+              El nombre solo puede contener letras y espacios.
+            </div>
           </div>
 
           <div class="form-field icon-field">
@@ -34,8 +40,14 @@
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M2.5 3A1.5 1.5 0 001 4.5v11A1.5 1.5 0 002.5 17h15a1.5 1.5 0 001.5-1.5v-11A1.5 1.5 0 0017.5 3h-15zM2 4.5a.5.5 0 01.5-.5h15a.5.5 0 01.5.5v2.39l-8.18 5.454a.75.75 0 01-.76.02L2 6.872V4.5zm0 3.528l7.67 5.113a2.25 2.25 0 002.26 0L18 8.028v7.472a.5.5 0 01-.5.5h-15a.5.5 0 01-.5-.5V8.028z" /></svg>
             </span>
             <input id="dni" type="text" formControlName="dni" placeholder="Sin puntos ni espacios">
-            <div *ngIf="reclamoForm.get('dni')?.invalid && reclamoForm.get('dni')?.touched" class="error">
+            <div *ngIf="reclamoForm.get('dni')?.errors?.['required'] && reclamoForm.get('dni')?.touched" class="error">
               El DNI es obligatorio.
+            </div>
+            <div *ngIf="reclamoForm.get('dni')?.errors?.['pattern']" class="error">
+              El DNI solo puede contener números.
+            </div>
+            <div *ngIf="reclamoForm.get('dni')?.errors?.['minlength'] || reclamoForm.get('dni')?.errors?.['maxlength']" class="error">
+              El DNI debe tener entre 7 y 8 dígitos.
             </div>
           </div>
           

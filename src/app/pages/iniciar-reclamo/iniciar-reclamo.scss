@@ -1,8 +1,6 @@
-/* ¡Mucho más limpio! La tarjeta se encarga del layout */
-
 .page-container {
   max-width: 800px;
-  margin: 2rem auto; // Centramos la tarjeta
+  margin: 2rem auto; 
 }
 
 .links-formularios {
@@ -43,7 +41,6 @@
     color: var(--color-texto-principal);
   }
 
-  // ¡Nuevos estilos para inputs!
   input[type="text"],
   input[type="email"] {
     width: 100%;
@@ -68,7 +65,7 @@
 
 .btn-largo {
   width: 100%;
-  padding: 1rem; // Un botón más grande
+  padding: 1rem;
   font-size: 1.1rem;
 }
 
@@ -76,42 +73,38 @@
 /* 1. ESTILOS PARA INPUTS CON ÍCONOS
 /* ---------------------------------- */
 .form-field.icon-field {
-  position: relative; // Contenedor padre
+  position: relative; 
 
   .icon {
     position: absolute;
     left: 10px;
-    // Centramos el ícono verticalmente con el input
     top: 50%;
     transform: translateY(50%); 
     height: 20px;
     width: 20px;
-    color: #9e9e9e; // Color del ícono
+    color: #9e9e9e; 
   }
 
-  // Hacemos espacio para el ícono
   input[type="text"],
   input[type="email"] {
-    padding-left: 2.5rem; // 40px
+    padding-left: 2.5rem;
   }
 }
 
 /* ---------------------------------- */
-/* 2. ESTILOS "PREMIUM" PARA INPUTS DE ARCHIVO
+/* 2. ESTILOS PARA INPUTS DE ARCHIVO
 /* ---------------------------------- */
 .form-field-file {
   margin-bottom: 1rem;
   
-  // Ocultamos el input feo del navegador
   .file-input-hidden {
     display: none;
   }
 
-  // Esta es la "caja" con borde punteado
   .file-upload-label {
     display: flex;
     align-items: center;
-    justify-content: space-between; // Botón a la izq, nombre a la der
+    justify-content: space-between; 
     padding: 0.75rem 1rem;
     border: 2px dashed var(--color-borde-suave);
     border-radius: var(--borde-redondeado);
@@ -124,11 +117,10 @@
     }
   }
 
-  // El botón "falso" que creamos
   .btn-file {
     display: flex;
     align-items: center;
-    gap: 0.5rem; // Espacio entre ícono y texto
+    gap: 0.5rem;
     padding: 0.5rem 1rem;
     background-color: var(--color-fondo-pagina);
     border: 1px solid var(--color-borde-suave);
@@ -137,22 +129,20 @@
     font-size: 0.9rem;
     color: var(--color-texto-principal);
     
-    svg { // Estilo para el ícono SVG
+    svg { 
       width: 16px;
       height: 16px;
     }
   }
 
-  // El texto del nombre del archivo
   .file-name {
     font-size: 0.9rem;
     color: var(--color-texto-secundario);
     font-style: italic;
-    // Evita que un nombre largo rompa el layout
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 200px; // Ajustar según sea necesario
+    max-width: 200px; 
   }
 }
 
@@ -163,24 +153,21 @@
 /* Esto es para que el botón no cambie de tamaño
    cuando el spinner reemplace al texto */
 .btn-largo {
-  // Le damos una altura mínima fija
   min-height: 54px; 
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-// La ruedita (spinner)
 .spinner {
   width: 24px;
   height: 24px;
-  border: 3px solid rgba(255, 255, 255, 0.3); // Borde grisecito
-  border-top-color: #ffffff; // El color "vivo" que gira
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff; 
   border-radius: 50%;
-  animation: spin 1s linear infinite; // La animación
+  animation: spin 1s linear infinite; 
 }
 
-// La animación que hace girar
 @keyframes spin {
   to {
     transform: rotate(360deg);
@@ -196,61 +183,58 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 2rem 1rem; // Un poco más de padding interno
+  padding: 2rem 1rem; 
 }
 
 .success-icon {
-  color: var(--color-exito); // El verde de nuestro styles.scss
-  margin-bottom: 2rem; // Más espacio abajo del ícono
+  color: var(--color-exito); 
+  margin-bottom: 2rem; 
 
   svg {
-    width: 80px; // Un poco más chico que 100px
+    width: 80px;
     height: 80px;
-    // Opcional: Un stroke más grueso si queremos
-    // stroke-width: 1.5; 
   }
 }
 
 .success-message {
-  font-size: 1.25rem; // Más grande
-  font-weight: 600; // Más negrita
+  font-size: 1.25rem;
+  font-weight: 600;
   color: var(--color-texto-principal);
   max-width: 500px;
-  margin-bottom: 1.5rem; // Más espacio
+  margin-bottom: 1.5rem; 
 }
 
 .success-subtitle {
   font-size: 1rem;
   font-weight: 500;
   color: var(--color-texto-secundario);
-  margin-top: 2rem; // Más espacio arriba
-  margin-bottom: 0.75rem; // Espacio antes del código
+  margin-top: 2rem; 
+  margin-bottom: 0.75rem;
 }
 
 .success-code-box {
-  font-family: 'monospace', sans-serif; // Una fuente más técnica para el código
-  font-size: 2.2rem; // Un poco más grande
+  font-family: 'monospace', sans-serif; 
+  font-size: 2.2rem; 
   font-weight: 700;
-  color: var(--color-primario); // Usamos el color principal
-  background-color: var(--color-borde-suave); // Fondo más clarito para que contraste
-  border: 2px dashed var(--color-borde-suave); // Mantenemos el borde dashed
-  padding: 1.2rem 2.8rem; // Más padding
-  margin: 0.5rem 0 1.5rem 0; // Ajustamos márgenes
+  color: var(--color-primario); 
+  background-color: var(--color-borde-suave); 
+  border: 2px dashed var(--color-borde-suave);
+  padding: 1.2rem 2.8rem; 
+  margin: 0.5rem 0 1.5rem 0; 
   border-radius: var(--borde-redondeado);
-  letter-spacing: 2px; // Separa los caracteres para mejor lectura
-  user-select: all; // Permite al usuario seleccionar el texto fácilmente
-  cursor: text; // Cambia el cursor para indicar que es seleccionable
+  letter-spacing: 2px;
+  user-select: all; 
+  cursor: text; 
 }
 
 .success-note {
   font-size: 0.9rem;
   color: var(--color-texto-secundario);
   margin-top: 0.5rem;
-  margin-bottom: 2.5rem; // Más espacio antes del botón
+  margin-bottom: 2.5rem; 
 }
 
-/* El botón secundario lo convertimos a primario para que se vea mejor */
-.btn-secondary { /* ESTO CAMBIA: ahora usa los estilos del primario */
+.btn-secondary { 
   background-color: var(--color-primario);
   color: white;
   &:hover { background-color: var(--color-primario-hover); }

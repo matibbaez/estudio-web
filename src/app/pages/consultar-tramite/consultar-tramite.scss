@@ -1,14 +1,10 @@
-/* Usamos las variables globales de styles.scss */
-
-/* Contenedor para centrar la tarjeta */
 .page-container {
-  max-width: 600px; // Más chico que el de "iniciar"
+  max-width: 600px; 
   margin: 2rem auto;
 }
 
 /* ---------------------------------- */
-/* 1. ESTILOS DE FORMULARIO "PREMIUM"
-/* (Copiados de iniciar-reclamo para consistencia)
+/* 1. ESTILOS DE FORMULARIO
 /* ---------------------------------- */
 .form-field {
   margin-bottom: 1.5rem;
@@ -31,7 +27,6 @@
     &:focus {
       outline: none;
       border-color: var(--color-primario);
-      /* ¡ARREGLO! Usamos RGBA con 40% de opacidad */
       box-shadow: 0 0 0 3px rgba(26, 35, 126, 0.4); 
     }
   }
@@ -43,14 +38,13 @@
   }
 }
 
-/* Estilo para el input con ícono */
 .form-field.icon-field {
   position: relative; 
   .icon {
     position: absolute;
     left: 10px;
     top: 50%;
-    transform: translateY(50%); // <--- ¡¡¡EL BUG ESTÁ ACÁ!!!
+    transform: translateY(50%); 
     height: 20px;
     width: 20px;
     color: #9e9e9e;
@@ -69,7 +63,6 @@
   padding: 1rem 0;
 }
 
-/* Spinner de carga (reutilizamos el de 'iniciar-reclamo') */
 .spinner {
   width: 24px;
   height: 24px;
@@ -79,12 +72,10 @@
   animation: spin 1s linear infinite;
 }
 
-/* Animación de giro */
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
 
-/* Spinner GRANDE para la vista de "Cargando..." */
 .spinner-grande {
   width: 50px;
   height: 50px;
@@ -152,19 +143,15 @@
   }
 }
 
-/* ---------------------------------- */
-/* Botones (reusamos los globales)
-/* ---------------------------------- */
 .btn-largo {
   width: 100%;
-  margin-top: 1.5rem; // Espacio antes del botón
+  margin-top: 1.5rem; 
 }
 
 .btn-secondary {
-  background-color: var(--color-secundario); // Esto es #424242
+  background-color: var(--color-secundario); 
   color: white;
   
-  /* ¡ARREGLO! Usamos un color harcodeado más oscuro */
   &:hover { 
     background-color: #2b2b2b; 
   }
