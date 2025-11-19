@@ -13,7 +13,7 @@
             <td>{{ reclamo.dni }}</td>
             <td>{{ reclamo.email }}</td>
             <td>
-              <span class="status-tag" [ngClass]="reclamo.estado | lowercase">
+              <span class="status-tag" [ngClass]="reclamo.estado.toLowerCase().replace(' ', '-')">
                 {{ reclamo.estado }}
               </span>
             </td>
