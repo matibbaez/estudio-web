@@ -1,106 +1,104 @@
-/* Usamos variables globales de styles.scss */
+/* Usamos variables globales */
 
-.login-container {
-  display: flex;
-  min-height: 100vh; /* Ocupa toda la pantalla */
-  background-color: #ffffff;
-}
-
-/* --- COLUMNA IZQUIERDA (Visual) --- */
-.login-visual {
-  display: none; /* Oculto en móvil */
-  
-  @media (min-width: 768px) {
-    display: flex;
-    flex: 1; /* Toma el espacio disponible */
-    background-color: var(--color-primario);
-    background-image: linear-gradient(135deg, var(--color-primario) 0%, #0d47a1 100%);
-    color: white;
-    align-items: center;
-    justify-content: center;
-    padding: 3rem;
-    position: relative;
-    overflow: hidden;
-
-    /* Un detalle sutil de fondo */
-    &::after {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
-      pointer-events: none;
-    }
-  }
-}
-
-.visual-content {
-  position: relative;
-  z-index: 2;
-  text-align: center;
-
-  h2 {
-    color: white;
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-  }
-  p {
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 1.2rem;
-  }
-}
-
-
-/* --- COLUMNA DERECHA (Formulario) --- */
-.login-form-wrapper {
-  flex: 1; /* Toma el espacio disponible */
+.login-page {
+  min-height: 100vh;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
-  background-color: #f9fafb; /* Gris muy clarito */
   
-  @media (min-width: 768px) {
-    max-width: 600px; /* Limita el ancho en desktop */
-  }
+  /* CAMBIO: Fondo claro y limpio en lugar de oscuro */
+  background-color: #f0f2f5; 
+  background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
+  background-size: 20px 20px; /* Un patrón de puntitos muy sutil y pro */
+  padding: 1rem;
 }
 
-.login-card {
+.login-container {
   width: 100%;
   max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* --- BRANDING (Lo sacamos de arriba y lo metemos en la tarjeta visualmente) --- */
+.brand-header {
+  display: none; /* Ocultamos el de afuera para limpiar la vista */
+}
+
+/* --- TARJETA --- */
+.login-card {
   background-color: white;
-  padding: 2.5rem;
   border-radius: var(--borde-redondeado);
+  width: 100%;
   box-shadow: var(--sombra-tarjeta);
+  overflow: hidden; /* Para que la cabecera de color respete los bordes */
+  border: 1px solid white;
 }
 
+/* --- CABECERA INTEGRADA (NUEVO DISEÑO) --- */
+/* --- CABECERA INTEGRADA (ESTILOS ARREGLADOS) --- */
 .login-header {
-  margin-bottom: 2rem;
+  background-color: var(--color-primario);
+  padding: 3rem 2rem;
   text-align: center;
-
-  h3 {
-    font-size: 1.8rem;
-    color: var(--color-primario);
-    margin-bottom: 0.5rem;
+  color: white;
+  
+  /* Estilos para el ícono */
+  .brand-icon {
+    width: 60px;
+    height: 60px;
+    background-color: rgba(255, 255, 255, 0.15); // Un poco transparente
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem auto; // Centrado y con espacio abajo
+    
+    svg {
+      width: 32px;
+      height: 32px;
+      color: white;
+    }
   }
+
+  /* Estilos para el H1 (Título Principal) */
+  h1 {
+    font-size: 1.75rem;
+    color: white;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+  }
+
   p {
-    color: var(--color-texto-secundario);
-    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1rem;
+    margin: 0;
+    font-weight: 400;
   }
 }
 
-/* --- ESTILOS DE INPUTS (Copiados y mejorados) --- */
+/* --- CUERPO DEL FORMULARIO --- */
+.login-form {
+  padding: 2.5rem 2rem; /* Espaciado interno */
+}
+
+/* --- INPUTS --- */
 .form-field {
   margin-bottom: 1.5rem;
   
   label {
     display: block;
-    font-weight: 500;
-    margin-bottom: 0.5rem;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    font-weight: 600;
     color: var(--color-texto-principal);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.75rem;
   }
 
   .input-wrapper {
@@ -109,25 +107,29 @@
 
   .icon {
     position: absolute;
-    left: 12px;
+    left: 14px;
     top: 50%;
     transform: translateY(-50%);
-    color: #9e9e9e;
+    color: #9ca3af;
+    z-index: 10;
     svg { width: 20px; height: 20px; }
   }
 
   input {
     width: 100%;
-    padding: 0.75rem 0.75rem 0.75rem 2.8rem; /* Espacio para el ícono */
-    border: 1px solid var(--color-borde-suave);
-    border-radius: 6px;
+    padding: 0.85rem 0.85rem 0.85rem 3rem; /* Más espacio */
+    border: 2px solid #f3f4f6; /* Borde muy suave por defecto */
+    border-radius: 8px;
     font-size: 1rem;
-    transition: all 0.2s;
+    color: var(--color-texto-principal);
+    background-color: #f9fafb;
+    transition: all 0.2s ease;
     
     &:focus {
       outline: none;
-      border-color: var(--color-primario);
-      box-shadow: 0 0 0 3px rgba(26, 35, 126, 0.1);
+      background-color: white;
+      border-color: var(--color-primario); /* Borde de TU color al enfocar */
+      box-shadow: 0 0 0 4px rgba(34, 39, 97, 0.1); /* Glow suave de tu color */
     }
   }
 
@@ -135,25 +137,57 @@
     color: var(--color-error);
     font-size: 0.8rem;
     margin-top: 0.4rem;
+    font-weight: 500;
   }
 }
 
 /* --- BOTÓN --- */
-.btn-largo {
+.btn-login {
   width: 100%;
-  margin-top: 1rem;
-  padding: 0.9rem;
+  padding: 1rem;
+  background-color: var(--color-primario); /* ¡TU COLOR! */
+  color: white;
+  border: none;
+  border-radius: 8px;
   font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.1s, background-color 0.2s;
+  margin-top: 1.5rem;
   display: flex;
   justify-content: center;
   align-items: center;
+  min-height: 50px;
+  box-shadow: 0 4px 12px rgba(34, 39, 97, 0.2); /* Sombra con tu color */
+
+  &:hover {
+    background-color: var(--color-primario-hover);
+    transform: translateY(-1px);
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+  }
 }
 
-/* (El spinner ya lo tenés global o copiado) */
+/* --- FOOTER --- */
+.login-footer {
+  margin-top: 2rem;
+  text-align: center;
+  
+  p {
+    font-size: 0.85rem;
+    color: #9ca3af;
+  }
+}
+
+/* Spinner */
 .spinner {
-  width: 20px; 
-  height: 20px;
-  border: 2px solid rgba(255,255,255,0.3);
+  width: 24px;
+  height: 24px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
   border-top-color: white;
   border-radius: 50%;
   animation: spin 1s linear infinite;

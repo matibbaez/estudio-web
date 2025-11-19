@@ -1,52 +1,88 @@
-/* Usamos las variables globales que definimos en styles.scss */
+/* Usamos variables globales */
+
 :host {
-  display: block; // Importante para que el navbar ocupe su espacio
+  display: block;
+  position: sticky; /* ¡Se pega arriba! */
+  top: 0;
+  z-index: 1000; /* Por encima de todo */
+  width: 100%;
 }
 
 .navbar {
-  background-color: var(--color-fondo-tarjeta); // ¡Ahora es blanco!
-  color: var(--color-texto-principal);
-  padding: 1rem 2rem;
-  box-shadow: var(--sombra-tarjeta); // ¡La "flotación"!
-  position: relative; // Para que el menú móvil se posicione bien
-  z-index: 1000;
+  background-color: var(--color-primario); /* Azul Oscuro */
+  color: white;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); /* Sombra suave */
+  height: 70px; /* Altura fija elegante */
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
 }
 
 .navbar-container {
+  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
+  padding: 0 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  height: 100%;
 }
 
+/* --- MARCA --- */
 .navbar-brand {
-  color: var(--color-primario); // El logo/marca usa el color primario
-  font-size: 1.5rem;
-  font-weight: 700; // Más grueso
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
   text-decoration: none;
+  color: white;
+  cursor: pointer;
+
+  .brand-icon {
+    width: 36px;
+    height: 36px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    svg {
+      width: 20px;
+      height: 20px;
+      color: white;
+    }
+  }
+
+  .brand-text {
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
 }
 
-/* ---------------------------------- */
-/* 1. LINKS DE ESCRITORIO
-/* ---------------------------------- */
+/* --- LINKS ESCRITORIO --- */
 .navbar-links-desktop {
-  a {
-    color: var(--color-texto-secundario);
-    text-decoration: none;
-    font-size: 1rem;
-    font-weight: 500;
-    margin-left: 1.5rem;
-    padding-bottom: 0.5rem; // Espacio para el borde
-    position: relative;
-    transition: color 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
 
-    // Borde inferior sutil para el link activo
+  a {
+    color: rgba(255, 255, 255, 0.75); /* Blanco un poco transparente */
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    position: relative;
+    padding: 0.5rem 0;
+
+    &:hover {
+      color: white;
+    }
+
     &.active {
-      color: var(--color-primario);
-      font-weight: 700;
+      color: white;
       
-      // Animación de la línea
       &::after {
         content: '';
         position: absolute;
@@ -54,112 +90,89 @@
         left: 0;
         width: 100%;
         height: 2px;
-        background-color: var(--color-primario);
+        background-color: #ffffff; // <-- ¡AHORA ES BLANCO PURO!
+        border-radius: 2px;
       }
     }
+  }
 
-    &:hover:not(.active) {
+  /* Botón especial para Admin */
+  .btn-admin {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 0.5rem 1.25rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    color: white;
+    border: 1px solid transparent;
+
+    &:hover {
+      background-color: white;
       color: var(--color-primario);
     }
+
+    &.active-btn {
+      background-color: white;
+      color: var(--color-primario);
+    }
+
+    &::after { display: none; } /* Sin línea abajo */
   }
 }
 
-/* ---------------------------------- */
-/* 5. ESTILOS PARA EL BOTÓN MÓVIL (HAMBURGUESA ANIMADA)
-/* (Esto reemplaza los estilos de .mobile-menu-button que teníamos)
-/* ---------------------------------- */
-
+/* --- BOTÓN HAMBURGUESA (Móvil) --- */
 .mobile-menu-button {
-  display: none; // Oculto en desktop (esto ya lo teníamos)
+  display: none; /* Oculto en desktop */
   background: none;
   border: none;
   cursor: pointer;
-  
-  // Contenedor para las 3 líneas
-  width: 28px; 
+  width: 30px;
   height: 24px;
-  position: relative; // Para posicionar las líneas adentro
-  z-index: 1001; // Asegurarse de que esté sobre el menú móvil
+  position: relative;
+  padding: 0;
+  z-index: 1001;
 
-  // Las 3 líneas (el ícono)
   span {
     display: block;
     position: absolute;
-    height: 3px; // Grosor de la línea
+    height: 2px;
     width: 100%;
-    background-color: var(--color-primario);
-    border-radius: 3px;
+    background-color: white;
+    border-radius: 2px;
     left: 0;
-    
-    // ¡La transición! Esta es la clave de la animación
-    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    transition: all 0.3s ease;
 
-    // Posición inicial de cada línea
     &:nth-child(1) { top: 0; }
     &:nth-child(2) { top: 10px; }
     &:nth-child(3) { top: 20px; }
   }
 }
 
-/* ---------------------------------- */
-/* 6. LA MAGIA: ANIMACIÓN A "X"
-/* ---------------------------------- */
-
-/* Cuando el <nav> (el padre) tenga la clase .menu-abierto...
-  buscamos nuestro botón y animamos las líneas de adentro.
-*/
-.navbar.menu-abierto {
-
-  .mobile-menu-button span {
-
-    // 1. La línea de ARRIBA: Rota 45 grados y se mueve al centro
-    &:nth-child(1) {
-      transform: translateY(10px) rotate(45deg);
-    }
-    
-    // 2. La línea del MEDIO: Se desvanece
-    &:nth-child(2) {
-      opacity: 0;
-    }
-    
-    // 3. La línea de ABAJO: Rota -45 grados y se mueve al centro
-    &:nth-child(3) {
-      transform: translateY(-10px) rotate(-45deg);
-    }
-  }
+/* Animación a "X" cuando está abierto */
+.navbar.menu-abierto .mobile-menu-button span {
+  &:nth-child(1) { transform: translateY(10px) rotate(45deg); }
+  &:nth-child(2) { opacity: 0; }
+  &:nth-child(3) { transform: translateY(-10px) rotate(-45deg); }
 }
 
-/* No te olvides de la Media Query que teníamos,
-  que es la que hace aparecer el botón en móvil
-*/
-@media (max-width: 768px) {
-  .mobile-menu-button {
-    display: block; // Mostramos botón hamburguesa
-  }
-  
-  // (El resto de las reglas de la media query
-  // .navbar-links-desktop { display: none; }
-  // se quedan como estaban)
-}
-
-/* ---------------------------------- */
-/* 3. LINKS DE MÓVIL (MENÚ DESPLEGABLE)
-/* ---------------------------------- */
-.mobile-menu-links {
-  display: none; // Oculto por defecto
+/* --- MENÚ DESPLEGABLE (Móvil) --- */
+.mobile-menu-dropdown {
+  display: none; /* Oculto por defecto */
+  position: absolute;
+  top: 70px; /* Altura del navbar */
+  left: 0;
   width: 100%;
-  background-color: var(--color-fondo-tarjeta);
-  box-shadow: 0 8px 10px rgba(0, 0, 0, 0.05); // Sombra suave hacia abajo
-
-  // Animación de despliegue
-  transform: translateY(-10px);
+  background-color: var(--color-primario); /* Mismo color que navbar */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1rem 0;
+  
+  /* Animación */
+  transform: translateY(-20px);
   opacity: 0;
+  transition: all 0.3s ease;
   pointer-events: none;
-  transition: transform 0.3s ease, opacity 0.3s ease;
 
-  // Estado abierto
   &.abierto {
-    display: block;
     transform: translateY(0);
     opacity: 1;
     pointer-events: auto;
@@ -167,39 +180,39 @@
 
   a {
     display: block;
-    padding: 1.25rem 2rem;
-    text-align: center;
+    padding: 1rem 2rem;
+    color: rgba(255, 255, 255, 0.8);
     text-decoration: none;
-    color: var(--color-texto-principal);
-    font-weight: 500;
-    border-top: 1px solid var(--color-borde-suave);
+    font-size: 1rem;
+    border-left: 4px solid transparent;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.05);
+      color: white;
+    }
 
     &.active {
-      color: var(--color-primario);
-      background-color: var(--color-fondo-pagina);
+      color: white;
+      border-left-color: var(--color-exito);
+      background-color: rgba(255, 255, 255, 0.05);
     }
+  }
+
+  .divider {
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.1);
+    margin: 0.5rem 2rem;
+  }
+
+  .link-admin {
+    font-weight: 600;
+    color: #90caf9; /* Un azul clarito para destacar */
   }
 }
 
-
-/* ---------------------------------- */
-/* 4. MEDIA QUERY (La magia del responsive)
-/* ---------------------------------- */
+/* --- RESPONSIVE --- */
 @media (max-width: 768px) {
-  
-  .navbar-links-desktop {
-    display: none; // Ocultamos links de escritorio
-  }
-
-  .mobile-menu-button {
-    display: block; // Mostramos botón hamburguesa
-  }
-
-  // Hacemos que el menú desplegable ocupe el ancho
-  .mobile-menu-links {
-    position: absolute;
-    top: 100%; // Justo debajo del navbar
-    left: 0;
-    right: 0;
-  }
+  .navbar-links-desktop { display: none; }
+  .mobile-menu-button { display: block; }
+  .mobile-menu-dropdown { display: block; }
 }

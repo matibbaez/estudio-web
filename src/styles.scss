@@ -2,26 +2,26 @@
 /* 1. VARIABLES GLOBALES (Nuestro Sistema de Diseño)
 /* ---------------------------------- */
 :root {
-  // Paleta de Colores
-  --color-primario: #1a237e;     // El azul oscuro que definimos
-  --color-primario-hover: #534bae;
-  --color-secundario: #424242;
-  --color-error: #dc3545;
-  --color-exito: #28a745;
+  // ¡TU NUEVO COLOR!
+  --color-primario: #222761;       // Azul Real Profundo
+  --color-primario-hover: #1a1e4d; // Un poquito más oscuro para hover
+  
+  --color-secundario: #5c6bc0;     // Un azul más claro para detalles secundarios
+  
+  --color-exito: #2e7d32;
+  --color-error: #c62828;
 
-  // Colores de UI (La clave)
-  --color-fondo-pagina: #f4f7f6;  // Un gris muy suave, no blanco
-  --color-fondo-tarjeta: #ffffff; // Las tarjetas SÍ son blancas
-  --color-texto-principal: #212121;
-  --color-texto-secundario: #555;
-  --color-borde-suave: #eeeeee;
+  // UI
+  --color-fondo-pagina: #f3f4f6;   // Un gris muy suave y moderno
+  --color-fondo-tarjeta: #ffffff;
+  
+  --color-texto-principal: #1f2937;
+  --color-texto-secundario: #6b7280;
+  --color-borde-suave: #e5e7eb;
 
-  // Tipografía
   --font-familia-principal: 'Roboto', sans-serif;
-
-  // Efectos (La magia)
-  --sombra-tarjeta: 0 4px 12px rgba(0, 0, 0, 0.08);
-  --borde-redondeado: 8px;
+  --sombra-tarjeta: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  --borde-redondeado: 12px;
 }
 
 /* ---------------------------------- */
