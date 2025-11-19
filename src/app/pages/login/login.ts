@@ -4,7 +4,8 @@ import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { CardComponent } from '../../components/card/card';
 import { NotificacionService } from '../../services/notificacion';
-import { Router } from '@angular/router'; // 1. ¡Importamos el Router!
+import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -37,7 +38,7 @@ export class LoginComponent {
     }
 
     this.isLoading = true;
-    const url = 'http://localhost:3000/auth/login'; // ¡La URL que ya probamos!
+    const url = `${environment.apiUrl}/auth/login`; 
     const credentials = this.loginForm.value;
 
     this.http.post(url, credentials).subscribe({

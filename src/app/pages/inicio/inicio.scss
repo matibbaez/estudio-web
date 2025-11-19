@@ -1,67 +1,316 @@
-/* Usamos las mismas variables que en el Navbar para consistencia */
-$color-primario: #1a237e;
-$color-secundario: #424242; // Un gris oscuro para el botón secundario
-$color-texto-claro: #ffffff;
+/* Usamos las variables de styles.scss */
 
-.inicio-container {
+.landing-page {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* ---------------------------------- */
+/* HERO SECTION
+/* ---------------------------------- */
+.hero {
+  background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%); // Fondo sutil
+  padding: 4rem 2rem;
+  min-height: 80vh; // Ocupa casi toda la pantalla
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: calc(100vh - 80px); // Restamos la altura aprox del navbar
   text-align: center;
-  padding: 2rem;
+  position: relative;
 }
 
 .hero-content {
-  max-width: 700px;
+  max-width: 800px;
+  z-index: 2; // Por encima de la forma abstracta
 }
 
-.hero-title {
-  font-size: 3rem;
-  font-weight: bold;
-  color: $color-primario;
-  margin-bottom: 1rem;
+.badge {
+  display: inline-block;
+  background-color: rgba(26, 35, 126, 0.1); // 10% primario
+  color: var(--color-primario);
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
-.hero-subtitle {
+h1 {
+  font-size: 3.5rem; // Título GIGANTE
+  line-height: 1.1;
+  color: var(--color-texto-principal);
+  margin-bottom: 1.5rem;
+  
+  .text-highlight {
+    color: var(--color-primario);
+    position: relative;
+    white-space: nowrap;
+    
+    // Subrayado creativo
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 5px;
+      left: 0;
+      width: 100%;
+      height: 10px;
+      background-color: rgba(26, 35, 126, 0.1);
+      z-index: -1;
+    }
+  }
+}
+
+p {
   font-size: 1.25rem;
-  color: #333;
+  color: var(--color-texto-secundario);
   margin-bottom: 2.5rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .hero-actions {
   display: flex;
   justify-content: center;
-  gap: 1.5rem; // Espacio entre los botones
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
-/* Estilos base para los botones */
-.btn {
-  display: inline-block;
-  padding: 0.75rem 2rem;
+/* ---------------------------------- */
+/* BOTONES CUSTOM PARA LANDING
+/* ---------------------------------- */
+.btn-lg {
+  padding: 1rem 2rem;
   font-size: 1.1rem;
-  font-weight: bold;
-  text-decoration: none;
-  border-radius: 4px;
-  border: 2px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  svg { width: 20px; height: 20px; }
+}
+
+.btn-primary {
+  background-color: var(--color-primario);
+  color: white;
+  box-shadow: 0 10px 20px rgba(26, 35, 126, 0.2); // Sombra linda
+  
+  &:hover {
+    transform: translateY(-2px); // Efecto de elevación
+    box-shadow: 0 15px 25px rgba(26, 35, 126, 0.3);
+  }
+}
+
+.btn-outline {
+  background-color: transparent;
+  border: 2px solid var(--color-primario);
+  color: var(--color-primario);
+
+  &:hover {
+    background-color: rgba(26, 35, 126, 0.05);
+  }
+}
+
+/* ---------------------------------- */
+/* SECCIÓN DE PASOS
+/* ---------------------------------- */
+.steps-section {
+  padding: 5rem 2rem;
+  background-color: #ffffff;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 4rem;
+  color: var(--color-texto-principal);
+}
+
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); // Responsive automático
+  gap: 3rem;
+}
+
+.step-card {
+  text-align: center;
+  padding: 2rem;
+  border-radius: var(--borde-redondeado);
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
+}
+
+.step-icon {
+  width: 70px;
+  height: 70px;
+  background-color: rgba(26, 35, 126, 0.1);
+  color: var(--color-primario);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem auto;
+
+  svg { width: 35px; height: 35px; }
+}
+
+.step-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: var(--color-texto-principal);
+}
+
+.step-card p {
+  font-size: 1rem;
+  color: var(--color-texto-secundario);
+}
+
+/* ---------------------------------- */
+/* RESPONSIVE
+/* ---------------------------------- */
+@media (max-width: 768px) {
+  h1 { font-size: 2.5rem; }
+  .hero { padding: 3rem 1rem; }
+  .hero-actions { flex-direction: column; width: 100%; }
+  .btn-lg { width: 100%; justify-content: center; }
+}
+
+/* ---------------------------------- */
+/* SECCIÓN FAQ (PREGUNTAS FRECUENTES)
+/* ---------------------------------- */
+.faq-section {
+  padding: 5rem 2rem;
+  background-color: var(--color-fondo-pagina); // Un grisecito suave para separar
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 3rem;
+
+  .section-title {
+    margin-bottom: 0.5rem; // Menos espacio entre título y subtítulo
+  }
+  
+  .section-subtitle {
+    font-size: 1.1rem;
+    color: var(--color-texto-secundario);
+  }
+}
+
+.faq-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr; // Izquierda chica, derecha grande
+  gap: 4rem;
+  align-items: start;
+}
+
+/* Columna Izquierda (Call to Action) */
+.faq-cta {
+  h3 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    color: var(--color-primario);
+  }
+  p {
+    margin-bottom: 2rem;
+  }
+}
+
+/* Columna Derecha (Lista Acordeón) */
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.faq-item {
+  background-color: #fff;
+  border-radius: var(--borde-redondeado);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  overflow: hidden;
+  border: 1px solid var(--color-borde-suave);
   transition: all 0.3s ease;
   cursor: pointer;
 
-  &.btn-primary {
-    background-color: $color-primario;
-    color: $color-texto-claro;
-
-    &:hover {
-      background-color: darken($color-primario, 10%);
-    }
+  &:hover {
+    border-color: var(--color-primario); // Highlight al pasar el mouse
   }
 
-  &.btn-secondary {
-    background-color: $color-secundario;
-    color: $color-texto-claro;
-
-    &:hover {
-      background-color: darken($color-secundario, 10%);
+  &.active {
+    border-color: var(--color-primario);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    
+    .chevron {
+      transform: rotate(180deg); // Giramos la flechita
+      color: var(--color-primario);
     }
+    
+    .faq-question {
+      color: var(--color-primario);
+      font-weight: 600;
+    }
+  }
+}
+
+.faq-question {
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--color-texto-principal);
+  transition: color 0.3s;
+
+  .chevron {
+    width: 20px;
+    height: 20px;
+    color: var(--color-texto-secundario);
+    transition: transform 0.3s ease, color 0.3s;
+  }
+}
+
+.faq-answer {
+  max-height: 0; // Oculto por defecto
+  overflow: hidden;
+  transition: max-height 0.3s ease-out, padding 0.3s ease;
+  background-color: #fafafa; // Un fondito apenas gris para la respuesta
+  
+  p {
+    padding: 0 1.5rem 1.5rem 1.5rem;
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--color-texto-secundario);
+  }
+
+  &.show {
+    max-height: 200px; // Altura suficiente para el texto
+    // (Si el texto es muy largo, aumentar esto)
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .faq-grid {
+    grid-template-columns: 1fr; // Una sola columna
+    gap: 3rem;
+  }
+  
+  .faq-cta {
+    text-align: center;
+    order: 2; // Ponemos el CTA abajo en móvil
+  }
+  
+  .faq-list {
+    order: 1; // Preguntas arriba
   }
 }

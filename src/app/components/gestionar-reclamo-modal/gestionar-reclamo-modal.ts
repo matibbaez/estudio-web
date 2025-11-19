@@ -1,12 +1,12 @@
 import { Component, Input, Output, EventEmitter, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-import { IReclamo } from '../../pages/admin-dashboard/admin-dashboard';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http'; // 1. ¡IMPORTAR HTTPCLIENT!
-import { NotificacionService } from '../../services/notificacion'; // 2. ¡IMPORTAR NOTIFICACION!
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { finalize } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
+import { IReclamo } from '../../pages/admin-dashboard/admin-dashboard';
+import { NotificacionService } from '../../services/notificacion';
 
-// 3. (PRO) Creamos un "tipo" para los nombres de archivo
 type TipoArchivo = 'dni' | 'recibo' | 'alta' | 'form1' | 'form2';
 
 @Component({
@@ -23,10 +23,10 @@ export class GestionarReclamoModalComponent implements OnInit {
   @Output() save = new EventEmitter<'Recibido' | 'En Proceso' | 'Finalizado'>();
 
   private fb = inject(FormBuilder);
-  private http = inject(HttpClient); // 4. ¡INYECTAR!
-  private notificacionService = inject(NotificacionService); // 5. ¡INYECTAR!
+  private http = inject(HttpClient); 
+  private notificacionService = inject(NotificacionService);
 
-  // 6. ¡NUEVA! Bandera para el spinner de descarga
+  // Bandera para el spinner de descarga
   public descargando: TipoArchivo | null = null;
 
   estadoForm = this.fb.group({
@@ -42,18 +42,19 @@ export class GestionarReclamoModalComponent implements OnInit {
   }
 
   // ------------------------------------------------------------------
-  // ¡NUEVO MÉTODO PARA DESCARGAR ARCHIVOS!
+  // MÉTODO PARA DESCARGAR ARCHIVOS (Con environment)
   // ------------------------------------------------------------------
   descargarArchivo(tipo: TipoArchivo) {
-    if (this.descargando) return; // Si ya está descargando, no hace nada
+    if (this.descargando) return; // Evita doble clic
 
-    this.descargando = tipo; // ¡Activamos el spinner!
-    const url = `http://localhost:3000/reclamos/descargar/${this.reclamo.id}/${tipo}`;
+    this.descargando = tipo; // Activa el spinner
+    
+    // 3. ¡USAMOS LA URL DEL ENVIRONMENT!
+    const url = `${environment.apiUrl}/reclamos/descargar/${this.reclamo.id}/${tipo}`;
 
-    // ¡La llamada GET! El 'jwtInterceptor' pone el token solo
     this.http.get<{ url: string }>(url).pipe(
       finalize(() => {
-        this.descargando = null; // ¡Apagamos el spinner (al final, éxito o error)!
+        this.descargando = null; // Apaga el spinner (éxito o error)
       })
     ).subscribe({
       next: (response) => {
@@ -66,14 +67,16 @@ export class GestionarReclamoModalComponent implements OnInit {
       }
     });
   }
-  // ------------------------------------------------------------------
 
-  // (Las funciones 'guardarCambios' y 'cerrarModal' quedan 100% igual)
+  // ------------------------------------------------------------------
+  // GUARDAR CAMBIOS (ESTADO)
+  // ------------------------------------------------------------------
   guardarCambios() {
     if (this.estadoForm.valid) {
       this.save.emit(this.estadoForm.value.estado as 'Recibido' | 'En Proceso' | 'Finalizado');
     }
   }
+
   cerrarModal() {
     this.close.emit();
   }

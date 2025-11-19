@@ -2,8 +2,7 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms'; 
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-
-// --- ¡FIX DE IMPORTS! (Estos eran los que tenías mal) ---
+import { environment } from '../../../environments/environment';
 import { CardComponent } from '../../components/card/card';
 import { NotificacionService } from '../../services/notificacion';
 
@@ -79,7 +78,10 @@ export class IniciarReclamoComponent {
       formData.append('fileAlta', formValue.fileAlta);
     }
 
-    this.http.post('http://localhost:3000/reclamos', formData).subscribe({
+    // 3. ¡USAMOS LA URL DEL ENVIRONMENT!
+    const url = `${environment.apiUrl}/reclamos`;
+
+    this.http.post(url, formData).subscribe({
       next: (response: any) => {
         this.isLoading = false;
         
@@ -92,7 +94,13 @@ export class IniciarReclamoComponent {
       error: (error) => {
         this.isLoading = false;
         console.error('¡ERROR! No se pudo conectar al backend:', error);
-        this.notificacionService.showError('Error al enviar el reclamo. Intente más tarde.');
+        
+        // (Opcional) Si querés mostrar el mensaje específico del backend (como "Tipo de archivo no permitido")
+        if (error.error && error.error.message) {
+             this.notificacionService.showError(error.error.message);
+        } else {
+             this.notificacionService.showError('Error al enviar el reclamo. Intente más tarde.');
+        }
       }
     });
   }

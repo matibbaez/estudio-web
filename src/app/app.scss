@@ -7,3 +7,16 @@
   flex-direction: column;
   gap: 0.5rem;
 }
+
+/* Hacemos que el host ocupe toda la altura */
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* El contenido principal empuja el footer hacia abajo */
+.main-content {
+  flex: 1; 
+}
+
