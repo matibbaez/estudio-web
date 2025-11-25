@@ -1,7 +1,7 @@
 <app-navbar></app-navbar>
 
-<div class="main-content">
-  <router-outlet></router-outlet>
+<div class="main-content" [@routeAnimations]="prepareRoute(outlet)">
+  <router-outlet #outlet="outlet"></router-outlet>
 </div>
 
 <div class="toast-container">

@@ -2,17 +2,20 @@
 
 :host {
   display: block;
-  position: sticky; /* ¡Se pega arriba! */
+  position: sticky;
   top: 0;
-  z-index: 1000; /* Por encima de todo */
+  z-index: 1000;
   width: 100%;
 }
 
 .navbar {
-  background-color: var(--color-primario); /* Azul Oscuro */
+  /* VOLVIMOS AL DISEÑO SÓLIDO */
+  background-color: var(--color-primario); /* Azul puro */
   color: white;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); /* Sombra suave */
-  height: 70px; /* Altura fija elegante */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); /* Sombra elegante */
+  border-bottom: none; /* Sin borde, bloque sólido */
+  
+  height: 70px;
   display: flex;
   align-items: center;
   transition: all 0.3s ease;
@@ -37,10 +40,14 @@
   text-decoration: none;
   color: white;
   cursor: pointer;
+  transition: opacity 0.2s;
+
+  &:hover { opacity: 0.9; }
 
   .brand-icon {
-    width: 36px;
-    height: 36px;
+    width: 38px;
+    height: 38px;
+    /* Fondo sutil para el icono */
     background-color: rgba(255, 255, 255, 0.1);
     border-radius: 8px;
     display: flex;
@@ -68,46 +75,61 @@
   gap: 2rem;
 
   a {
-    color: rgba(255, 255, 255, 0.75); /* Blanco un poco transparente */
+    color: rgba(255, 255, 255, 0.7); /* Un poco transparente inactivo */
     text-decoration: none;
     font-size: 0.95rem;
     font-weight: 500;
     transition: all 0.3s ease;
-    position: relative;
+    position: relative; /* Necesario para la línea */
     padding: 0.5rem 0;
+
+    /* LA ANIMACIÓN QUE TE GUSTÓ */
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 3px; /* Un poquito más gruesa para que se note en el azul */
+      background-color: #ffffff; /* Blanco puro */
+      border-radius: 2px;
+      
+      /* Truco de animación: Escala desde el centro */
+      transform: scaleX(0); 
+      transform-origin: center; 
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
 
     &:hover {
       color: white;
+      &::after {
+        transform: scaleX(1); /* Crece al pasar el mouse */
+      }
     }
 
     &.active {
       color: white;
-      
+      font-weight: 700;
       &::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 2px;
-        background-color: #ffffff; // <-- ¡AHORA ES BLANCO PURO!
-        border-radius: 2px;
+        transform: scaleX(1); /* Se queda fija si es la página activa */
       }
     }
   }
 
-  /* Botón especial para Admin */
+  /* Botón especial para Admin (Sin línea animada) */
   .btn-admin {
     background-color: rgba(255, 255, 255, 0.1);
-    padding: 0.5rem 1.25rem;
-    border-radius: 20px;
+    padding: 0.6rem 1.4rem;
+    border-radius: 50px;
     font-size: 0.9rem;
     color: white;
+    font-weight: 600;
     border: 1px solid transparent;
 
     &:hover {
       background-color: white;
       color: var(--color-primario);
+      transform: translateY(-1px);
     }
 
     &.active-btn {
@@ -115,13 +137,13 @@
       color: var(--color-primario);
     }
 
-    &::after { display: none; } /* Sin línea abajo */
+    &::after { display: none; } /* Quitamos la línea para este botón */
   }
 }
 
 /* --- BOTÓN HAMBURGUESA (Móvil) --- */
 .mobile-menu-button {
-  display: none; /* Oculto en desktop */
+  display: none;
   background: none;
   border: none;
   cursor: pointer;
@@ -147,7 +169,7 @@
   }
 }
 
-/* Animación a "X" cuando está abierto */
+/* Animación a "X" */
 .navbar.menu-abierto .mobile-menu-button span {
   &:nth-child(1) { transform: translateY(10px) rotate(45deg); }
   &:nth-child(2) { opacity: 0; }
@@ -156,17 +178,19 @@
 
 /* --- MENÚ DESPLEGABLE (Móvil) --- */
 .mobile-menu-dropdown {
-  display: none; /* Oculto por defecto */
+  display: none;
   position: absolute;
-  top: 70px; /* Altura del navbar */
+  top: 70px;
   left: 0;
   width: 100%;
-  background-color: var(--color-primario); /* Mismo color que navbar */
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  
+  /* Azul Sólido para el menú móvil también */
+  background-color: var(--color-primario); 
+  
   border-top: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
   padding: 1rem 0;
   
-  /* Animación */
   transform: translateY(-20px);
   opacity: 0;
   transition: all 0.3s ease;
@@ -193,20 +217,22 @@
 
     &.active {
       color: white;
-      border-left-color: var(--color-exito);
-      background-color: rgba(255, 255, 255, 0.05);
+      background-color: rgba(255, 255, 255, 0.1);
+      border-left-color: white; /* Indicador lateral clásico */
+      font-weight: 600;
     }
   }
 
   .divider {
     height: 1px;
     background-color: rgba(255, 255, 255, 0.1);
-    margin: 0.5rem 2rem;
+    margin: 0.5rem 1.5rem;
   }
 
   .link-admin {
-    font-weight: 600;
-    color: #90caf9; /* Un azul clarito para destacar */
+    font-weight: 700;
+    color: #90caf9; /* Azul clarito */
+    margin-top: 0.5rem;
   }
 }
 

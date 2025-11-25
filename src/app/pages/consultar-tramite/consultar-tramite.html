@@ -1,61 +1,87 @@
 <div class="page-container">
-  <app-card [titulo]="'Consultar Estado del Trámite'">
+  
+  <!-- Link de navegación simple -->
+  <a routerLink="/" class="back-link">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    Volver al inicio
+  </a>
 
-    <ng-container *ngIf="!isLoading && !resultado && !errorMensaje">
-      <p>Ingrese el código de seguimiento que recibió al iniciar su reclamo.</p>
+  <app-card [titulo]="'Consultar Estado'">
+
+    <!-- ESTADO 1: FORMULARIO DE BÚSQUEDA -->
+    <ng-container *ngIf="!resultado && !errorMensaje && !isLoading">
+      <div class="search-header">
+        <p>Ingresá el código de seguimiento que recibiste al iniciar el trámite.</p>
+      </div>
       
       <form class="consulta-form" [formGroup]="consultaForm" (ngSubmit)="onSubmit()">
         
         <div class="form-field icon-field">
-          <label for="codigo">Código de Seguimiento *</label>
-          <span class="icon">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M1.5 6.375c0-1.036.84-1.875 1.875-1.875h13.25c1.035 0 1.875.84 1.875 1.875v7.25c0 1.035-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 011.5 13.625v-7.25zm1.875-.375a.375.375 0 00-.375.375v7.25c0 .207.168.375.375.375h13.25a.375.375 0 00.375-.375v-7.25a.375.375 0 00-.375-.375H3.375z" clip-rule="evenodd" />
-              <path d="M9.172 8.172a.75.75 0 011.06 0l1.25 1.25a.75.75 0 11-1.06 1.06L10 9.793l-.422.421a.75.75 0 01-1.06-1.06l.654-.654zM7 11.25a.75.75 0 000 1.5h6a.75.75 0 000-1.5H7z" />
-            </svg>
-          </span>
-          <input id="codigo" type="text" formControlName="codigo" placeholder="ABC-12345">
-          <div *ngIf="consultaForm.get('codigo')?.invalid && consultaForm.get('codigo')?.touched" class="error">
-            El código es obligatorio.
+          <label for="codigo">Código de Seguimiento</label>
+          <div class="input-wrapper">
+            <span class="icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" /></svg>
+            </span>
+            <input id="codigo" type="text" formControlName="codigo" placeholder="Ej: A4F-8B1" autocomplete="off">
           </div>
         </div>
 
-        <button type="submit" [disabled]="consultaForm.invalid || isLoading" class="btn btn-primary btn-largo">
-          <span *ngIf="!isLoading">Consultar</span>
-          <span *ngIf="isLoading"><div class="spinner"></div></span>
+        <button type="submit" class="btn btn-primary btn-largo" [disabled]="consultaForm.invalid">
+          Consultar Ahora
         </button>
       </form>
     </ng-container>
 
-    <div *ngIf="isLoading" class="resultado-container loading">
+    <!-- ESTADO 2: CARGANDO -->
+    <div *ngIf="isLoading" class="loading-container">
       <div class="spinner-grande"></div>
-      <p>Buscando información...</p>
+      <p>Buscando expediente...</p>
     </div>
 
+    <!-- ESTADO 3: ÉXITO (DISEÑO TICKET) -->
     <div *ngIf="resultado" class="resultado-container exito">
-      <p class="success-subtitle">Estado de su trámite:</p>
       
-      <div class="estado-box">
-        {{ resultado.estado | uppercase }}
+      <div class="status-card">
+        <div class="card-header-status" [ngClass]="resultado.estado.toLowerCase().replace(' ', '-')">
+          <div class="status-icon">
+            <!-- Icono dinámico según estado (podrías hacer un ngSwitch acá si querés ser detallista) -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" /></svg>
+          </div>
+          <h3>{{ resultado.estado }}</h3>
+          <span class="status-subtitle">Estado Actual</span>
+        </div>
+
+        <div class="card-body-status">
+          <div class="info-row">
+            <span class="label">Código:</span>
+            <span class="value code">{{ resultado.codigo_seguimiento }}</span>
+          </div>
+          <div class="divider-dashed"></div>
+          <div class="info-row">
+            <span class="label">Titular:</span>
+            <span class="value">{{ resultado.nombre }}</span>
+          </div>
+          <div class="info-row">
+            <span class="label">Fecha Inicio:</span>
+            <span class="value">{{ resultado.fecha_creacion | date:'dd/MM/yyyy' }}</span>
+          </div>
+        </div>
       </div>
-      
-      <p class="detalle">Iniciado el: {{ resultado.fecha_creacion | date:'dd/MM/yyyy' }}</p>
-      <p class="detalle">Código: {{ resultado.codigo_seguimiento }}</p>
-      
+
       <button (click)="resetForm()" class="btn btn-secondary btn-largo">
         Consultar otro código
       </button>
     </div>
 
-    <div *ngIf="errorMensaje && !isLoading" class="resultado-container error-mensaje">
-      <div class="error-icon">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
-        </svg>
+    <!-- ESTADO 4: ERROR -->
+    <div *ngIf="errorMensaje && !isLoading" class="resultado-container error">
+      <div class="error-box">
+        <div class="error-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" /></svg>
+        </div>
+        <h3>No encontrado</h3>
+        <p>{{ errorMensaje }}</p>
       </div>
-      <h2 class="error-title">Error en la consulta</h2>
-      <p>{{ errorMensaje }}</p>
-      
       <button (click)="resetForm()" class="btn btn-primary btn-largo">
         Intentar de nuevo
       </button>

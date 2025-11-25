@@ -1,158 +1,175 @@
+/* Usamos variables globales */
+
 .page-container {
-  max-width: 600px; 
-  margin: 2rem auto;
+  max-width: 550px; /* Ancho ideal para lectura */
+  margin: 3rem auto;
+  padding: 0 1rem;
+  /* Fondo coherente */
+  background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
+  background-size: 20px 20px;
 }
 
-/* ---------------------------------- */
-/* 1. ESTILOS DE FORMULARIO
-/* ---------------------------------- */
+/* Link de volver */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-texto-secundario);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+  transition: color 0.2s;
+  
+  &:hover { color: var(--color-primario); }
+}
+
+/* --- FORMULARIO --- */
+.search-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  p { color: var(--color-texto-secundario); font-size: 0.95rem; }
+}
+
 .form-field {
   margin-bottom: 1.5rem;
-  text-align: left;
-
+  
   label {
     display: block;
-    font-weight: 500;
-    margin-bottom: 0.5rem;
-  }
-
-  input[type="text"] {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid var(--color-borde-suave);
-    border-radius: 4px;
-    font-size: 1rem;
-    transition: border-color 0.3s, box-shadow 0.3s;
-
-    &:focus {
-      outline: none;
-      border-color: var(--color-primario);
-      box-shadow: 0 0 0 3px rgba(26, 35, 126, 0.4); 
-    }
-  }
-
-  .error {
-    color: var(--color-error);
-    font-size: 0.8rem;
-    margin-top: 0.25rem;
-  }
-}
-
-.form-field.icon-field {
-  position: relative; 
-  .icon {
-    position: absolute;
-    left: 10px;
-    top: 50%;
-    transform: translateY(50%); 
-    height: 20px;
-    width: 20px;
-    color: #9e9e9e;
-  }
-  input[type="text"] { padding-left: 2.5rem; }
-}
-
-/* ---------------------------------- */
-/* 2. ESTILOS DE RESULTADOS
-/* ---------------------------------- */
-.resultado-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding: 1rem 0;
-}
-
-.spinner {
-  width: 24px;
-  height: 24px;
-  border: 3px solid rgba(255, 255, 255, 0.3);
-  border-top-color: #ffffff;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-.spinner-grande {
-  width: 50px;
-  height: 50px;
-  border: 5px solid var(--color-borde-suave);
-  border-top-color: var(--color-primario);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin-bottom: 1.5rem;
-}
-
-/* ---------------------------------- */
-/* Vista de ÉXITO
-/* ---------------------------------- */
-.exito {
-  .success-subtitle {
-    font-size: 1.1rem;
-    font-weight: 500;
-    color: var(--color-texto-secundario);
-    margin-bottom: 0.5rem;
-  }
-
-  .estado-box {
-    font-family: 'monospace', sans-serif;
-    font-size: 2rem;
     font-weight: 700;
-    color: var(--color-exito); // ¡Verde!
+    font-size: 0.8rem;
+    color: var(--color-primario);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .input-wrapper {
+    position: relative;
+    .icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+      svg { width: 22px; height: 22px; }
+    }
     
-    /* ¡ARREGLO! Usamos RGBA (el color verde con transparencia) */
-    background-color: rgba(40, 167, 69, 0.15); // 15% de opacidad para el fondo
-    border: 2px dashed rgba(40, 167, 69, 0.4); // 40% de opacidad para el borde
-
-    padding: 1rem 2.5rem;
-    margin: 0.5rem 0 1.5rem 0;
-    border-radius: var(--borde-redondeado);
-  }
-
-  .detalle {
-    font-size: 0.9rem;
-    color: var(--color-texto-secundario);
-  }
-}
-
-/* ---------------------------------- */
-/* Vista de ERROR
-/* ---------------------------------- */
-.error-mensaje {
-  .error-icon {
-    color: var(--color-error);
-    margin-bottom: 1rem;
-    svg {
-      width: 50px;
-      height: 50px;
+    input {
+      width: 100%;
+      padding: 1rem 1rem 1rem 3rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 10px;
+      font-size: 1.1rem; /* Letra grande para el código */
+      letter-spacing: 1px;
+      font-family: monospace; /* Fuente monoespaciada para códigos */
+      transition: all 0.2s;
+      
+      &:focus {
+        outline: none;
+        border-color: var(--color-primario);
+        background-color: white;
+        box-shadow: 0 0 0 4px rgba(34, 39, 97, 0.1);
+      }
+      &::placeholder { font-family: sans-serif; letter-spacing: normal; font-size: 1rem; }
     }
   }
-  .error-title {
-    color: var(--color-error);
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-  }
-  p {
-    font-size: 1.1rem;
-    color: var(--color-texto-principal);
-    margin-bottom: 2rem;
-  }
 }
 
-.btn-largo {
-  width: 100%;
-  margin-top: 1.5rem; 
+/* --- RESULTADO TICKET (NUEVO) --- */
+.status-card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  border: 1px solid #f1f5f9;
+  margin-bottom: 2rem;
+  animation: slideUp 0.4s ease-out;
 }
 
-.btn-secondary {
-  background-color: var(--color-secundario); 
+.card-header-status {
+  padding: 2rem;
+  text-align: center;
   color: white;
+  background-color: var(--color-primario); /* Default */
   
-  &:hover { 
-    background-color: #2b2b2b; 
+  /* Colores dinámicos según estado */
+  &.finalizado { background-color: var(--color-exito); } /* Verde */
+  &.en-proceso { background-color: #f59e0b; } /* Naranja */
+  &.recibido { background-color: var(--color-primario); } /* Azul */
+
+  .status-icon {
+    width: 60px;
+    height: 60px;
+    background-color: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem auto;
+    svg { width: 32px; height: 32px; color: white; }
+  }
+
+  h3 { margin: 0; font-size: 1.5rem; font-weight: 700; text-transform: uppercase; }
+  .status-subtitle { font-size: 0.85rem; opacity: 0.9; text-transform: uppercase; letter-spacing: 1px; }
+}
+
+.card-body-status {
+  padding: 1.5rem;
+  
+  .info-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+    
+    .label { color: var(--color-texto-secundario); }
+    .value { font-weight: 600; color: var(--color-texto-principal); text-align: right; }
+    .value.code { font-family: monospace; font-size: 1.1rem; color: var(--color-primario); }
   }
 }
+
+.divider-dashed {
+  border-bottom: 2px dashed #e2e8f0;
+  margin: 1rem 0;
+  position: relative;
+  
+  /* Efecto de "corte" de ticket en los bordes */
+  &::before, &::after {
+    content: '';
+    position: absolute;
+    top: -10px;
+    width: 20px;
+    height: 20px;
+    background-color: white; /* Color del fondo de la app-card */
+    border-radius: 50%;
+  }
+  &::before { left: -25px; } /* Ajustar según padding */
+  &::after { right: -25px; }
+}
+
+
+/* --- ERROR BOX --- */
+.error-box {
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  
+  .error-icon { color: #dc2626; margin-bottom: 1rem; svg { width: 40px; height: 40px; } }
+  h3 { color: #991b1b; margin-bottom: 0.5rem; font-size: 1.2rem; }
+  p { color: #b91c1c; margin: 0; }
+}
+
+/* --- BOTONES --- */
+.btn-largo { width: 100%; padding: 1rem; border-radius: 10px; font-weight: 700; cursor: pointer; transition: all 0.2s; border: none;}
+.btn-primary { background-color: var(--color-primario); color: white; &:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); } }
+.btn-secondary { background-color: white; color: var(--color-texto-principal); border: 2px solid #e2e8f0; &:hover { border-color: var(--color-primario); color: var(--color-primario); } }
+
+/* --- SPINNER --- */
+.loading-container { text-align: center; padding: 3rem 0; color: var(--color-texto-secundario); }
+.spinner-grande { width: 40px; height: 40px; border: 3px solid #e2e8f0; border-top-color: var(--color-primario); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 1rem auto; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }

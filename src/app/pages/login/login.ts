@@ -5,12 +5,13 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { CardComponent } from '../../components/card/card';
 import { NotificacionService } from '../../services/notificacion';
 import { Router } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, CardComponent], // ¡Importamos la Card!
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, CardComponent], // ¡Importamos la Card!
   templateUrl: './login.html',
   styleUrl: './login.scss'
 })

@@ -2,36 +2,51 @@
   <app-card [titulo]="'Panel de Administración'">
     
     <div *ngIf="reclamos$ | async as reclamos; else loading">
-      <table class="admin-table" *ngIf="reclamos.length > 0; else noReclamos">
-        <thead>
-          </thead>
-        <tbody>
-          <tr *ngFor="let reclamo of reclamos">
-            <td>{{ reclamo.fecha_creacion | date:'dd/MM/yyyy HH:mm' }}</td>
-            <td>{{ reclamo.codigo_seguimiento }}</td>
-            <td>{{ reclamo.nombre }}</td>
-            <td>{{ reclamo.dni }}</td>
-            <td>{{ reclamo.email }}</td>
-            <td>
-              <span class="status-tag" [ngClass]="reclamo.estado.toLowerCase().replace(' ', '-')">
-                {{ reclamo.estado }}
-              </span>
-            </td>
 
-            <td>
-              <button 
-                class="btn btn-primary btn-chico" 
-                (click)="abrirModal(reclamo)" [disabled]="actualizandoId === reclamo.id">
-                
-                <span *ngIf="actualizandoId !== reclamo.id">Gestionar</span>
-                <span *ngIf="actualizandoId === reclamo.id">
-                  <div class="spinner-chico"></div>
+      <div class="table-responsive" *ngIf="reclamos.length > 0; else noReclamos">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Código</th>
+              <th>Nombre</th>
+              <th>DNI</th>
+              <th>Email</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let reclamo of reclamos">
+              <td>{{ reclamo.fecha_creacion | date:'dd/MM/yyyy HH:mm' }}</td>
+              <td class="font-mono">{{ reclamo.codigo_seguimiento }}</td>
+              <td>{{ reclamo.nombre }}</td>
+              <td>{{ reclamo.dni }}</td>
+              <td>{{ reclamo.email }}</td>
+              
+              <td>
+                <span class="status-tag" [ngClass]="reclamo.estado.toLowerCase().replace(' ', '-')">
+                  {{ reclamo.estado }}
                 </span>
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+              </td>
+
+              <td>
+                <button 
+                  class="btn btn-primary btn-chico" 
+                  (click)="abrirModal(reclamo)" 
+                  [disabled]="actualizandoId === reclamo.id">
+                  
+                  <span *ngIf="actualizandoId !== reclamo.id">Gestionar</span>
+                  
+                  <span *ngIf="actualizandoId === reclamo.id">
+                    <div class="spinner-chico"></div>
+                  </span>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
       <ng-template #noReclamos>
         <div class="no-reclamos-box">

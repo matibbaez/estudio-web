@@ -10,19 +10,32 @@ import { AdminDashboardComponent } from './pages/admin-dashboard/admin-dashboard
 import { authGuard } from './auth/auth-guard';
 
 export const routes: Routes = [
-  // --- Rutas Públicas ---
-  { path: '', component: InicioComponent, pathMatch: 'full' },
-  { path: 'iniciar-reclamo', component: IniciarReclamoComponent },
-  { path: 'consultar-tramite', component: ConsultarTramiteComponent },
-  { path: 'login', component: LoginComponent },
-
-  // ------------------------------------------
-  // RUTA PRIVADA PARA EL ADMIN
-  // ------------------------------------------
   { 
-    path: 'admin-dashboard',
-    component: AdminDashboardComponent,
-    canActivate: [authGuard] 
+    path: '', 
+    component: InicioComponent, 
+    pathMatch: 'full',
+    data: { animation: 'InicioPage' }
+  },
+  { 
+    path: 'iniciar-reclamo', 
+    component: IniciarReclamoComponent,
+    data: { animation: 'IniciarPage' } 
+  },
+  { 
+    path: 'consultar-tramite', 
+    component: ConsultarTramiteComponent,
+    data: { animation: 'ConsultarPage' } 
+  },
+  { 
+    path: 'login', 
+    component: LoginComponent,
+    data: { animation: 'LoginPage' } 
+  },
+  { 
+    path: 'admin-dashboard', 
+    component: AdminDashboardComponent, 
+    canActivate: [authGuard],
+    data: { animation: 'AdminPage' } 
   },
   
   { path: '**', redirectTo: '' } 

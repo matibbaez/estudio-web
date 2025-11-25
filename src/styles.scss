@@ -1,6 +1,67 @@
 /* ---------------------------------- */
-/* 1. VARIABLES GLOBALES (Nuestro Sistema de Diseño)
+/* SCROLLBAR "FUTURISTA" / MODERNA
 /* ---------------------------------- */
+
+/* ---------------------------------- */
+/* CONFIGURACIÓN DE LENIS (SCROLL FLUIDO)
+/* ---------------------------------- */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important; /* Lenis se encarga del scroll, no CSS */
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none; /* Mejora performance si hay iframes */
+}
+
+/* Para Firefox */
+html {
+  scrollbar-width: thin; /* Barra finita */
+  scrollbar-color: var(--color-primario) transparent; /* Thumb | Track */
+}
+
+/* Para Chrome, Edge, Safari (Webkit) */
+::-webkit-scrollbar {
+  width: 8px; /* Ancho vertical */
+  height: 8px; /* Alto horizontal */
+}
+
+/* El "carril" (Track) - Lo hacemos invisible o muy sutil */
+::-webkit-scrollbar-track {
+  background: transparent; 
+  margin: 4px 0;
+}
+
+/* La "barra" que se mueve (Thumb) */
+::-webkit-scrollbar-thumb {
+  background-color: rgba(34, 39, 97, 0.3); /* Azul sutil (transparente) */
+  border-radius: 10px; /* Borde bien redondo (cápsula) */
+  border: 2px solid transparent; /* Truco para dar aire alrededor */
+  background-clip: content-box; /* Hace que el borde transparente funcione */
+  transition: background-color 0.3s;
+}
+
+/* Cuando pasás el mouse por encima de la barra */
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-primario); /* Se pone azul sólido */
+}
+
+/* Esquina (donde se cruzan vertical y horizontal) */
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
 :root {
   // ¡TU NUEVO COLOR!
   --color-primario: #222761;       // Azul Real Profundo

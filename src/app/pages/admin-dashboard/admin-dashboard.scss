@@ -152,17 +152,38 @@
 @keyframes spin { to { transform: rotate(360deg); } }
 
 /* ---------------------------------- */
-/* RESPONSIVE (TABLA MÓVIL)
+/* TABLA RESPONSIVE (SCROLL HORIZONTAL)
 /* ---------------------------------- */
-@media (max-width: 768px) {
-  .page-container { padding: 0 1rem; }
+.table-responsive {
+  width: 100%;
+  overflow-x: auto; /* ¡La clave! Permite scroll lateral */
+  -webkit-overflow-scrolling: touch; /* Scroll suave en iPhone */
+  margin-top: 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--color-borde-suave); /* Un marquito sutil */
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
   
-  /* Hacemos que la tabla tenga scroll horizontal si no entra */
-  app-card { // Asumiendo que app-card tiene un contenedor interno
-    overflow-x: auto; 
+  /* ¡TRUCO! Le damos un ancho mínimo a la tabla.
+     Si la pantalla es más chica que esto, aparece el scroll.
+     Así las columnas no se aplastan.
+  */
+  min-width: 900px; 
+
+  thead tr {
+    background-color: #f8f9fa;
+    color: var(--color-texto-secundario);
+    text-align: left;
   }
-  
-  .admin-table {
-    min-width: 600px; // Fuerza el ancho para que aparezca el scroll
+
+  th, td {
+    padding: 1rem; /* Buen espacio para leer */
+    vertical-align: middle;
+    white-space: nowrap; /* Evita que el texto se parta en dos líneas feo */
   }
+
+  /* ... (resto de estilos de hover, bordes, etc. quedan igual) ... */
 }

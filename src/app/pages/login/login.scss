@@ -1,5 +1,3 @@
-/* Usamos variables globales */
-
 .login-page {
   min-height: 100vh;
   width: 100%;
@@ -7,54 +5,59 @@
   align-items: center;
   justify-content: center;
   
-  /* CAMBIO: Fondo claro y limpio en lugar de oscuro */
-  background-color: #f0f2f5; 
-  background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
-  background-size: 20px 20px; /* Un patrón de puntitos muy sutil y pro */
+  /* Fondo claro con patrón de puntos (mismo que el Hero) */
+  background-color: #f8fafc; 
+  background-image: radial-gradient(#cbd5e1 1.5px, transparent 1.5px);
+  background-size: 24px 24px;
   padding: 1rem;
 }
 
 .login-container {
   width: 100%;
-  max-width: 400px;
+  max-width: 420px; /* Un pelín más ancho para que respire */
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-/* --- BRANDING (Lo sacamos de arriba y lo metemos en la tarjeta visualmente) --- */
-.brand-header {
-  display: none; /* Ocultamos el de afuera para limpiar la vista */
+  
+  /* Animación de entrada suave */
+  animation: fadeInUp 0.6s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* --- TARJETA --- */
 .login-card {
   background-color: white;
-  border-radius: var(--borde-redondeado);
+  border-radius: 16px; /* Bordes un poco más redondeados */
   width: 100%;
-  box-shadow: var(--sombra-tarjeta);
-  overflow: hidden; /* Para que la cabecera de color respete los bordes */
+  /* Sombra profunda y elegante */
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
   border: 1px solid white;
 }
 
-/* --- CABECERA INTEGRADA (NUEVO DISEÑO) --- */
-/* --- CABECERA INTEGRADA (ESTILOS ARREGLADOS) --- */
+/* --- CABECERA AZUL --- */
 .login-header {
   background-color: var(--color-primario);
-  padding: 3rem 2rem;
+  padding: 2.5rem 2rem;
   text-align: center;
   color: white;
+  cursor: pointer; /* Indica que se puede clickear para salir */
+  transition: background-color 0.2s;
   
-  /* Estilos para el ícono */
+  &:hover {
+    background-color: #1e1b4b; /* Un tono apenas más oscuro al hover */
+  }
+  
+  /* Ícono */
   .brand-icon {
-    width: 60px;
-    height: 60px;
-    background-color: rgba(255, 255, 255, 0.15); // Un poco transparente
-    border-radius: 12px;
+    width: 64px;
+    height: 64px;
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 1.5rem auto; // Centrado y con espacio abajo
+    margin: 0 auto 1.25rem auto;
+    backdrop-filter: blur(4px); /* Detalle sutil */
     
     svg {
       width: 32px;
@@ -63,42 +66,41 @@
     }
   }
 
-  /* Estilos para el H1 (Título Principal) */
   h1 {
-    font-size: 1.75rem;
+    font-size: 1.5rem;
     color: white;
     font-weight: 700;
-    margin: 0 0 0.5rem 0;
+    margin: 0 0 0.25rem 0;
     letter-spacing: -0.5px;
-    line-height: 1.2;
   }
 
   p {
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
     margin: 0;
-    font-weight: 400;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.75rem;
   }
 }
 
-/* --- CUERPO DEL FORMULARIO --- */
+/* --- FORMULARIO --- */
 .login-form {
-  padding: 2.5rem 2rem; /* Espaciado interno */
+  padding: 2.5rem 2rem;
 }
 
-/* --- INPUTS --- */
 .form-field {
   margin-bottom: 1.5rem;
   
   label {
     display: block;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--color-texto-principal);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--color-texto-secundario);
     margin-bottom: 0.5rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    font-size: 0.75rem;
   }
 
   .input-wrapper {
@@ -107,37 +109,63 @@
 
   .icon {
     position: absolute;
-    left: 14px;
+    left: 16px;
     top: 50%;
     transform: translateY(-50%);
-    color: #9ca3af;
+    color: #94a3b8; /* Gris azulado */
     z-index: 10;
+    display: flex;
     svg { width: 20px; height: 20px; }
   }
 
   input {
     width: 100%;
-    padding: 0.85rem 0.85rem 0.85rem 3rem; /* Más espacio */
-    border: 2px solid #f3f4f6; /* Borde muy suave por defecto */
-    border-radius: 8px;
+    padding: 0.9rem 1rem 0.9rem 3rem; /* Espacio para icono */
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
     font-size: 1rem;
     color: var(--color-texto-principal);
-    background-color: #f9fafb;
+    background-color: #f8fafc;
     transition: all 0.2s ease;
+    
+    &::placeholder { color: #cbd5e1; }
     
     &:focus {
       outline: none;
       background-color: white;
-      border-color: var(--color-primario); /* Borde de TU color al enfocar */
-      box-shadow: 0 0 0 4px rgba(34, 39, 97, 0.1); /* Glow suave de tu color */
+      border-color: var(--color-primario);
+      box-shadow: 0 0 0 4px rgba(34, 39, 97, 0.1); /* Glow azul */
+      
+      /* Al enfocar, cambiamos el color del icono hermano */
+    }
+    
+    /* Pequeño truco CSS: input enfocado -> icono cambia de color */
+    &:focus + .icon, &:focus ~ .icon {
+        color: var(--color-primario);
     }
   }
 
   .error {
-    color: var(--color-error);
+    color: #dc2626; /* Rojo error */
     font-size: 0.8rem;
-    margin-top: 0.4rem;
+    margin-top: 0.5rem;
     font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    
+    &::before {
+        content: '!';
+        display: inline-block;
+        width: 14px;
+        height: 14px;
+        background: #dc2626;
+        color: white;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 14px;
+        font-size: 10px;
+    }
   }
 }
 
@@ -145,30 +173,36 @@
 .btn-login {
   width: 100%;
   padding: 1rem;
-  background-color: var(--color-primario); /* ¡TU COLOR! */
+  background-color: var(--color-primario);
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
-  transition: transform 0.1s, background-color 0.2s;
-  margin-top: 1.5rem;
+  transition: all 0.2s ease;
+  margin-top: 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 50px;
-  box-shadow: 0 4px 12px rgba(34, 39, 97, 0.2); /* Sombra con tu color */
+  min-height: 54px; /* Altura generosa para touch */
+  box-shadow: 0 4px 6px -1px rgba(26, 35, 126, 0.2);
 
   &:hover {
-    background-color: var(--color-primario-hover);
-    transform: translateY(-1px);
+    background-color: var(--color-primario-hover, #1e1b4b);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(26, 35, 126, 0.3);
+  }
+
+  &:active {
+    transform: translateY(0);
   }
 
   &:disabled {
     opacity: 0.7;
     cursor: not-allowed;
     transform: none;
+    box-shadow: none;
   }
 }
 
@@ -176,10 +210,12 @@
 .login-footer {
   margin-top: 2rem;
   text-align: center;
+  padding: 0 1rem;
   
   p {
-    font-size: 0.85rem;
-    color: #9ca3af;
+    font-size: 0.8rem;
+    color: #94a3b8;
+    line-height: 1.5;
   }
 }
 
@@ -192,4 +228,17 @@
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
+
 @keyframes spin { to { transform: rotate(360deg); } }
+
+/* Animación de Entrada */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -4,7 +4,8 @@
     
     <div class="login-card">
       
-      <div class="login-header">
+      <!-- Hice el header clickeable para volver al inicio por si entraron por error -->
+      <div class="login-header" routerLink="/inicio">
         
         <div class="brand-icon">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
@@ -13,7 +14,7 @@
         </div>
 
         <h1>Estudio Jurídico</h1>
-        <p>Acceso al Portal Administrativo</p>
+        <p>Portal Administrativo</p>
       </div>
 
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
@@ -27,7 +28,7 @@
             <input id="email" type="email" formControlName="email" placeholder="admin@estudio.com">
           </div>
           <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="error">
-            Email inválido.
+            Ingrese un email válido.
           </div>
         </div>
 
@@ -40,12 +41,12 @@
             <input id="password" type="password" formControlName="password" placeholder="••••••••">
           </div>
           <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="error">
-            Contraseña requerida.
+            La contraseña es obligatoria.
           </div>
         </div>
 
         <button type="submit" [disabled]="loginForm.invalid || isLoading" class="btn-login">
-          <span *ngIf="!isLoading">Ingresar</span>
+          <span *ngIf="!isLoading">Ingresar al Sistema</span>
           <span *ngIf="isLoading"><div class="spinner"></div></span>
         </button>
 
@@ -53,7 +54,7 @@
     </div>
 
     <div class="login-footer">
-      <p>&copy; 2025 VisionPath. Acceso restringido.</p>
+      <p>&copy; 2025 Estudio Jurídico. Acceso restringido a personal autorizado.</p>
     </div>
 
   </div>
