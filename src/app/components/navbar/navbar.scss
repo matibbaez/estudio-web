@@ -1,5 +1,3 @@
-/* Usamos variables globales */
-
 :host {
   display: block;
   position: sticky;
@@ -9,11 +7,10 @@
 }
 
 .navbar {
-  /* VOLVIMOS AL DISEÑO SÓLIDO */
   background-color: var(--color-primario); /* Azul puro */
   color: white;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); /* Sombra elegante */
-  border-bottom: none; /* Sin borde, bloque sólido */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  border-bottom: none;
   
   height: 70px;
   display: flex;
@@ -32,39 +29,26 @@
   height: 100%;
 }
 
-/* --- MARCA --- */
+/* --- MARCA (LOGO IMAGEN) --- */
 .navbar-brand {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
   text-decoration: none;
-  color: white;
   cursor: pointer;
+  height: 100%; /* Ocupa toda la altura para centrar */
   transition: opacity 0.2s;
 
   &:hover { opacity: 0.9; }
 
-  .brand-icon {
-    width: 38px;
-    height: 38px;
-    /* Fondo sutil para el icono */
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  .logo-img {
+    height: 40px; /* Altura controlada para que no rompa el navbar */
+    width: auto;  /* El ancho se ajusta solo */
+    object-fit: contain; /* Asegura que se vea entera */
     
-    svg {
-      width: 20px;
-      height: 20px;
-      color: white;
+    /* Opcional: si sentís que el logo está muy pegado al borde en móvil */
+    @media (max-width: 768px) {
+        height: 40px; 
     }
-  }
-
-  .brand-text {
-    font-size: 1.25rem;
-    font-weight: 700;
-    letter-spacing: 0.5px;
   }
 }
 
@@ -75,26 +59,23 @@
   gap: 2rem;
 
   a {
-    color: rgba(255, 255, 255, 0.7); /* Un poco transparente inactivo */
+    color: rgba(255, 255, 255, 0.8);
     text-decoration: none;
     font-size: 0.95rem;
     font-weight: 500;
     transition: all 0.3s ease;
-    position: relative; /* Necesario para la línea */
+    position: relative;
     padding: 0.5rem 0;
 
-    /* LA ANIMACIÓN QUE TE GUSTÓ */
     &::after {
       content: '';
       position: absolute;
       bottom: 0;
       left: 0;
       width: 100%;
-      height: 3px; /* Un poquito más gruesa para que se note en el azul */
-      background-color: #ffffff; /* Blanco puro */
+      height: 3px;
+      background-color: #ffffff;
       border-radius: 2px;
-      
-      /* Truco de animación: Escala desde el centro */
       transform: scaleX(0); 
       transform-origin: center; 
       transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -102,21 +83,16 @@
 
     &:hover {
       color: white;
-      &::after {
-        transform: scaleX(1); /* Crece al pasar el mouse */
-      }
+      &::after { transform: scaleX(1); }
     }
 
     &.active {
       color: white;
       font-weight: 700;
-      &::after {
-        transform: scaleX(1); /* Se queda fija si es la página activa */
-      }
+      &::after { transform: scaleX(1); }
     }
   }
 
-  /* Botón especial para Admin (Sin línea animada) */
   .btn-admin {
     background-color: rgba(255, 255, 255, 0.1);
     padding: 0.6rem 1.4rem;
@@ -137,7 +113,7 @@
       color: var(--color-primario);
     }
 
-    &::after { display: none; } /* Quitamos la línea para este botón */
+    &::after { display: none; }
   }
 }
 
@@ -169,7 +145,6 @@
   }
 }
 
-/* Animación a "X" */
 .navbar.menu-abierto .mobile-menu-button span {
   &:nth-child(1) { transform: translateY(10px) rotate(45deg); }
   &:nth-child(2) { opacity: 0; }
@@ -183,10 +158,7 @@
   top: 70px;
   left: 0;
   width: 100%;
-  
-  /* Azul Sólido para el menú móvil también */
   background-color: var(--color-primario); 
-  
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
   padding: 1rem 0;
@@ -218,7 +190,7 @@
     &.active {
       color: white;
       background-color: rgba(255, 255, 255, 0.1);
-      border-left-color: white; /* Indicador lateral clásico */
+      border-left-color: white;
       font-weight: 600;
     }
   }
@@ -231,12 +203,11 @@
 
   .link-admin {
     font-weight: 700;
-    color: #90caf9; /* Azul clarito */
+    color: #90caf9;
     margin-top: 0.5rem;
   }
 }
 
-/* --- RESPONSIVE --- */
 @media (max-width: 768px) {
   .navbar-links-desktop { display: none; }
   .mobile-menu-button { display: block; }

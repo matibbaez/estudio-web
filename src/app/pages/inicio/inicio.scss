@@ -17,14 +17,24 @@
    ========================================= */
 .hero {
   position: relative;
-  background-color: #f8fafc; /* Gris muy suave */
-  /* Patrón de puntos */
+  background-color: #f8fafc;
+  
+  /* 1. Patrón */
   background-image: radial-gradient(#cbd5e1 1.5px, transparent 1.5px);
+  
+  /* 2. Tamaño del patrón */
   background-size: 24px 24px;
-  padding: 6rem 1rem; /* Buen espacio vertical */
+  
+  /* 3. Animación Ajustada */
+  /* 20s para un descenso suave y constante */
+  animation: moverPuntos 2s linear infinite;
+  
+  will-change: background-position;
+  
+  padding: 6rem 1rem;
   overflow: hidden;
 
-  /* Degradado inferior para suavizar la unión con la sgte sección */
+  /* Degradado inferior */
   &::after {
     content: '';
     position: absolute;
@@ -34,6 +44,7 @@
     height: 150px;
     background: linear-gradient(to bottom, transparent 0%, #f8fafc 100%);
     pointer-events: none;
+    z-index: 1;
   }
 }
 
@@ -68,21 +79,24 @@
 }
 
 /* Título con efecto Marcador */
+/* Título Principal */
 h1 {
   font-size: 3.5rem;
   line-height: 1.1;
   color: var(--color-texto-principal);
   margin-bottom: 1.5rem;
-  font-weight: 800;
+  font-weight: 500;
   letter-spacing: -1px;
 
   .text-highlight {
     position: relative;
-    white-space: nowrap; 
     color: var(--color-primario);
     z-index: 1; 
+    font-weight: 800;
     
-    /* El subrayado creativo */
+    /* --- VERSIÓN DESKTOP (Rotada y Cool) --- */
+    white-space: nowrap; /* Fuerza una sola línea en pantallas grandes */
+    
     &::after {
       content: '';
       position: absolute;
@@ -96,6 +110,35 @@ h1 {
       transform: rotate(-1deg);
     }
   }
+}
+
+/* --- AJUSTES PARA MÓVIL --- */
+@media (max-width: 768px) {
+  h1 { 
+    font-size: 2.5rem; 
+    line-height: 1.2; /* Un poquito más de aire entre líneas */
+    
+    .text-highlight {
+      white-space: normal; /* Permitimos que baje de renglón */
+      display: inline;     /* Importante para que el fondo fluya */
+      
+      /* --- TÉCNICA ESPECIAL PARA MÓVIL --- */
+      /* Usamos fondo en vez de ::after para que soporte multilinea */
+      background-image: linear-gradient(to right, rgba(26, 35, 126, 0.15), rgba(26, 35, 126, 0.15));
+      background-position: 0% 90%; /* Ubicado abajo */
+      background-repeat: no-repeat;
+      background-size: 100% 0.4em; /* Ancho total, altura del subrayado */
+      
+      /* Quitamos el bloque rotado de desktop porque rompe el wrap */
+      &::after {
+        display: none; 
+      }
+    }
+  }
+
+  .hero { padding: 4rem 1rem; }
+  .hero-actions { flex-direction: column; width: 100%; }
+  .btn-lg { width: 100%; justify-content: center; }
 }
 
 p {
@@ -400,4 +443,14 @@ p {
   }
   .faq-cta { text-align: center; order: 2; }
   .faq-list { order: 1; }
+}
+
+@keyframes moverPuntos {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    /* CAMBIO: 0 en X, 24px en Y (Solo baja) */
+    background-position: 0 24px; 
+  }
 }

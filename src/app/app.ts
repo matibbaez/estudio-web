@@ -1,5 +1,5 @@
-import { Component, inject, OnInit, AfterViewInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, inject, OnInit } from '@angular/core';
+import { RouterOutlet, Router, NavigationEnd } from '@angular/router'; // IMPORTAR ROUTER
 import { NavbarComponent } from './components/navbar/navbar';
 import { CommonModule } from '@angular/common';
 import { NotificacionComponent } from './components/notificacion/notificacion';
@@ -7,6 +7,7 @@ import { FooterComponent } from './components/footer/footer';
 import { NotificacionService } from './services/notificacion';
 import { fadeAnimation } from './animations';
 import Lenis from 'lenis';
+import { filter } from 'rxjs/operators'; // IMPORTAR FILTER
 
 @Component({
   selector: 'app-root',
@@ -24,25 +25,34 @@ import Lenis from 'lenis';
 })
 export class AppComponent implements OnInit {
   public notificacionService = inject(NotificacionService);
+  private router = inject(Router); // INYECTAMOS EL ROUTER
 
   prepareRoute(outlet: RouterOutlet) {
     return outlet && outlet.activatedRouteData && outlet.activatedRouteData['animation'];
   }
 
   ngOnInit() {
-    // 2. ¡INICIALIZAMOS EL SCROLL FLUIDO!
+    // 1. Configuración de Lenis
     const lenis = new Lenis({
-      duration: 1.2, // Cuánto tarda en frenar (más alto = más suave)
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Matemáticas para la suavidad
-      smoothWheel: true, // Activar para la ruedita
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
     });
 
-    // 3. El loop de animación (necesario para que funcione)
+    // 2. Loop de animación
     function raf(time: number) {
       lenis.raf(time);
       requestAnimationFrame(raf);
     }
-
     requestAnimationFrame(raf);
+
+    // 3. ¡LA MAGIA! DETECTAMOS CUANDO CAMBIA LA RUTA
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd) // Solo cuando terminó de navegar
+    ).subscribe(() => {
+      // Le decimos a Lenis: "Llevame arriba suavemente"
+      // immediate: false fuerza la animación suave
+      lenis.scrollTo(0, { immediate: false });
+    });
   }
 }

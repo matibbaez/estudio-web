@@ -1,16 +1,123 @@
-/* ---------------------------------- */
-/* SCROLLBAR "FUTURISTA" / MODERNA
-/* ---------------------------------- */
+/* =========================================
+   VARIABLES GLOBALES (Tus Design Tokens)
+   ========================================= */
+:root {
+  /* --- PALETA DE COLORES (Tu Azul Royal Profundo) --- */
+  --color-primario: #222761;       /* Azul Real Profundo */
+  --color-primario-hover: #1a1e4d; /* Un poquito más oscuro para hover */
+  --color-secundario: #5c6bc0;     /* Azul más claro para detalles */
+  
+  /* Estados del sistema */
+  --color-exito: #2e7d32; /* Verde éxito */
+  --color-error: #c62828; /* Rojo error */
+  --color-advertencia: #f59e0b; /* Naranja alerta */
 
-/* ---------------------------------- */
-/* CONFIGURACIÓN DE LENIS (SCROLL FLUIDO)
-/* ---------------------------------- */
+  /* --- UI & FONDOS --- */
+  --color-fondo-pagina: #f3f4f6;   /* Gris muy suave y moderno */
+  --color-fondo-tarjeta: #ffffff;
+  --color-borde-suave: #e5e7eb;
+  
+  /* Textos */
+  --color-texto-principal: #1f2937;
+  --color-texto-secundario: #6b7280;
+
+  /* --- TIPOGRAFÍA & BORDES --- */
+  --font-familia-principal: 'Outfit', sans-serif;
+  --borde-redondeado: 12px;
+  --sombra-tarjeta: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+}
+
+/* =========================================
+   RESET & BASE
+   ========================================= */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  font-family: var(--font-familia-principal);
+  background-color: var(--color-fondo-pagina);
+  color: var(--color-texto-principal);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased; /* Texto nítido */
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Títulos con tu color primario */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700; /* Un poco más de peso para presencia */
+  color: var(--color-primario);
+}
+
+p {
+  color: var(--color-texto-secundario);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+button {
+  font-family: inherit;
+}
+
+/* =========================================
+   SCROLLBAR & SCROLL BEHAVIOR
+   ========================================= */
+html {
+  /* ¡ESTA ES LA CLAVE PARA EL SCROLL LINDO! */
+  scroll-behavior: smooth;
+  
+  /* Para Firefox Scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-primario) transparent;
+}
+
+/* Para Chrome, Edge, Safari (Webkit) */
+::-webkit-scrollbar {
+  width: 8px; /* Ancho vertical */
+  height: 8px; /* Alto horizontal */
+}
+
+::-webkit-scrollbar-track {
+  background: transparent; 
+  margin: 4px 0;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(34, 39, 97, 0.3); /* Azul sutil */
+  border-radius: 10px;
+  border: 2px solid transparent; /* Truco para dar aire */
+  background-clip: content-box;
+  transition: background-color 0.3s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-primario); /* Azul sólido al hover */
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* =========================================
+   CONFIGURACIÓN LENIS (Opcional si usás la librería JS)
+   ========================================= */
 html.lenis, html.lenis body {
   height: auto;
 }
 
 .lenis.lenis-smooth {
-  scroll-behavior: auto !important; /* Lenis se encarga del scroll, no CSS */
+  /* Si usás Lenis JS, él maneja el scroll. Si no, usa el nativo de arriba. */
+  scroll-behavior: auto !important; 
 }
 
 .lenis.lenis-smooth [data-lenis-prevent] {
@@ -22,105 +129,17 @@ html.lenis, html.lenis body {
 }
 
 .lenis.lenis-scrolling iframe {
-  pointer-events: none; /* Mejora performance si hay iframes */
+  pointer-events: none;
 }
 
-/* Para Firefox */
-html {
-  scrollbar-width: thin; /* Barra finita */
-  scrollbar-color: var(--color-primario) transparent; /* Thumb | Track */
-}
-
-/* Para Chrome, Edge, Safari (Webkit) */
-::-webkit-scrollbar {
-  width: 8px; /* Ancho vertical */
-  height: 8px; /* Alto horizontal */
-}
-
-/* El "carril" (Track) - Lo hacemos invisible o muy sutil */
-::-webkit-scrollbar-track {
-  background: transparent; 
-  margin: 4px 0;
-}
-
-/* La "barra" que se mueve (Thumb) */
-::-webkit-scrollbar-thumb {
-  background-color: rgba(34, 39, 97, 0.3); /* Azul sutil (transparente) */
-  border-radius: 10px; /* Borde bien redondo (cápsula) */
-  border: 2px solid transparent; /* Truco para dar aire alrededor */
-  background-clip: content-box; /* Hace que el borde transparente funcione */
-  transition: background-color 0.3s;
-}
-
-/* Cuando pasás el mouse por encima de la barra */
-::-webkit-scrollbar-thumb:hover {
-  background-color: var(--color-primario); /* Se pone azul sólido */
-}
-
-/* Esquina (donde se cruzan vertical y horizontal) */
-::-webkit-scrollbar-corner {
-  background: transparent;
-}
-
-:root {
-  // ¡TU NUEVO COLOR!
-  --color-primario: #222761;       // Azul Real Profundo
-  --color-primario-hover: #1a1e4d; // Un poquito más oscuro para hover
-  
-  --color-secundario: #5c6bc0;     // Un azul más claro para detalles secundarios
-  
-  --color-exito: #2e7d32;
-  --color-error: #c62828;
-
-  // UI
-  --color-fondo-pagina: #f3f4f6;   // Un gris muy suave y moderno
-  --color-fondo-tarjeta: #ffffff;
-  
-  --color-texto-principal: #1f2937;
-  --color-texto-secundario: #6b7280;
-  --color-borde-suave: #e5e7eb;
-
-  --font-familia-principal: 'Roboto', sans-serif;
-  --sombra-tarjeta: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-  --borde-redondeado: 12px;
-}
-
-/* ---------------------------------- */
-/* 2. RESETEO GLOBAL
-/* ---------------------------------- */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-html, body {
-  font-family: var(--font-familia-principal);
-  background-color: var(--color-fondo-pagina); // ¡Fondo nuevo!
-  color: var(--color-texto-principal);
-}
-
-h1, h2, h3, h4, h5, h6 {
-  font-weight: 500;
-  color: var(--color-primario);
-}
-
-p {
-  color: var(--color-texto-secundario);
-  line-height: 1.6;
-}
-
-a {
-  text-decoration: none;
-  color: var(--color-primario);
-}
-
-/* ---------------------------------- */
-/* 3. CLASES DE BOTONES GLOBALES
-/* ---------------------------------- */
-/* (Para reusar en Inicio, etc.) */
+/* =========================================
+   CLASES DE UTILIDAD & BOTONES
+   ========================================= */
 .btn {
-  display: inline-block;
+  display: inline-flex; /* Mejor que inline-block para centrar iconos */
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
   padding: 0.75rem 2rem;
   font-size: 1rem;
   font-weight: 500;
@@ -134,12 +153,29 @@ a {
   &.btn-primary {
     background-color: var(--color-primario);
     color: white;
-    &:hover { background-color: var(--color-primario-hover); }
+    box-shadow: 0 4px 6px rgba(34, 39, 97, 0.2);
+    
+    &:hover { 
+      background-color: var(--color-primario-hover);
+      transform: translateY(-2px);
+    }
   }
 
   &.btn-secondary {
-    background-color: var(--color-secundario);
-    color: white;
-    &:hover { background-color: var(--color-secundario), 10%; }
+    background-color: white;
+    color: var(--color-primario);
+    border: 2px solid var(--color-primario);
+    
+    &:hover { 
+      background-color: rgba(34, 39, 97, 0.05);
+    }
+  }
+
+  /* Estado deshabilitado genérico */
+  &:disabled, &.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none;
   }
 }

@@ -148,7 +148,6 @@
   &::after { right: -25px; }
 }
 
-
 /* --- ERROR BOX --- */
 .error-box {
   background-color: #fef2f2;
@@ -165,7 +164,12 @@
 
 /* --- BOTONES --- */
 .btn-largo { width: 100%; padding: 1rem; border-radius: 10px; font-weight: 700; cursor: pointer; transition: all 0.2s; border: none;}
-.btn-primary { background-color: var(--color-primario); color: white; &:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); } }
+.btn-primary {
+  background-color: var(--color-primario);
+  color: white;
+  &:hover { background-color: var(--color-primario-hover); }
+  &:disabled { opacity: 0.7; cursor: not-allowed; }
+}
 .btn-secondary { background-color: white; color: var(--color-texto-principal); border: 2px solid #e2e8f0; &:hover { border-color: var(--color-primario); color: var(--color-primario); } }
 
 /* --- SPINNER --- */
