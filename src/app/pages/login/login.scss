@@ -5,7 +5,7 @@
   align-items: center;
   justify-content: center;
   
-  /* Fondo claro con patrón de puntos (mismo que el Hero) */
+  /* Fondo coherente con el resto de la web */
   background-color: #f8fafc; 
   background-image: radial-gradient(#cbd5e1 1.5px, transparent 1.5px);
   background-size: 24px 24px;
@@ -14,7 +14,7 @@
 
 .login-container {
   width: 100%;
-  max-width: 420px; /* Un pelín más ancho para que respire */
+  max-width: 420px; 
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -26,9 +26,8 @@
 /* --- TARJETA --- */
 .login-card {
   background-color: white;
-  border-radius: 16px; /* Bordes un poco más redondeados */
+  border-radius: 16px; 
   width: 100%;
-  /* Sombra profunda y elegante */
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
   overflow: hidden;
   border: 1px solid white;
@@ -37,51 +36,32 @@
 /* --- CABECERA AZUL --- */
 .login-header {
   background-color: var(--color-primario);
-  padding: 2.5rem 2rem;
+  padding: 3rem 2rem 2.5rem 2rem;
   text-align: center;
   color: white;
-  cursor: pointer; /* Indica que se puede clickear para salir */
+  cursor: pointer; 
   transition: background-color 0.2s;
   
   &:hover {
-    background-color: #1e1b4b; /* Un tono apenas más oscuro al hover */
+    background-color: var(--color-primario-hover); 
   }
   
-  /* Ícono */
-  .brand-icon {
-    width: 64px;
-    height: 64px;
-    background-color: rgba(255, 255, 255, 0.15);
-    border-radius: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 1.25rem auto;
-    backdrop-filter: blur(4px); /* Detalle sutil */
-    
-    svg {
-      width: 32px;
-      height: 32px;
-      color: white;
-    }
-  }
-
-  h1 {
-    font-size: 1.5rem;
-    color: white;
-    font-weight: 700;
-    margin: 0 0 0.25rem 0;
-    letter-spacing: -0.5px;
+  /* ESTILO DEL NUEVO LOGO */
+  .logo-img {
+    height: 50px; /* Tamaño ideal para encabezado de tarjeta */
+    width: auto;
+    display: block;
+    margin: 0 auto 1rem auto; /* Centrado horizontal con margen abajo */
+    object-fit: contain;
   }
 
   p {
     color: rgba(255, 255, 255, 0.7);
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     margin: 0;
-    font-weight: 500;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    font-size: 0.75rem;
+    letter-spacing: 2px; 
   }
 }
 
@@ -112,7 +92,7 @@
     left: 16px;
     top: 50%;
     transform: translateY(-50%);
-    color: #94a3b8; /* Gris azulado */
+    color: #94a3b8; 
     z-index: 10;
     display: flex;
     svg { width: 20px; height: 20px; }
@@ -120,7 +100,7 @@
 
   input {
     width: 100%;
-    padding: 0.9rem 1rem 0.9rem 3rem; /* Espacio para icono */
+    padding: 0.9rem 1rem 0.9rem 3rem; /* Espacio a la izquierda para el ícono */
     border: 2px solid #e2e8f0;
     border-radius: 10px;
     font-size: 1rem;
@@ -134,19 +114,17 @@
       outline: none;
       background-color: white;
       border-color: var(--color-primario);
-      box-shadow: 0 0 0 4px rgba(34, 39, 97, 0.1); /* Glow azul */
-      
-      /* Al enfocar, cambiamos el color del icono hermano */
+      box-shadow: 0 0 0 4px rgba(34, 39, 97, 0.1); 
     }
     
-    /* Pequeño truco CSS: input enfocado -> icono cambia de color */
+    /* Al enfocar el input, pintamos el ícono del color primario */
     &:focus + .icon, &:focus ~ .icon {
         color: var(--color-primario);
     }
   }
 
   .error {
-    color: #dc2626; /* Rojo error */
+    color: var(--color-error); 
     font-size: 0.8rem;
     margin-top: 0.5rem;
     font-weight: 500;
@@ -159,7 +137,7 @@
         display: inline-block;
         width: 14px;
         height: 14px;
-        background: #dc2626;
+        background: var(--color-error);
         color: white;
         border-radius: 50%;
         text-align: center;
@@ -185,11 +163,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 54px; /* Altura generosa para touch */
+  min-height: 54px; 
   box-shadow: 0 4px 6px -1px rgba(26, 35, 126, 0.2);
 
   &:hover {
-    background-color: var(--color-primario-hover, #1e1b4b);
+    background-color: var(--color-primario-hover);
     transform: translateY(-2px);
     box-shadow: 0 10px 15px -3px rgba(26, 35, 126, 0.3);
   }
@@ -203,6 +181,8 @@
     cursor: not-allowed;
     transform: none;
     box-shadow: none;
+    background-color: #cbd5e1; /* Gris desactivado */
+    color: #64748b;
   }
 }
 
@@ -219,7 +199,7 @@
   }
 }
 
-/* Spinner */
+/* --- SPINNER --- */
 .spinner {
   width: 24px;
   height: 24px;
@@ -231,14 +211,7 @@
 
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* Animación de Entrada */
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }

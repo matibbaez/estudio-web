@@ -15,7 +15,6 @@
   text-align: center;
 }
 
-/* ... (El estilo de :host ::ng-deep app-card queda igual al anterior) ... */
 :host ::ng-deep app-card {
   .card {
     border: none;
@@ -48,7 +47,6 @@
 
 .form-content { padding: 2.5rem; }
 
-/* ... (Info-box queda igual) ... */
 .info-box {
   background-color: #fff;
   border-left: 4px solid var(--color-secundario);
