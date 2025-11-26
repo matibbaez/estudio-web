@@ -131,11 +131,6 @@
     grid-template-columns: 1fr; /* Todo en una columna */
     gap: 2.5rem;
   }
-  
-  .footer-logo, .brand-desc {
-    /* No centramos para mantener alineación izquierda elegante en móvil,
-       o podés centrar si preferís */
-  }
 
   .bottom-container {
     flex-direction: column;
