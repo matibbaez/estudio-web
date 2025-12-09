@@ -1,97 +1,105 @@
 <div class="page-container">
   <app-card [titulo]="'Panel de Administración'">
     
-    <div class="filters-bar">
-      <button 
-        class="filter-btn" 
-        [class.active]="filtroActual === ''" 
-        (click)="cargarReclamos('')">
-        Todos
-      </button>
+    <div class="tools-bar">
       
-      <button 
-        class="filter-btn recibido" 
-        [class.active]="filtroActual === 'Recibido'" 
-        (click)="cargarReclamos('Recibido')">
-        Recibidos
-      </button>
-      
-      <button 
-        class="filter-btn en-proceso" 
-        [class.active]="filtroActual === 'En Proceso'" 
-        (click)="cargarReclamos('En Proceso')">
-        En Proceso
-      </button>
-      
-      <button 
-        class="filter-btn finalizado" 
-        [class.active]="filtroActual === 'Finalizado'" 
-        (click)="cargarReclamos('Finalizado')">
-        Finalizados
-      </button>
+      <div class="status-tabs">
+        <button 
+          class="tab-btn" 
+          [class.active]="filtroEstado === ''" 
+          (click)="cambiarEstado('')">
+          Todos
+        </button>
+        <button 
+          class="tab-btn" 
+          [class.active]="filtroEstado === 'Recibido'" 
+          (click)="cambiarEstado('Recibido')">
+          Recibidos
+        </button>
+        <button 
+          class="tab-btn" 
+          [class.active]="filtroEstado === 'En Proceso'" 
+          (click)="cambiarEstado('En Proceso')">
+          En Proceso
+        </button>
+        <button 
+          class="tab-btn" 
+          [class.active]="filtroEstado === 'Finalizado'" 
+          (click)="cambiarEstado('Finalizado')">
+          Finalizados
+        </button>
+      </div>
+
+      <div class="type-filter">
+        <select (change)="cambiarTipo($event)" class="select-profesional">
+          <option value="">Todos los Tipos</option>
+          <option value="Revoca">⚠️ Solo Revocaciones</option>
+          <option value="Rechazo">Rechazos</option>
+          <option value="Alta Medica">Altas Médicas</option>
+          <option value="Prestaciones">Prestaciones</option>
+        </select>
+      </div>
+
     </div>
 
-    <div *ngIf="reclamos$ | async as reclamos; else loading">
-
-      <div class="table-responsive" *ngIf="reclamos.length > 0; else noReclamos">
+    <div *ngIf="!loading; else loadingTemplate">
+      
+      <div class="table-responsive" *ngIf="reclamosFiltrados.length > 0; else noReclamos">
         <table class="admin-table">
           <thead>
             <tr>
               <th>Fecha</th>
               <th>Código</th>
-              <th>Nombre</th>
-              <th>Tipo de Trámite</th> <th>DNI</th>
-              <th>Email</th>
+              <th>Cliente</th>
+              <th>Trámite</th>
+              <th>DNI</th>
               <th>Estado</th>
               <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let reclamo of reclamos" [class.row-revoca]="reclamo.path_revoca_patrocinio">
+            <tr *ngFor="let reclamo of reclamosFiltrados" 
+                [class.row-urgente]="reclamo.path_revoca_patrocinio">
               
-              <td>{{ reclamo.fecha_creacion | date:'dd/MM/yyyy HH:mm' }}</td>
+              <td>{{ reclamo.fecha_creacion | date:'dd/MM' }}</td>
               
-              <td class="font-mono">
-                {{ reclamo.codigo_seguimiento }}
-                <span *ngIf="reclamo.path_revoca_patrocinio" title="Cliente Revocó Patrocinio Anterior" style="margin-left: 5px; cursor: help;">🔥</span>
+              <td class="font-mono font-bold">{{ reclamo.codigo_seguimiento }}</td>
+              
+              <td>
+                <div class="cliente-info">
+                  <span class="nombre">{{ reclamo.nombre }}</span>
+                  <span class="email-chico">{{ reclamo.email }}</span>
+                </div>
               </td>
-              
-              <td>{{ reclamo.nombre }}</td>
 
               <td>
-                <div class="tipo-box">
-                  <span class="tipo-text">{{ reclamo.tipo_tramite }}</span>
-                  
-                  <span *ngIf="reclamo.path_revoca_patrocinio" class="badge-alerta">
-                    ⚠️ REVOCA
+                <div class="tipo-wrapper">
+                  <span class="tipo-main">
+                    {{ reclamo.tipo_tramite }}
+                    <span *ngIf="reclamo.subtipo_tramite" class="subtipo">({{ reclamo.subtipo_tramite }})</span>
                   </span>
 
-                  <span *ngIf="reclamo.tipo_tramite === 'Rechazo'" class="badge-rechazo">
+                  <span *ngIf="reclamo.path_revoca_patrocinio" class="badge-pill red">
+                    REVOCACIÓN
+                  </span>
+                  <span *ngIf="reclamo.tipo_tramite === 'Rechazo'" class="badge-pill orange">
                     RECHAZO
                   </span>
                 </div>
               </td>
 
               <td>{{ reclamo.dni }}</td>
-              <td>{{ reclamo.email }}</td>
               
               <td>
-                <span class="status-tag" [ngClass]="reclamo.estado.toLowerCase().replace(' ', '-')">
-                  {{ reclamo.estado }}
-                </span>
+                <span class="status-dot" [ngClass]="reclamo.estado.toLowerCase().replace(' ', '-')"></span>
+                {{ reclamo.estado }}
               </td>
 
               <td>
-                <button 
-                  class="btn btn-primary btn-chico" 
-                  (click)="abrirModal(reclamo)" 
-                  [disabled]="actualizandoId === reclamo.id">
-                  
-                  <span *ngIf="actualizandoId !== reclamo.id">Gestionar</span>
-                  
-                  <span *ngIf="actualizandoId === reclamo.id">
-                    <div class="spinner-chico"></div>
-                  </span>
+                <button class="btn-icon" (click)="abrirModal(reclamo)" title="Gestionar">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
+                  </svg>
                 </button>
               </td>
             </tr>
@@ -100,17 +108,20 @@
       </div>
 
       <ng-template #noReclamos>
-        <div class="no-reclamos-box">
-          <p>🎉 ¡Bandeja limpia! No hay reclamos en esta categoría.</p>
+        <div class="empty-state">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="empty-icon">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m8.25 3.267ul4.5 4.5m0-4.5l-4.5 4.5m-6-8.25h19.5a2.25 2.25 0 012.25 2.25v9a2.25 2.25 0 01-2.25 2.25h-19.5A2.25 2.25 0 012.25 19.5v-9A2.25 2.25 0 014.5 7.5z" />
+          </svg>
+          <p>No se encontraron trámites con estos filtros.</p>
         </div>
       </ng-template>
 
     </div>
 
-    <ng-template #loading>
-      <div class="loading-container">
-        <div class="spinner-grande"></div>
-        <p>Cargando reclamos desde el servidor...</p>
+    <ng-template #loadingTemplate>
+      <div class="loading-box">
+        <div class="spinner"></div>
+        <span>Cargando datos...</span>
       </div>
     </ng-template>
 

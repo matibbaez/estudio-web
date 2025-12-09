@@ -1,244 +1,259 @@
-/* Usamos las variables globales de styles.scss */
-
+/* Usamos las variables globales */
 .page-container {
   max-width: 1200px;
-  margin: 3rem auto;
+  margin: 2rem auto;
   padding: 0 1.5rem;
 }
 
 /* ---------------------------------- */
-/* TABLA RESPONSIVE (SCROLL HORIZONTAL)
+/* 1. BARRA DE HERRAMIENTAS (NUEVO)
+/* ---------------------------------- */
+.tools-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+/* Tabs de Estado (Botones limpios) */
+.status-tabs {
+  display: flex;
+  gap: 0.5rem;
+  background: #f1f5f9;
+  padding: 4px;
+  border-radius: 10px;
+}
+
+.tab-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  background: transparent;
+  color: #64748b;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.2s;
+  font-size: 0.9rem;
+
+  &.active {
+    background: white;
+    color: var(--color-primario);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+  
+  &:hover:not(.active) { 
+    color: var(--color-primario); 
+    background-color: rgba(255,255,255,0.5);
+  }
+}
+
+/* Dropdown de Tipo */
+.type-filter {
+  position: relative;
+}
+
+.select-profesional {
+  appearance: none; /* Saca el estilo default del navegador */
+  padding: 0.6rem 2.5rem 0.6rem 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background-color: white;
+  color: #334155;
+  font-weight: 500;
+  cursor: pointer;
+  outline: none;
+  min-width: 200px;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23334155' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 16px;
+  
+  &:focus { border-color: var(--color-primario); }
+}
+
+/* ---------------------------------- */
+/* 2. TABLA RESPONSIVE
 /* ---------------------------------- */
 .table-responsive {
   width: 100%;
-  overflow-x: auto; /* ¡La clave! Permite scroll lateral en móvil */
-  -webkit-overflow-scrolling: touch;
-  margin-top: 1rem;
+  overflow-x: auto;
   border-radius: 12px;
   border: 1px solid var(--color-borde-suave);
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  background: white;
 }
 
 .admin-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate; /* Necesario para efectos de borde */
+  border-spacing: 0;
   min-width: 900px; 
   font-size: 0.95rem;
 
-  thead tr {
-    background-color: #f8fafc; /* Gris muy clarito premium */
+  thead th {
+    background-color: #f8fafc;
     color: var(--color-texto-secundario);
     text-align: left;
-  }
-
-  th {
     padding: 1rem 1.5rem;
     font-weight: 600;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     border-bottom: 1px solid var(--color-borde-suave);
-    white-space: nowrap;
   }
 
-  td {
+  tbody td {
     padding: 1rem 1.5rem;
     vertical-align: middle;
     color: var(--color-texto-principal);
-    border-bottom: 1px solid var(--color-borde-suave);
-    white-space: nowrap;
+    border-bottom: 1px solid #f1f5f9;
   }
 
   /* Efecto Hover en las filas */
   tbody tr {
     transition: background-color 0.2s ease;
-
-    &:hover {
-      background-color: #f1f5f9; /* Azul/Gris muy sutil */
-    }
-
-    &:last-of-type td {
-      border-bottom: none; /* Sacamos borde al último */
-    }
+    &:hover { background-color: #f8fafc; }
+    &:last-child td { border-bottom: none; }
   }
 
-  /* Fuente monoespaciada para el código */
+  /* --- CÓDIGO MONO --- */
   .font-mono {
     font-family: 'Courier New', Courier, monospace;
-    font-weight: 700;
     color: var(--color-primario);
-    background-color: rgba(0,0,0,0.05);
-    padding: 2px 6px;
-    border-radius: 4px;
+    letter-spacing: -0.5px;
   }
 }
 
 /* ---------------------------------- */
-/* ETIQUETAS DE ESTADO (BADGES)
+/* 3. FILA URGENTE (REVOCA)
 /* ---------------------------------- */
-.status-tag {
-  display: inline-block;
-  padding: 0.35rem 0.75rem;
-  border-radius: 20px; // Píldora
-  font-weight: 700;
-  font-size: 0.75rem;
-  text-transform: uppercase;
+.row-urgente {
+  background-color: #fffbfc; /* Fondo apenas rosado */
+
+  td:first-child {
+    /* Truco CSS para borde izquierdo dentro de la celda sin romper la tabla */
+    box-shadow: inset 4px 0 0 #ef4444; 
+  }
+}
+
+/* ---------------------------------- */
+/* 4. CONTENIDO DE CELDAS
+/* ---------------------------------- */
+
+/* Info del Cliente (Nombre + Email gris abajo) */
+.cliente-info {
+  display: flex; 
+  flex-direction: column;
+  line-height: 1.3;
+  
+  .nombre { font-weight: 600; color: #1e293b; }
+  .email-chico { font-size: 0.8rem; color: #94a3b8; }
+}
+
+/* Info del Trámite (Tipo + Badges) */
+.tipo-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-start;
+}
+
+.tipo-main {
+  font-weight: 500;
+  font-size: 0.9rem;
+  
+  .subtipo {
+    color: #64748b;
+    font-size: 0.8rem;
+  }
+}
+
+/* Badges Profesionales (Pastillas) */
+.badge-pill {
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 12px;
   letter-spacing: 0.5px;
+  text-transform: uppercase;
   
-  // Estado "Recibido" (Azul)
-  &.recibido {
-    background-color: rgba(34, 39, 97, 0.1); // 10% de tu color primario
-    color: var(--color-primario);
-    border: 1px solid rgba(34, 39, 97, 0.2);
+  &.red {
+    background-color: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fca5a5;
   }
   
-  // Estado "En Proceso" (Naranja)
-  &.en-proceso { 
-    background-color: rgba(245, 158, 11, 0.1);
-    color: #b45309;
-    border: 1px solid rgba(245, 158, 11, 0.2);
-  }
-  
-  // Estado "Finalizado" (Verde)
-  &.finalizado {
-    background-color: rgba(22, 163, 74, 0.1);
-    color: #15803d;
-    border: 1px solid rgba(22, 163, 74, 0.2);
+  &.orange {
+    background-color: #ffedd5;
+    color: #9a3412;
+    border: 1px solid #fed7aa;
   }
 }
 
 /* ---------------------------------- */
-/* BOTÓN DE ACCIÓN (Gestionar)
+/* 5. ESTADO (PUNTITO DE COLOR)
 /* ---------------------------------- */
-.btn-chico {
-  padding: 0.4rem 1rem;
-  font-size: 0.85rem;
-  font-weight: 600;
-  border-radius: 6px;
-  background-color: white;
-  border: 1px solid var(--color-borde-suave);
-  color: var(--color-texto-principal);
-  transition: all 0.2s;
+.status-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 6px;
+  
+  &.recibido { background-color: #3b82f6; box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2); }
+  &.en-proceso { background-color: #f59e0b; box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2); }
+  &.finalizado { background-color: #10b981; box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2); }
+}
+
+/* ---------------------------------- */
+/* 6. BOTONES DE ACCIÓN
+/* ---------------------------------- */
+.btn-icon {
+  background: transparent; 
+  border: none; 
   cursor: pointer;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  color: #94a3b8; 
+  padding: 6px; 
+  border-radius: 6px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center; justify-content: center;
 
-  &:hover {
-    border-color: var(--color-primario);
-    color: #f1f5f9;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  }
-
-  &:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-    background-color: #f3f4f6;
+  svg { width: 20px; height: 20px; }
+  
+  &:hover { 
+    background-color: #e2e8f0; 
+    color: var(--color-primario); 
   }
 }
 
 /* ---------------------------------- */
-/* SPINNERS Y MENSAJES
+/* 7. ESTADOS DE CARGA / VACÍO
 /* ---------------------------------- */
-.loading-container, .no-reclamos-box {
+.loading-box, .empty-state {
   padding: 4rem;
   text-align: center;
-  color: var(--color-texto-secundario);
+  color: #64748b;
   
-  p { margin-top: 1rem; font-size: 1.1rem; font-weight: 500; }
-}
+  .spinner {
+    width: 30px; height: 30px;
+    border: 3px solid #e2e8f0; border-top-color: var(--color-primario);
+    border-radius: 50%; margin: 0 auto 1rem;
+    animation: spin 1s linear infinite;
+  }
 
-.spinner-grande {
-  width: 40px;
-  height: 40px;
-  border: 3px solid var(--color-borde-suave);
-  border-top-color: var(--color-primario);
-  border-radius: 50%;
-  margin: 0 auto;
-  animation: spin 1s linear infinite;
-}
-
-.spinner-chico {
-  width: 14px;
-  height: 14px;
-  border: 2px solid currentColor; /* Usa el color del texto del botón */
-  border-top-color: transparent;
-  border-radius: 50%;
-  margin: 0 auto;
-  display: block;
-  animation: spin 1s linear infinite;
-}
-
-/* Botones especiales para archivos críticos */
-.btn-rechazo {
-  background-color: #fff7ed;
-  color: #c2410c;
-  border-color: #fdba74;
-}
-
-.btn-revoca {
-  background-color: #fef2f2;
-  color: #dc2626;
-  border-color: #fca5a5;
-  font-weight: 800; /* Más gordito */
-  box-shadow: 0 2px 5px rgba(220, 38, 38, 0.2);
+  .empty-icon {
+    width: 48px; height: 48px; margin-bottom: 1rem; opacity: 0.5;
+  }
 }
 
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* ---------------------------------- */
-/* RESPONSIVE (Ajustes extra)
-/* ---------------------------------- */
+/* Responsive móvil */
 @media (max-width: 768px) {
-  .page-container { padding: 0 1rem; margin-top: 2rem; }
-  
-  /* En móvil el botón puede ser un poco más grande para tocar fácil */
-  .btn-chico {
-    padding: 0.5rem 1rem;
-  }
-}
-
-.filters-bar {
-  display: flex;
-  gap: 0.5rem;
-  margin-bottom: 1.5rem;
-  flex-wrap: wrap;
-}
-
-.filter-btn {
-  padding: 0.5rem 1rem;
-  border: 1px solid var(--color-borde-suave);
-  background-color: white;
-  color: var(--color-texto-secundario);
-  border-radius: 20px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-
-  &:hover {
-    background-color: #f3f4f6;
-  }
-
-  /* Estado Activo (General) */
-  &.active {
-    background-color: var(--color-primario);
-    color: white;
-    border-color: var(--color-primario);
-  }
-
-  /* Colores específicos al estar activos (Opcional, queda muy pro) */
-  &.recibido.active {
-    background-color: rgba(34, 39, 97, 1); /* Azul */
-    border-color: rgba(34, 39, 97, 1);
-  }
-  &.en-proceso.active {
-    background-color: #f59e0b; /* Naranja */
-    border-color: #f59e0b;
-    color: white;
-  }
-  &.finalizado.active {
-    background-color: #10b981; /* Verde */
-    border-color: #10b981;
-    color: white;
-  }
+  .tools-bar { flex-direction: column; align-items: stretch; }
+  .status-tabs { overflow-x: auto; }
+  .select-profesional { width: 100%; }
 }
