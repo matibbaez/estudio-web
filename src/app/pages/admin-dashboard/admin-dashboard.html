@@ -1,6 +1,36 @@
 <div class="page-container">
   <app-card [titulo]="'Panel de Administración'">
     
+    <div class="filters-bar">
+      <button 
+        class="filter-btn" 
+        [class.active]="filtroActual === ''" 
+        (click)="cargarReclamos('')">
+        Todos
+      </button>
+      
+      <button 
+        class="filter-btn recibido" 
+        [class.active]="filtroActual === 'Recibido'" 
+        (click)="cargarReclamos('Recibido')">
+        Recibidos
+      </button>
+      
+      <button 
+        class="filter-btn en-proceso" 
+        [class.active]="filtroActual === 'En Proceso'" 
+        (click)="cargarReclamos('En Proceso')">
+        En Proceso
+      </button>
+      
+      <button 
+        class="filter-btn finalizado" 
+        [class.active]="filtroActual === 'Finalizado'" 
+        (click)="cargarReclamos('Finalizado')">
+        Finalizados
+      </button>
+    </div>
+
     <div *ngIf="reclamos$ | async as reclamos; else loading">
 
       <div class="table-responsive" *ngIf="reclamos.length > 0; else noReclamos">
@@ -10,17 +40,38 @@
               <th>Fecha</th>
               <th>Código</th>
               <th>Nombre</th>
-              <th>DNI</th>
+              <th>Tipo de Trámite</th> <th>DNI</th>
               <th>Email</th>
               <th>Estado</th>
               <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let reclamo of reclamos">
+            <tr *ngFor="let reclamo of reclamos" [class.row-revoca]="reclamo.path_revoca_patrocinio">
+              
               <td>{{ reclamo.fecha_creacion | date:'dd/MM/yyyy HH:mm' }}</td>
-              <td class="font-mono">{{ reclamo.codigo_seguimiento }}</td>
+              
+              <td class="font-mono">
+                {{ reclamo.codigo_seguimiento }}
+                <span *ngIf="reclamo.path_revoca_patrocinio" title="Cliente Revocó Patrocinio Anterior" style="margin-left: 5px; cursor: help;">🔥</span>
+              </td>
+              
               <td>{{ reclamo.nombre }}</td>
+
+              <td>
+                <div class="tipo-box">
+                  <span class="tipo-text">{{ reclamo.tipo_tramite }}</span>
+                  
+                  <span *ngIf="reclamo.path_revoca_patrocinio" class="badge-alerta">
+                    ⚠️ REVOCA
+                  </span>
+
+                  <span *ngIf="reclamo.tipo_tramite === 'Rechazo'" class="badge-rechazo">
+                    RECHAZO
+                  </span>
+                </div>
+              </td>
+
               <td>{{ reclamo.dni }}</td>
               <td>{{ reclamo.email }}</td>
               
@@ -50,7 +101,7 @@
 
       <ng-template #noReclamos>
         <div class="no-reclamos-box">
-          <p>🎉 ¡Bandeja limpia! No hay reclamos nuevos.</p>
+          <p>🎉 ¡Bandeja limpia! No hay reclamos en esta categoría.</p>
         </div>
       </ng-template>
 

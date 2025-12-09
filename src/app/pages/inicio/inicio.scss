@@ -213,6 +213,125 @@ p {
 }
 
 /* =========================================
+   BANNER REVOCACIÓN (INTEGRADO)
+   ========================================= */
+.revoca-banner {
+  /* Usamos tu variable principal para que coincida con el branding */
+  background-color: var(--color-primario); 
+  /* Si querés un degradado sutil usando tu mismo color: */
+  // background: linear-gradient(135deg, var(--color-primario) 0%, #1e40af 100%); 
+  
+  padding: 2rem 0;
+  color: white;
+  margin-top: -1px; /* Para asegurar que pegue bien con bordes */
+}
+
+.banner-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  
+  /* Un fondo sutil para el contenedor interno (opcional, le da profundidad) */
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 1.5rem 2rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.banner-info {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.icon-circle {
+  flex-shrink: 0;
+  width: 50px;
+  height: 50px;
+  background-color: rgba(255, 255, 255, 0.15); /* Blanco translúcido */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.banner-text {
+  h3 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: white; /* Texto blanco sobre fondo azul */
+  }
+  
+  p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.85); /* Blanco un poco apagado para subtítulo */
+    font-size: 1rem;
+    max-width: none;
+  }
+}
+
+/* BOTÓN BLANCO (Invertido) */
+/* Este botón resalta un montón sobre el azul sin usar colores raros */
+.btn-white {
+  background-color: white;
+  color: var(--color-primario); /* El texto del botón es azul */
+  font-weight: 700;
+  padding: 0.8rem 1.8rem;
+  border-radius: 12px; /* Mismo radio que tus otros botones */
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  white-space: nowrap;
+
+  .arrow-icon {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.2s ease;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px rgba(0,0,0,0.15);
+    background-color: #f8fafc; /* Un gris muy clarito al hover */
+    
+    .arrow-icon {
+      transform: translateX(4px);
+    }
+  }
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .banner-wrapper {
+    flex-direction: column;
+    text-align: center;
+    padding: 2rem 1.5rem;
+  }
+
+  .banner-info {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .banner-action, .btn-white {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* =========================================
    2. SECCIÓN DE PASOS (Connected Steps)
    ========================================= */
 .steps-section {

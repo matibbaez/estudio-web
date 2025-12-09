@@ -28,6 +28,36 @@
     </div>
   </section>
 
+  <div class="revoca-banner">
+    <div class="container">
+      <div class="banner-wrapper">
+        
+        <div class="banner-info">
+          <div class="icon-circle">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
+            </svg>
+          </div>
+          
+          <div class="banner-text">
+            <h3>¿Ya tenés abogado pero querés cambiar?</h3>
+            <p>Tramitamos tu revocación de patrocinio de forma ética y segura.</p>
+          </div>
+        </div>
+
+        <div class="banner-action">
+          <a routerLink="/iniciar-reclamo" [queryParams]="{ revoca: 'true' }" class="btn btn-white">
+            Pasarme a ReclamARTe
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="arrow-icon">
+              <path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clip-rule="evenodd" />
+            </svg>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
   <section class="steps-section">
     <div class="container">
       <div class="section-header">

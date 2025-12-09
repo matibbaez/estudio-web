@@ -168,6 +168,21 @@
   animation: spin 1s linear infinite;
 }
 
+/* Botones especiales para archivos críticos */
+.btn-rechazo {
+  background-color: #fff7ed;
+  color: #c2410c;
+  border-color: #fdba74;
+}
+
+.btn-revoca {
+  background-color: #fef2f2;
+  color: #dc2626;
+  border-color: #fca5a5;
+  font-weight: 800; /* Más gordito */
+  box-shadow: 0 2px 5px rgba(220, 38, 38, 0.2);
+}
+
 @keyframes spin { to { transform: rotate(360deg); } }
 
 /* ---------------------------------- */
@@ -179,5 +194,51 @@
   /* En móvil el botón puede ser un poco más grande para tocar fácil */
   .btn-chico {
     padding: 0.5rem 1rem;
+  }
+}
+
+.filters-bar {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--color-borde-suave);
+  background-color: white;
+  color: var(--color-texto-secundario);
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: #f3f4f6;
+  }
+
+  /* Estado Activo (General) */
+  &.active {
+    background-color: var(--color-primario);
+    color: white;
+    border-color: var(--color-primario);
+  }
+
+  /* Colores específicos al estar activos (Opcional, queda muy pro) */
+  &.recibido.active {
+    background-color: rgba(34, 39, 97, 1); /* Azul */
+    border-color: rgba(34, 39, 97, 1);
+  }
+  &.en-proceso.active {
+    background-color: #f59e0b; /* Naranja */
+    border-color: #f59e0b;
+    color: white;
+  }
+  &.finalizado.active {
+    background-color: #10b981; /* Verde */
+    border-color: #10b981;
+    color: white;
   }
 }
