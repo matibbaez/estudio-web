@@ -6,6 +6,62 @@
   width: 100%;
 }
 
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  transition: opacity 0.3s ease;
+
+  &:hover {
+    opacity: 0.9;
+  }
+}
+
+/* El Ícono (Escudo de protección con Check) */
+.logo-icon {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #b45309 0%, #d97706 100%);  
+  border-radius: 8px; /* Un poco cuadrado para seriedad */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 6px -1px rgba(245, 158, 11, 0.3);
+  
+  svg {
+    width: 20px;
+    height: 20px;
+    color: white;
+  }
+}
+
+/* El Texto Tipográfico */
+.logo-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 500; /* Peso medio para "Reclam" */
+  color: #fff; /* Azul Oscuro (Casi negro) */
+  letter-spacing: -0.5px; /* Un poquito apretado queda más moderno */
+  line-height: 1;
+
+  .highlight {
+    font-weight: 900; /* Extra gordo para ART */
+    color: #d97706; /* Naranja quemado */
+  }
+}
+
+/* Ajuste para móviles */
+@media (max-width: 768px) {
+  .logo-text {
+    font-size: 1.2rem;
+  }
+  .logo-icon {
+    width: 32px;
+    height: 32px;
+  }
+}
+
 .navbar {
   background-color: var(--color-primario); /* Azul puro */
   color: white;

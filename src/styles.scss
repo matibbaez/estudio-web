@@ -1,30 +1,35 @@
 /* =========================================
-   VARIABLES GLOBALES (Tus Design Tokens)
+   VARIABLES GLOBALES (Paleta Premium Legal)
    ========================================= */
 :root {
-  /* --- PALETA DE COLORES (Tu Azul Royal Profundo) --- */
-  --color-primario: #222761;       /* Azul Real Profundo */
-  --color-primario-hover: #1a1e4d; /* Un poquito más oscuro para hover */
-  --color-secundario: #5c6bc0;     /* Azul más claro para detalles */
+  /* --- COLORES PRINCIPALES (Navy & Amber) --- */
+  --color-primario: #0f172a;       /* Slate 900: Azul Marino Profundo (Autoridad) */
+  --color-primario-hover: #1e293b; /* Slate 800 */
   
-  /* Estados del sistema */
-  --color-exito: #2e7d32; /* Verde éxito */
-  --color-error: #c62828; /* Rojo error */
-  --color-advertencia: #f59e0b; /* Naranja alerta */
+  --color-secundario: #64748b;     /* Slate 500: Gris azulado para textos secundarios */
+  
+  --color-acento: #d97706;         /* Amber 600: Ámbar Quemado (Acción/ART) */
+  --color-acento-hover: #b45309;   /* Amber 700 */
+
+  /* --- ESTADOS DEL SISTEMA --- */
+  --color-exito: #059669;          /* Emerald 600: Un verde más elegante */
+  --color-error: #ef4444;          /* Red 500: Rojo suave */
+  --color-advertencia: #f59e0b;    /* Amber 500 */
+  --color-info: #3b82f6;           /* Blue 500 */
 
   /* --- UI & FONDOS --- */
-  --color-fondo-pagina: #f3f4f6;   /* Gris muy suave y moderno */
+  --color-fondo-pagina: #f8fafc;   /* Slate 50: Casi blanco, muy limpio */
   --color-fondo-tarjeta: #ffffff;
-  --color-borde-suave: #e5e7eb;
+  --color-borde-suave: #e2e8f0;    /* Slate 200 */
   
-  /* Textos */
-  --color-texto-principal: #1f2937;
-  --color-texto-secundario: #6b7280;
+  /* --- TEXTOS --- */
+  --color-texto-principal: #334155; /* Slate 700: No es negro puro, es gris oscuro */
+  --color-texto-secundario: #64748b; /* Slate 500 */
 
-  /* --- TIPOGRAFÍA & BORDES --- */
-  --font-familia-principal: 'Outfit', sans-serif;
+  /* --- TIPOGRAFÍA & DETALLES --- */
+  --font-familia-principal: 'Outfit', sans-serif; /* Moderna y limpia */
   --borde-redondeado: 12px;
-  --sombra-tarjeta: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  --sombra-tarjeta: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
 /* =========================================
@@ -45,20 +50,22 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Títulos con tu color primario */
 h1, h2, h3, h4, h5, h6 {
-  font-weight: 700; /* Un poco más de peso para presencia */
-  color: var(--color-primario);
+  font-weight: 700;
+  color: var(--color-primario); /* Títulos en Azul Marino */
+  line-height: 1.2;
 }
 
 p {
   color: var(--color-texto-secundario);
+  margin-bottom: 1rem;
 }
 
 a {
   text-decoration: none;
   color: inherit;
   cursor: pointer;
+  transition: color 0.2s;
 }
 
 ul, ol {
@@ -67,24 +74,21 @@ ul, ol {
 
 button {
   font-family: inherit;
+  border: none;
+  outline: none;
 }
 
 /* =========================================
-   SCROLLBAR & SCROLL BEHAVIOR
+   SCROLLBAR (Personalizado y Sutil)
    ========================================= */
 html {
-  /* ¡ESTA ES LA CLAVE PARA EL SCROLL LINDO! */
   scroll-behavior: smooth;
-  
-  /* Para Firefox Scrollbar */
   scrollbar-width: thin;
   scrollbar-color: var(--color-primario) transparent;
 }
 
-/* Para Chrome, Edge, Safari (Webkit) */
 ::-webkit-scrollbar {
-  width: 8px; /* Ancho vertical */
-  height: 8px; /* Alto horizontal */
+  width: 8px;
 }
 
 ::-webkit-scrollbar-track {
@@ -93,89 +97,105 @@ html {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: rgba(34, 39, 97, 0.3); /* Azul sutil */
+  background-color: #cbd5e1; /* Gris suave por defecto */
   border-radius: 10px;
-  border: 2px solid transparent; /* Truco para dar aire */
+  border: 2px solid transparent;
   background-clip: content-box;
   transition: background-color 0.3s;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: var(--color-primario); /* Azul sólido al hover */
-}
-
-::-webkit-scrollbar-corner {
-  background: transparent;
-}
-
-/* =========================================
-   CONFIGURACIÓN LENIS (Opcional si usás la librería JS)
-   ========================================= */
-html.lenis, html.lenis body {
-  height: auto;
-}
-
-.lenis.lenis-smooth {
-  /* Si usás Lenis JS, él maneja el scroll. Si no, usa el nativo de arriba. */
-  scroll-behavior: auto !important; 
-}
-
-.lenis.lenis-smooth [data-lenis-prevent] {
-  overscroll-behavior: contain;
-}
-
-.lenis.lenis-stopped {
-  overflow: hidden;
-}
-
-.lenis.lenis-scrolling iframe {
-  pointer-events: none;
+  background-color: var(--color-primario); /* Se pone azul al hover */
 }
 
 /* =========================================
    CLASES DE UTILIDAD & BOTONES
    ========================================= */
 .btn {
-  display: inline-flex; /* Mejor que inline-block para centrar iconos */
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
   padding: 0.75rem 2rem;
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: 600; /* Un poco más bold */
   text-decoration: none;
   border-radius: var(--borde-redondeado);
-  border: 2px solid transparent;
-  transition: all 0.3s ease;
+  border: 1px solid transparent;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   text-align: center;
+  white-space: nowrap;
 
+  /* 1. PRIMARIO (Azul Marino - Sobrio) */
   &.btn-primary {
     background-color: var(--color-primario);
     color: white;
-    box-shadow: 0 4px 6px rgba(34, 39, 97, 0.2);
+    box-shadow: 0 4px 6px rgba(15, 23, 42, 0.2);
     
     &:hover { 
       background-color: var(--color-primario-hover);
       transform: translateY(-2px);
+      box-shadow: 0 10px 15px -3px rgba(15, 23, 42, 0.3);
     }
   }
 
+  /* 2. SECUNDARIO (Borde Azul - Elegante) */
   &.btn-secondary {
     background-color: white;
     color: var(--color-primario);
-    border: 2px solid var(--color-primario);
+    border: 1px solid var(--color-borde-suave);
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     
     &:hover { 
-      background-color: rgba(34, 39, 97, 0.05);
+      border-color: var(--color-primario);
+      background-color: #f8fafc;
+      transform: translateY(-1px);
     }
   }
 
-  /* Estado deshabilitado genérico */
+  /* 3. WARNING / ACCIÓN (Ámbar - Para llamar la atención) */
+  &.btn-warning {
+    background-color: var(--color-acento);
+    color: white;
+    box-shadow: 0 4px 6px rgba(217, 119, 6, 0.25);
+
+    &:hover {
+      background-color: var(--color-acento-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 15px -3px rgba(217, 119, 6, 0.4);
+    }
+  }
+
+  /* 4. BLANCO (Para usar sobre fondos oscuros/naranjas) */
+  &.btn-white {
+    background-color: white;
+    color: var(--color-acento);
+    font-weight: 800;
+    
+    &:hover {
+      background-color: #fffbeb;
+      transform: translateY(-2px);
+    }
+  }
+
+  /* Estado deshabilitado */
   &:disabled, &.disabled {
-    opacity: 0.6;
+    opacity: 0.5;
     cursor: not-allowed;
     transform: none !important;
-    box-shadow: none;
+    box-shadow: none !important;
+    background-color: #e2e8f0 !important;
+    color: #94a3b8 !important;
+    border-color: transparent !important;
   }
 }
+
+/* =========================================
+   LENIS (Smooth Scroll - Si lo usás)
+   ========================================= */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
+.lenis.lenis-scrolling iframe { pointer-events: none; }

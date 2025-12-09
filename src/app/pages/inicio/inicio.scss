@@ -14,7 +14,7 @@
 
 /* =========================================
    1. HERO SECTION (Centrado y con Puntos)
-   ========================================= */
+========================================= */
 .hero {
   position: relative;
   background-color: #f8fafc;
@@ -212,18 +212,83 @@ p {
   .btn-lg { width: 100%; justify-content: center; }
 }
 
+@keyframes moverPuntos {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    /* Mueve el fondo exactamente el tamaño del patrón (24px) para hacer un loop infinito invisible */
+    background-position: 0 24px; 
+  }
+}
+
 /* =========================================
-   BANNER REVOCACIÓN (INTEGRADO)
-   ========================================= */
+   BANNER REVOCACIÓN (VERSIÓN PREMIUM SUTIL)
+========================================= */
 .revoca-banner {
-  /* Usamos tu variable principal para que coincida con el branding */
-  background-color: var(--color-primario); 
-  /* Si querés un degradado sutil usando tu mismo color: */
-  // background: linear-gradient(135deg, var(--color-primario) 0%, #1e40af 100%); 
+  /* Fondo Azul Oscuro (Serio y profesional) */
+  background-color: var(--color-primario);
+  padding: 2.5rem 0;
+  position: relative;
+  z-index: 10;
   
-  padding: 2rem 0;
-  color: white;
-  margin-top: -1px; /* Para asegurar que pegue bien con bordes */
+  /* LÍNEA NARANJA SUPERIOR (El toque sutil de marca) */
+  border-top: 3px solid var(--color-acento);
+  
+  /* Sombra suave para separar del contenido */
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.2);
+}
+
+/* BOTÓN BLANCO */
+.btn-white {
+  background-color: white;
+  color: var(--color-acento); /* Texto general: Naranja */
+  
+  font-weight: 700;
+  padding: 0.9rem 2rem;
+  border-radius: 50px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem; /* Espacio entre texto y flecha */
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  white-space: nowrap;
+  font-size: 1rem;
+  border: none;
+
+  /* Resaltado de "ART" en Azul */
+  .highlight-blue {
+    color: var(--color-primario); /* Azul Navy */
+    font-weight: 900;
+  }
+
+  /* Ícono Flecha Simple */
+  .simple-icon {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.3s ease;
+    /* La flecha en Azul para combinar con el ART */
+    color: var(--color-primario); 
+    
+    /* Si la preferís naranja, cambiá la línea de arriba por: */
+    /* color: var(--color-acento); */
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    background-color: #f8fafc; /* Gris muy clarito */
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    
+    /* Movimiento lateral clásico */
+    .simple-icon {
+      transform: translateX(4px);
+    }
+  }
+  
+  &:active {
+    transform: translateY(-1px);
+  }
 }
 
 .banner-wrapper {
@@ -232,12 +297,8 @@ p {
   justify-content: space-between;
   gap: 2rem;
   
-  /* Un fondo sutil para el contenedor interno (opcional, le da profundidad) */
-  background-color: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
-  padding: 1.5rem 2rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  /* Fondo interno transparente */
+  background: transparent;
 }
 
 .banner-info {
@@ -246,78 +307,100 @@ p {
   gap: 1.5rem;
 }
 
+/* ÍCONO: Ahora es el protagonista del naranja */
 .icon-circle {
   flex-shrink: 0;
-  width: 50px;
-  height: 50px;
-  background-color: rgba(255, 255, 255, 0.15); /* Blanco translúcido */
+  width: 60px;
+  height: 60px;
+  
+  /* Fondo oscuro con borde naranja sutil */
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--color-acento);
+  
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  
+  /* El ícono brilla en naranja */
+  color: var(--color-acento);
+  
+  /* Pequeño resplandor naranja */
+  box-shadow: 0 0 15px rgba(217, 119, 6, 0.2);
   
   svg {
-    width: 24px;
-    height: 24px;
+    width: 28px;
+    height: 28px;
   }
 }
 
 .banner-text {
   h3 {
     margin: 0 0 0.25rem 0;
-    font-size: 1.35rem;
+    font-size: 1.5rem;
     font-weight: 700;
-    color: white; /* Texto blanco sobre fondo azul */
+    color: white; /* Texto blanco limpio */
   }
   
   p {
     margin: 0;
-    color: rgba(255, 255, 255, 0.85); /* Blanco un poco apagado para subtítulo */
+    color: rgba(255, 255, 255, 0.7); /* Gris suave */
     font-size: 1rem;
-    max-width: none;
+    font-weight: 400;
   }
 }
 
-/* BOTÓN BLANCO (Invertido) */
-/* Este botón resalta un montón sobre el azul sin usar colores raros */
+/* BOTÓN: Ahora es el foco de atención (Naranja Solido) */
 .btn-white {
-  background-color: white;
-  color: var(--color-primario); /* El texto del botón es azul */
+  /* Cambio clave: Fondo Naranja, Texto Blanco */
+  background-color: var(--color-acento);
+  color: white;
+  
   font-weight: 700;
-  padding: 0.8rem 1.8rem;
-  border-radius: 12px; /* Mismo radio que tus otros botones */
+  padding: 0.9rem 2rem;
+  border-radius: 50px;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  transition: all 0.2s ease;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  gap: 0.75rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(217, 119, 6, 0.3); /* Sombra naranja */
   white-space: nowrap;
+  font-size: 1rem;
+  border: none;
 
   .arrow-icon {
-    width: 20px;
-    height: 20px;
-    transition: transform 0.2s ease;
+    width: 18px;
+    height: 18px;
+    transition: transform 0.3s ease;
+    color: white;
   }
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 15px rgba(0,0,0,0.15);
-    background-color: #f8fafc; /* Un gris muy clarito al hover */
+    background-color: var(--color-acento-hover); /* Un poco más oscuro al hover */
+    box-shadow: 0 8px 20px rgba(217, 119, 6, 0.4);
     
     .arrow-icon {
       transform: translateX(4px);
     }
   }
+  
+  &:active {
+    transform: translateY(-1px);
+  }
 }
 
 /* RESPONSIVE */
 @media (max-width: 900px) {
+  .revoca-banner {
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+  }
+
   .banner-wrapper {
     flex-direction: column;
-    text-align: center;
-    padding: 2rem 1.5rem;
+    gap: 1.5rem;
   }
 
   .banner-info {
@@ -349,7 +432,7 @@ p {
   .section-title {
     font-size: 2.5rem;
     font-weight: 800;
-    color: var(--color-texto-principal);
+    color: var(--color-primario); /* Azul Navy */
     margin-bottom: 0.5rem;
   }
   
@@ -384,6 +467,7 @@ p {
   text-align: center;
   position: relative;
   padding: 0 1rem;
+  cursor: default;
   
   h3 {
     font-size: 1.4rem;
@@ -398,11 +482,19 @@ p {
     line-height: 1.6;
   }
 
-  /* Efecto Hover */
+  /* --- EFECTO HOVER (ACÁ ENTRA EL NARANJA) --- */
   &:hover .step-icon {
     transform: scale(1.1);
-    background-color: var(--color-primario);
-    color: white;
+    
+    /* Cambio sutil: Borde e Ícono se ponen Naranjas */
+    border-color: var(--color-acento);
+    color: var(--color-acento);
+    
+    /* Mantenemos fondo blanco para limpieza */
+    background-color: white;
+    
+    /* Brillo naranja suave */
+    box-shadow: 0 10px 25px rgba(217, 119, 6, 0.15);
   }
 }
 
@@ -417,34 +509,36 @@ p {
 
 .step-number {
   position: absolute;
-  font-size: 8rem; /* Aumentamos el tamaño */
+  font-size: 8rem;
   font-weight: 900;
-  /* Usamos un gris un poco más fuerte (Slate 200) */
-  color: #e2e8f0; 
-  top: -20px;      /* Lo subimos un poco para centrarlo visualmente */
-  left: 50%;       /* Lo ubicamos a la mitad */
-  transform: translateX(-50%); /* Lo centramos perfectamente */
-  z-index: 1;      /* Queda detrás del icono */
+  color: #f1f5f9; /* Gris muy clarito de fondo */
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
   font-family: sans-serif;
   line-height: 1;
-  opacity: 0.8;    /* Le damos presencia */
-  pointer-events: none; /* Para que no moleste al clickear */
+  opacity: 0.8;
+  pointer-events: none;
 }
 
 .step-icon {
   width: 80px;
   height: 80px;
   background-color: white;
+  
+  /* ESTADO NORMAL: Azul Institucional */
   border: 2px solid var(--color-primario);
   color: var(--color-primario);
+  
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   z-index: 2;
-  box-shadow: 0 10px 25px rgba(26, 35, 126, 0.1);
-  transition: transform 0.3s ease, background-color 0.3s ease;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
   
   svg { width: 35px; height: 35px; }
 }
@@ -454,7 +548,7 @@ p {
   .steps-grid {
     grid-template-columns: 1fr;
     gap: 4rem;
-    &::before { display: none; } /* Chau línea en móvil */
+    &::before { display: none; }
   }
 }
 
@@ -481,6 +575,13 @@ p {
     font-weight: 700;
   }
   p { margin-bottom: 2rem; color: var(--color-texto-secundario); }
+  
+  /* Botón de acción (Naranja) */
+  .btn-primary {
+    background-color: var(--color-primario);
+    border-color: var(--color-primario);
+    &:hover { background-color: var(--color-primario-hover); }
+  }
 }
 
 .faq-list {
@@ -491,27 +592,34 @@ p {
 
 .faq-item {
   background-color: #fff;
-  border-radius: 12px; /* Ajustado */
+  border-radius: 12px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.05);
   overflow: hidden;
   border: 1px solid var(--color-borde-suave);
   transition: all 0.3s ease;
   cursor: pointer;
 
+  /* Hover: Solo un gris oscurito o azul para indicar "interactivo" */
   &:hover {
-    border-color: var(--color-primario);
+    border-color: var(--color-acento);
   }
 
+  /* --- ESTADO ACTIVO (ABIERTO) --- */
   &.active {
-    border-color: var(--color-primario);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    /* CAMBIO CLAVE: Borde Naranja al abrir */
+    border-color: var(--color-acento);
+    
+    /* Sombra con un tinte naranja suave */
+    box-shadow: 0 5px 15px rgba(217, 119, 6, 0.15);
     
     .chevron {
       transform: rotate(180deg);
-      color: var(--color-primario);
+      /* La flechita también se pone Naranja */
+      color: var(--color-acento);
     }
     
     .faq-question {
+      /* El título se mantiene oscuro para buena lectura, pero más grueso */
       color: var(--color-primario);
       font-weight: 700;
     }
@@ -540,17 +648,18 @@ p {
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.3s ease-out, padding 0.3s ease;
-  background-color: #fafafa;
+  background-color: #fff; /* Fondo blanco limpio para leer */
   
   p {
     padding: 0 1.5rem 1.5rem 1.5rem;
     margin: 0;
     font-size: 0.95rem;
     color: var(--color-texto-secundario);
+    line-height: 1.6;
   }
 
   &.show {
-    max-height: 200px; 
+    max-height: 200px; /* Altura suficiente para la respuesta */
   }
 }
 
@@ -562,14 +671,4 @@ p {
   }
   .faq-cta { text-align: center; order: 2; }
   .faq-list { order: 1; }
-}
-
-@keyframes moverPuntos {
-  0% {
-    background-position: 0 0;
-  }
-  100% {
-    /* CAMBIO: 0 en X, 24px en Y (Solo baja) */
-    background-position: 0 24px; 
-  }
 }

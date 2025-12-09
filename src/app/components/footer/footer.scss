@@ -1,8 +1,6 @@
-/* Usamos las variables globales de styles.scss */
-
+/* Usamos las variables globales */
 .site-footer {
-  /* CAMBIO: Fondo Oscuro para enmarcar el sitio */
-  background-color: var(--color-primario); 
+  background-color: var(--color-primario); /* Azul Marino Profundo */
   color: rgba(255, 255, 255, 0.8);
   padding-top: 4rem;
   border-top: none; 
@@ -13,30 +11,65 @@
   margin: 0 auto;
   padding: 0 2rem;
   display: grid;
-  /* 3 Columnas: Grande - Chica - Mediana */
   grid-template-columns: 2fr 1fr 1.5fr; 
   gap: 4rem;
   padding-bottom: 3rem;
 }
 
-/* --- COLUMNA 1: MARCA --- */
+/* --- COLUMNA 1: LOGO Y MARCA --- */
 .footer-logo {
+  margin-bottom: 1.5rem;
+}
+
+/* Estilo del Logo en el Footer */
+.brand-logo-footer {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 1rem;
-  color: white;
+  gap: 12px;
+  text-decoration: none;
+  opacity: 1;
+  transition: opacity 0.3s;
 
-  svg { width: 32px; height: 32px; }
-  h3 { font-size: 1.5rem; font-weight: 700; margin: 0; }
-  img { height: 40px; }
+  &:hover { opacity: 0.9; }
+
+  /* Icono (Escudo) */
+  .logo-icon {
+    width: 40px;
+    height: 40px;
+    /* Degradado Ámbar (mismo que navbar) */
+    background: linear-gradient(135deg, #b45309 0%, #d97706 100%);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+    
+    svg {
+      width: 22px; height: 22px; color: white;
+    }
+  }
+
+  /* Texto (Montserrat) */
+  .logo-text {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 500;
+    color: white; /* Blanco para que se vea sobre el fondo azul */
+    line-height: 1;
+    letter-spacing: -0.5px;
+
+    .highlight {
+      font-weight: 900;
+      color: var(--color-acento); /* Ámbar */
+    }
+  }
 }
 
 .brand-desc {
   font-size: 0.95rem;
   line-height: 1.6;
-  max-width: 320px;
-  color: rgba(255, 255, 255, 0.6); /* Gris clarito */
+  max-width: 300px;
+  color: rgba(255, 255, 255, 0.6);
 }
 
 /* --- COLUMNAS LINKS & CONTACTO --- */
@@ -50,22 +83,18 @@
     letter-spacing: 1px;
     position: relative;
     
-    /* Pequeña línea decorativa debajo del título */
     &::after {
       content: '';
       position: absolute;
-      bottom: -8px;
-      left: 0;
-      width: 40px;
-      height: 2px;
-      background-color: rgba(255,255,255,0.3);
+      bottom: -8px; left: 0;
+      width: 40px; height: 2px;
+      background-color: var(--color-acento); /* Línea decorativa naranja */
       border-radius: 2px;
     }
   }
 
   ul {
-    list-style: none;
-    padding: 0;
+    list-style: none; padding: 0;
     
     li {
       margin-bottom: 0.8rem;
@@ -78,32 +107,28 @@
 
         &:hover {
           color: white;
-          padding-left: 5px; /* Efecto movimiento */
+          padding-left: 5px; 
+          color: var(--color-acento); /* Hover naranja */
         }
       }
     }
   }
 }
 
-/* Estilos específicos para la lista de contacto */
 .contact-list li {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 0.95rem;
+  display: flex; align-items: center; gap: 0.75rem;
+  color: rgba(255, 255, 255, 0.7); font-size: 0.95rem;
   
   .icon {
-    width: 20px;
-    height: 20px;
-    color: white; /* Iconos blancos brillantes */
+    width: 20px; height: 20px;
+    color: var(--color-acento); /* Iconos de contacto en naranja */
     flex-shrink: 0;
   }
 }
 
 /* --- BARRA FINAL --- */
 .footer-bottom {
-  background-color: rgba(0, 0, 0, 0.15); /* Un poco más oscuro que el fondo */
+  background-color: rgba(0, 0, 0, 0.2);
   padding: 1.5rem 0;
   font-size: 0.85rem;
 }
@@ -119,16 +144,14 @@
   p { margin: 0; }
   
   .dev-name {
-    color: white;
-    font-weight: 600;
-    opacity: 0.9;
+    color: white; font-weight: 600; opacity: 0.9;
   }
 }
 
 /* --- RESPONSIVE --- */
 @media (max-width: 768px) {
   .footer-container {
-    grid-template-columns: 1fr; /* Todo en una columna */
+    grid-template-columns: 1fr;
     gap: 2.5rem;
   }
 
@@ -137,4 +160,14 @@
     gap: 1rem;
     text-align: center;
   }
+}
+
+.site-footer {
+  background-color: var(--color-primario); /* Azul Marino Profundo */
+  color: rgba(255, 255, 255, 0.8);
+  padding-top: 4rem;
+  
+  /* --- EL CAMBIO CLAVE --- */
+  /* Borde superior naranja grueso para dar cierre y conexión */
+  border-top: 4px solid var(--color-acento); 
 }
