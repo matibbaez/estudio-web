@@ -7,7 +7,7 @@ import { environment } from '../../../environments/environment';
 import { IReclamo } from '../../pages/admin-dashboard/admin-dashboard';
 import { NotificacionService } from '../../services/notificacion';
 
-type TipoArchivo = 'dni' | 'recibo' | 'alta' | 'form1' | 'form2';
+type TipoArchivo = 'dni' | 'recibo' | 'alta' | 'form1' | 'form2' | 'carta_documento' | 'revoca';
 
 @Component({
   selector: 'app-gestionar-reclamo-modal',
@@ -45,25 +45,28 @@ export class GestionarReclamoModalComponent implements OnInit {
   // MÉTODO PARA DESCARGAR ARCHIVOS (Con environment)
   // ------------------------------------------------------------------
   descargarArchivo(tipo: TipoArchivo) {
-    if (this.descargando) return; // Evita doble clic
+    if (this.descargando) return; 
 
-    this.descargando = tipo; // Activa el spinner
+    this.descargando = tipo; 
     
-    // 3. ¡USAMOS LA URL DEL ENVIRONMENT!
     const url = `${environment.apiUrl}/reclamos/descargar/${this.reclamo.id}/${tipo}`;
 
     this.http.get<{ url: string }>(url).pipe(
       finalize(() => {
-        this.descargando = null; // Apaga el spinner (éxito o error)
+        this.descargando = null; 
       })
     ).subscribe({
       next: (response) => {
-        // ¡ÉXITO! Abrimos el link temporal de Supabase en una pestaña nueva
         window.open(response.url, '_blank');
       },
       error: (error: HttpErrorResponse) => {
         console.error('Error al descargar archivo:', error);
-        this.notificacionService.showError('Error al generar el link de descarga.');
+        
+        if (error.status === 404) {
+           this.notificacionService.showError('El archivo solicitado no se encuentra en el servidor.');
+        } else {
+           this.notificacionService.showError('Error al generar el link de descarga.');
+        }
       }
     });
   }

@@ -12,7 +12,13 @@
     <div class="detalle-cliente">
       <strong>Cliente:</strong> {{ reclamo.nombre }} <br>
       <strong>DNI:</strong> {{ reclamo.dni }} <br>
-      <strong>Código:</strong> {{ reclamo.codigo_seguimiento }}
+      <strong>Código:</strong> {{ reclamo.codigo_seguimiento }} <br>
+      
+      <strong>Trámite:</strong> 
+      <span class="tipo-badge">
+        {{ reclamo.tipo_tramite }} 
+        <span *ngIf="reclamo.subtipo_tramite">({{ reclamo.subtipo_tramite }})</span>
+      </span>
     </div>
 
     <fieldset class="fieldset-archivos">
@@ -51,6 +57,26 @@
             Ver Alta Médica
           </span>
           <span *ngIf="descargando === 'alta'"><div class="spinner-chico"></div></span>
+        </button>
+
+        <button *ngIf="reclamo.path_carta_documento" 
+                class="btn-archivo btn-rechazo" 
+                (click)="descargarArchivo('carta_documento')" 
+                [disabled]="descargando === 'carta_documento'">
+          <span *ngIf="descargando !== 'carta_documento'">
+            📩 Ver Carta Documento
+          </span>
+          <span *ngIf="descargando === 'carta_documento'"><div class="spinner-chico"></div></span>
+        </button>
+
+        <button *ngIf="reclamo.path_revoca_patrocinio" 
+                class="btn-archivo btn-revoca" 
+                (click)="descargarArchivo('revoca')" 
+                [disabled]="descargando === 'revoca'">
+          <span *ngIf="descargando !== 'revoca'">
+            🔥 VER ESCRITO REVOCA
+          </span>
+          <span *ngIf="descargando === 'revoca'"><div class="spinner-chico"></div></span>
         </button>
 
       </div>
