@@ -2,15 +2,8 @@
   <div class="navbar-container">
     
     <!-- AQUI ESTÁ EL CAMBIO: LOGO IMAGEN -->
-    <a routerLink="/" class="brand-logo">
-      <div class="logo-icon">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-          <path fill-rule="evenodd" d="M12.516 2.17a.75.75 0 00-1.032 0 11.209 11.209 0 01-7.877 3.08.75.75 0 00-.722.515A12.74 12.74 0 002.25 9.75c0 5.942 4.064 10.933 9.563 12.348a.749.749 0 00.374 0c5.499-1.415 9.563-6.406 9.563-12.348 0-1.352-.272-2.636-.759-3.804a.75.75 0 00-.738-.486 11.209 11.209 0 01-7.737-3.289zm-4.852 9.47a.75.75 0 01.765.027l2.128 1.332 3.654-4.814a.75.75 0 111.196.908l-4.18 5.506a.75.75 0 01-1.127.087l-2.73-2.127a.75.75 0 01.294-1.32l.001.001z" clip-rule="evenodd" />
-        </svg>
-      </div>
-      <span class="logo-text">
-        Reclam<span class="highlight">ART</span>e
-      </span>
+    <a class="navbar-brand" routerLink="/" (click)="cerrarMenu()">
+      <img src="/logoFinalReclamarte.png" alt="Reclamá" class="logo-img">
     </a>
     
     <div class="navbar-links-desktop">

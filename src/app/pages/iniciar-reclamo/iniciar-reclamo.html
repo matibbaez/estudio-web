@@ -1,15 +1,88 @@
 <div class="page-container">
-  <app-card [titulo]="isSubmitted ? '¡Reclamo Enviado con Éxito!' : 'Iniciar un Nuevo Reclamo'">
+  <app-card [titulo]="isSubmitted ? '¡Reclamo Enviado con Éxito!' : (pasoActual === 0 ? 'Seleccioná tu Caso' : 'Completar Datos')">
 
     <div class="custom-header" *ngIf="!isSubmitted">
-      <h1>Iniciar Nuevo Reclamo</h1>
-      <p>Completá los datos para comenzar tu gestión.</p>
+      <h1 *ngIf="pasoActual === 0">¿Cuál es tu situación?</h1>
+      <h1 *ngIf="pasoActual === 1">Iniciando trámite: <span class="text-highlight">{{ reclamoForm.get('tipo_tramite')?.value }}</span></h1>
+      <p *ngIf="pasoActual === 0">Seleccioná la opción que mejor describa tu caso para comenzar.</p>
+      <p *ngIf="pasoActual === 1">Completá la documentación requerida para gestionar tu expediente.</p>
     </div>
 
     <div class="form-content">
 
-      <ng-container *ngIf="!isSubmitted">
+      <ng-container *ngIf="!isSubmitted && pasoActual === 0">
         
+        <div class="tramite-grid">
+          
+          <div class="tramite-card" (click)="seleccionarTramite('Rechazo')">
+            <div class="card-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+              </svg>
+            </div>
+            <div class="card-content">
+              <h3>Me rechazaron el accidente</h3>
+              <p>La ART envió Carta Documento negando el siniestro o la patología.</p>
+            </div>
+            <div class="card-action">Elegir</div>
+          </div>
+
+          <div class="tramite-card" (click)="seleccionarTramite('Alta Medica')">
+            <div class="card-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m3.75 9v6m3-3H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+              </svg>
+            </div>
+            <div class="card-content">
+              <h3>Me dieron el Alta</h3>
+              <p>Te mandaron a trabajar pero no estás recuperado o necesitás reingresar.</p>
+            </div>
+            <div class="card-action">Elegir</div>
+          </div>
+
+          <div class="tramite-card" (click)="seleccionarTramite('Prestaciones')">
+            <div class="card-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div class="card-content">
+              <h3>Quiero cobrar mi indemnización</h3>
+              <p>Ya tenés el alta definitiva y querés que valoren tu incapacidad.</p>
+            </div>
+            <div class="card-action">Elegir</div>
+          </div>
+
+          <div class="tramite-card highlight" (click)="seleccionarTramite('Revoca')">
+            <div class="card-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
+              </svg>
+            </div>
+            <div class="card-content">
+              <h3>Cambiar de asesoramiento</h3>
+              <p>Ya tenés un trámite iniciado pero querés revocar patrocinio.</p>
+            </div>
+            <div class="card-action">Elegir</div>
+          </div>
+
+        </div>
+      </ng-container>
+
+
+      <ng-container *ngIf="!isSubmitted && pasoActual === 1">
+        
+        <div class="back-nav-container">
+          <button class="btn-back-premium" (click)="pasoActual = 0">
+            <div class="back-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+              </svg>
+            </div>
+            <span class="back-text">Volver a la selección</span>
+          </button>
+        </div>
+
         <div class="info-box">
           <div class="info-icon">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" /></svg>
@@ -26,22 +99,10 @@
 
         <form [formGroup]="reclamoForm" (ngSubmit)="onSubmit()" class="reclamo-form">
 
-          <fieldset>
-            <legend>Clasificación del Trámite</legend>
+          <fieldset *ngIf="reclamoForm.get('tipo_tramite')?.value === 'Prestaciones'">
+            <legend>Detalle del Reclamo</legend>
             <div class="form-grid">
-              
-              <div class="form-field">
-                <label>Tipo de Trámite *</label>
-                <div class="input-wrapper">
-                  <select formControlName="tipo_tramite" (change)="onTipoChange()" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid var(--color-borde-suave); background: #f9fafb;">
-                    <option value="Alta Medica">Alta Médica</option>
-                    <option value="Rechazo">Rechazo del Siniestro</option>
-                    <option value="Prestaciones">Prestaciones Dinerarias / Reingreso</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="form-field" *ngIf="reclamoForm.get('tipo_tramite')?.value === 'Prestaciones'">
+              <div class="form-field full-width">
                 <label>Especificar Prestación *</label>
                 <div class="input-wrapper">
                   <select formControlName="subtipo_tramite" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid var(--color-borde-suave); background: #f9fafb;">
@@ -54,7 +115,6 @@
                   Debe especificar el tipo.
                 </div>
               </div>
-
             </div>
           </fieldset>
 
@@ -85,7 +145,7 @@
                 </div>
                 <div *ngIf="reclamoForm.get('dni')?.invalid && (reclamoForm.get('dni')?.dirty || reclamoForm.get('dni')?.touched)">
                   <div *ngIf="reclamoForm.get('dni')?.errors?.['required']" class="error">El DNI es obligatorio.</div>
-                  <div *ngIf="reclamoForm.get('dni')?.errors?.['pattern']" class="error">Solo números (sin puntos ni letras).</div>
+                  <div *ngIf="reclamoForm.get('dni')?.errors?.['pattern']" class="error">Solo números (sin puntos).</div>
                   <div *ngIf="reclamoForm.get('dni')?.errors?.['minlength'] || reclamoForm.get('dni')?.errors?.['maxlength']" class="error">Debe tener entre 7 y 8 dígitos.</div>
                 </div>
               </div>
@@ -106,9 +166,9 @@
           <fieldset>
             <legend>Documentación Requerida</legend>
             
-            <div *ngIf="esRevocaPatrocinio" style="background-color: #fff7ed; border: 1px solid #fed7aa; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; color: #9a3412; display: flex; gap: 10px; align-items: center;">
+            <div *ngIf="reclamoForm.get('tipo_tramite')?.value === 'Revoca'" style="background-color: #fff7ed; border: 1px solid #fed7aa; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; color: #9a3412; display: flex; gap: 10px; align-items: center;">
                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width: 24px; height: 24px;"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" /></svg>
-               <span style="font-weight: 600; font-size: 0.9rem;">ATENCIÓN: Al cambiar de abogado, es obligatorio adjuntar el escrito de "Revoca Patrocinio".</span>
+               <span style="font-weight: 600; font-size: 0.9rem;">ATENCIÓN: Es obligatorio adjuntar el escrito de "Revoca Patrocinio".</span>
             </div>
 
             <div class="files-grid">
@@ -195,14 +255,14 @@
                     </div>
                     <div class="file-info">
                       <span class="label-text" style="color: #991b1b;">{{ reclamoForm.get('fileCartaDocumento')?.value ? 'Carta Cargada' : 'Subir Carta Doc.' }}</span>
-                      <span class="file-name">{{ reclamoForm.get('fileCartaDocumento')?.value?.name || 'Requerido para Rechazo' }}</span>
+                      <span class="file-name">{{ reclamoForm.get('fileCartaDocumento')?.value?.name || 'Requerido' }}</span>
                     </div>
                 </label>
                 <input id="fileCartaDocumento" type="file" (change)="onFileChange($event, 'fileCartaDocumento')" class="file-input-hidden" accept=".pdf,.jpg,.png">
-                <div *ngIf="reclamoForm.get('fileCartaDocumento')?.invalid && reclamoForm.get('fileCartaDocumento')?.touched" class="error">Es obligatorio adjuntar el rechazo.</div>
+                <div *ngIf="reclamoForm.get('fileCartaDocumento')?.invalid && reclamoForm.get('fileCartaDocumento')?.touched" class="error">Obligatorio.</div>
               </div>
 
-              <div class="form-field-file" *ngIf="esRevocaPatrocinio">
+              <div class="form-field-file" *ngIf="reclamoForm.get('tipo_tramite')?.value === 'Revoca'">
                 <label>Escrito "Revoca Patrocinio" *</label>
                 <label class="file-upload-label" for="fileRevoca" [class.uploaded]="reclamoForm.get('fileRevoca')?.value" style="border-color: #fdba74; background-color: #fff7ed;">
                     <div class="btn-icon" style="background-color: #f97316; color: white;">
@@ -214,7 +274,7 @@
                     </div>
                 </label>
                 <input id="fileRevoca" type="file" (change)="onFileChange($event, 'fileRevoca')" class="file-input-hidden" accept=".pdf,.jpg,.png">
-                <div *ngIf="reclamoForm.get('fileRevoca')?.invalid && reclamoForm.get('fileRevoca')?.touched" class="error">Es obligatorio subir la revoca.</div>
+                <div *ngIf="reclamoForm.get('fileRevoca')?.invalid && reclamoForm.get('fileRevoca')?.touched" class="error">Obligatorio.</div>
               </div>
 
             </div>

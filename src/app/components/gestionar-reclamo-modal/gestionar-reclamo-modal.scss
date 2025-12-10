@@ -27,17 +27,25 @@
 /* 2. El Contenido (La "Tarjeta" flotante) */
 .modal-content {
   position: relative;
-  z-index: 1001; // Por encima del fondo
+  z-index: 1001;
   background-color: var(--color-fondo-tarjeta);
-  border-radius: var(--borde-redondeado);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  
+  /* Flex Column es CLAVE para el scroll interno */
+  display: flex;
+  flex-direction: column;
+
+  /* Por defecto (Desktop) */
   width: 90%;
-  max-width: 500px;
+  max-width: 600px; /* Un poco más ancho para desktop */
+  max-height: 85vh; /* Importante: altura máxima en desktop */
+  border-radius: var(--borde-redondeado);
   animation: slideInUp 0.3s ease-out;
 }
 
 /* 3. El Encabezado */
 .modal-header {
+  flex-shrink: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -63,6 +71,8 @@
 
 /* 4. El Cuerpo */
 .modal-body {
+  flex-grow: 1;
+  overflow-y: auto;
   padding: 1.5rem;
   
   .detalle-cliente {
@@ -104,12 +114,14 @@
 
 /* 5. El Pie */
 .modal-footer {
+  flex-shrink: 0; /* No se achica */
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
-  padding: 1.5rem;
+  padding: 1rem 1.5rem;
   background-color: var(--color-fondo-pagina);
   border-top: 1px solid var(--color-borde-suave);
+  /* Asegura bordes redondeados solo abajo en desktop */
   border-bottom-left-radius: var(--borde-redondeado);
   border-bottom-right-radius: var(--borde-redondeado);
 
@@ -233,4 +245,22 @@
 .tipo-badge {
   font-weight: 600;
   color: #475569;
+}
+
+@media (max-width: 768px) {
+  .modal-content {
+    width: 100%;
+    height: 100%; /* Ocupa toda la pantalla */
+    max-width: none;
+    max-height: none;
+    border-radius: 0; /* Sin bordes redondeados */
+  }
+  
+  .modal-footer {
+    border-radius: 0; /* Sin bordes abajo */
+    padding-bottom: 2rem; /* Un poco más de aire por la barra de navegación del celu */
+  }
+
+  /* Ajustamos el tamaño de fuente para que entre mejor */
+  .modal-header h3 { font-size: 1.2rem; }
 }

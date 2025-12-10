@@ -1,18 +1,14 @@
-import { Component, inject, OnInit } from '@angular/core'; // <--- Agregamos OnInit
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms'; 
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { ActivatedRoute } from '@angular/router'; // <--- Importamos ActivatedRoute
+import { ActivatedRoute } from '@angular/router'; 
 import { environment } from '../../../environments/environment';
 import { CardComponent } from '../../components/card/card';
 import { NotificacionService } from '../../services/notificacion';
 
 const MAX_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB
-const ALLOWED_MIME_TYPES = [
-  'application/pdf',
-  'image/jpeg',
-  'image/png',
-];
+const ALLOWED_MIME_TYPES = ['application/pdf', 'image/jpeg', 'image/png'];
 
 @Component({
   selector: 'app-iniciar-reclamo',
@@ -21,123 +17,140 @@ const ALLOWED_MIME_TYPES = [
   templateUrl: './iniciar-reclamo.html',
   styleUrl: './iniciar-reclamo.scss'
 })
-export class IniciarReclamoComponent implements OnInit { // <--- Implementamos OnInit
+export class IniciarReclamoComponent implements OnInit {
   
   private fb = inject(FormBuilder);
   private http = inject(HttpClient); 
   private notificacionService = inject(NotificacionService);
-  private route = inject(ActivatedRoute); // <--- Inyectamos la Ruta
+  private route = inject(ActivatedRoute);
 
   isLoading = false;
   isSubmitted = false; 
   codigoExito: string | null = null; 
   
-  // Variable para saber si mostramos el cartel de alerta roja
+  // Controla qué pantalla vemos (0: Tarjetas, 1: Formulario)
+  pasoActual = 0;
+
+  // Variable para el cartel de alerta naranja en el HTML
   esRevocaPatrocinio = false; 
 
+  // --- DEFINICIÓN DEL FORMULARIO ---
+  // Nota: Los campos condicionales arrancan SIN required. Se agregan dinámicamente.
   reclamoForm = this.fb.group({
-    nombre: ['', [
-      Validators.required,
-      Validators.minLength(3), 
-      Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/) 
-    ]],
-    dni: ['', [
-      Validators.required,
-      Validators.minLength(7), 
-      Validators.maxLength(8), 
-      Validators.pattern(/^[0-9]*$/) 
-    ]],
+    nombre: ['', [Validators.required, Validators.minLength(3), Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/)]],
+    dni: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(8), Validators.pattern(/^[0-9]*$/)]],
     email: ['', [Validators.required, Validators.email]],
     
-    // --- CAMPOS NUEVOS ---
-    tipo_tramite: ['Alta Medica', Validators.required], // Valor por defecto
-    subtipo_tramite: [''], // Opcional al inicio
+    // Tipo de Trámite
+    tipo_tramite: ['', Validators.required], 
+    subtipo_tramite: [''], // Se vuelve required si es 'Prestaciones'
     
-    // Archivos Base
+    // Archivos Base (Siempre obligatorios)
     fileDNI: [null as File | null, Validators.required],
     fileRecibo: [null as File | null, Validators.required],
-    fileAlta: [null as File | null], // Opcional (solo si es Alta Medica)
     fileForm1: [null as File | null, Validators.required], 
     fileForm2: [null as File | null, Validators.required],
     
-    // Archivos Nuevos Condicionales
-    fileCartaDocumento: [null as File | null], // Solo si es Rechazo
-    fileRevoca: [null as File | null]          // Solo si viene del Banner
+    // Archivos Opcionales / Condicionales
+    fileAlta: [null as File | null], 
+    fileCartaDocumento: [null as File | null], // Se vuelve required si es 'Rechazo'
+    fileRevoca: [null as File | null]          // Se vuelve required si es 'Revoca'
   });
 
   constructor() {}
 
-  // 1. DETECTAMOS SI VIENE DEL BANNER "REVOCA"
   ngOnInit(): void {
+    // Detectamos si viene del banner del Home (Query Param ?revoca=true)
     this.route.queryParams.subscribe(params => {
       if (params['revoca'] === 'true') {
-        this.esRevocaPatrocinio = true;
-        // Hacemos obligatorio el archivo de Revoca
-        this.reclamoForm.get('fileRevoca')?.setValidators([Validators.required]);
-        this.reclamoForm.get('fileRevoca')?.updateValueAndValidity();
+        // Entramos directo al modo Revoca
+        this.seleccionarTramite('Revoca');
       }
     });
+  }
+
+  // =========================================================
+  // 1. LÓGICA DE SELECCIÓN (EL CEREBRO DEL FORMULARIO)
+  // =========================================================
+  seleccionarTramite(tipo: string) {
+    // A. Seteamos el valor
+    this.reclamoForm.patchValue({ tipo_tramite: tipo });
     
-    // Ejecutamos la validación inicial del tipo de trámite
-    this.onTipoChange();
+    // B. Actualizamos bandera para el HTML (Cartel Naranja)
+    this.esRevocaPatrocinio = (tipo === 'Revoca');
+
+    // C. ACTUALIZAMOS LAS REGLAS DE VALIDACIÓN (CRÍTICO)
+    this.actualizarReglasValidacion(tipo);
+
+    // D. Cambiamos de pantalla
+    this.pasoActual = 1;
+    
+    // E. Scroll arriba suave
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // 2. LÓGICA DINÁMICA DEL SELECTOR (CAMBIO DE TIPO)
-  onTipoChange() {
-    const tipo = this.reclamoForm.get('tipo_tramite')?.value;
-    const subtipoControl = this.reclamoForm.get('subtipo_tramite');
-    const cdControl = this.reclamoForm.get('fileCartaDocumento');
+  // Método auxiliar para limpiar y re-asignar validators
+  private actualizarReglasValidacion(tipo: string) {
+    const subtipoCtrl = this.reclamoForm.get('subtipo_tramite');
+    const cartaDocCtrl = this.reclamoForm.get('fileCartaDocumento');
+    const revocaCtrl = this.reclamoForm.get('fileRevoca');
 
-    // Reseteamos validaciones para empezar limpio
-    subtipoControl?.clearValidators();
-    cdControl?.clearValidators();
+    // 1. LIMPIEZA: Primero sacamos la obligatoriedad a todo lo condicional
+    subtipoCtrl?.clearValidators();
+    cartaDocCtrl?.clearValidators();
+    revocaCtrl?.clearValidators();
 
-    if (tipo === 'Prestaciones') {
-      subtipoControl?.setValidators([Validators.required]);
+    // 2. ASIGNACIÓN: Según el caso, hacemos obligatorio lo que corresponda
+    if (tipo === 'Rechazo') {
+      cartaDocCtrl?.setValidators([Validators.required]); // Pide Carta Doc
     } 
-    else if (tipo === 'Rechazo') {
-      cdControl?.setValidators([Validators.required]);
+    else if (tipo === 'Prestaciones') {
+      subtipoCtrl?.setValidators([Validators.required]); // Pide Select Subtipo
+    } 
+    else if (tipo === 'Revoca') {
+      revocaCtrl?.setValidators([Validators.required]); // Pide Escrito Revoca
     }
+    // 'Alta Medica' no pide nada extra, queda con los base.
 
-    // Actualizamos el estado de los campos
-    subtipoControl?.updateValueAndValidity();
-    cdControl?.updateValueAndValidity();
+    // 3. ACTUALIZACIÓN: Avisamos a Angular que recalcule el estado
+    subtipoCtrl?.updateValueAndValidity();
+    cartaDocCtrl?.updateValueAndValidity();
+    revocaCtrl?.updateValueAndValidity();
+    this.reclamoForm.updateValueAndValidity(); // Actualiza el form completo
   }
 
+  // =========================================================
+  // 2. LOGICA DE ENVÍO
+  // =========================================================
   onSubmit() {
     if (this.reclamoForm.invalid) {
       this.reclamoForm.markAllAsTouched();
-      this.notificacionService.showError('Formulario inválido. Revise los campos en rojo.');
+      this.notificacionService.showError('Faltan datos obligatorios. Revise el formulario.');
       return;
     }
 
     this.isLoading = true;
-    console.log('Formulario Válido, armando FormData...');
-
     const formData = new FormData();
     const formValue = this.reclamoForm.value;
 
-    // Datos Base
+    // Append Datos Texto
     formData.append('nombre', formValue.nombre!);
     formData.append('dni', formValue.dni!);
     formData.append('email', formValue.email!);
-    
-    // Nuevos Datos de Texto
     formData.append('tipo_tramite', formValue.tipo_tramite!);
+    
     if (formValue.subtipo_tramite) {
       formData.append('subtipo_tramite', formValue.subtipo_tramite);
     }
 
-    // Archivos Base
+    // Append Archivos Base
     formData.append('fileDNI', formValue.fileDNI!);
     formData.append('fileRecibo', formValue.fileRecibo!);
     formData.append('fileForm1', formValue.fileForm1!);
     formData.append('fileForm2', formValue.fileForm2!);
 
-    // Archivos Opcionales / Condicionales
+    // Append Archivos Condicionales (Solo si tienen valor)
     if (formValue.fileAlta) formData.append('fileAlta', formValue.fileAlta);
-    
-    // Solo mandamos estos si existen (el backend debe estar preparado para recibirlos opcionalmente)
     if (formValue.fileCartaDocumento) formData.append('fileCartaDocumento', formValue.fileCartaDocumento);
     if (formValue.fileRevoca) formData.append('fileRevoca', formValue.fileRevoca);
 
@@ -149,28 +162,26 @@ export class IniciarReclamoComponent implements OnInit { // <--- Implementamos O
         this.isSubmitted = true; 
         this.codigoExito = response.codigo_seguimiento; 
         this.notificacionService.showSuccess('¡Reclamo enviado con éxito!');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       },
       error: (error) => {
         this.isLoading = false;
-        console.error('¡ERROR! No se pudo conectar al backend:', error);
-        if (error.error && error.error.message) {
-             this.notificacionService.showError(error.error.message);
-        } else {
-             this.notificacionService.showError('Error al enviar el reclamo. Intente más tarde.');
-        }
+        console.error('Error backend:', error);
+        const msg = error.error?.message || 'Error al enviar el reclamo.';
+        this.notificacionService.showError(msg);
       }
     });
   }
 
+  // =========================================================
+  // 3. UTILS (Archivos, Reiniciar)
+  // =========================================================
   iniciarOtroReclamo() {
     this.isSubmitted = false;
     this.codigoExito = null;
-    this.esRevocaPatrocinio = false; // Reseteamos esto también
+    this.esRevocaPatrocinio = false; 
+    this.pasoActual = 0; // Vuelve a las tarjetas
     this.reclamoForm.reset();
-    
-    // Volvemos a poner valores por defecto
-    this.reclamoForm.patchValue({ tipo_tramite: 'Alta Medica' });
-    this.onTipoChange(); // Re-aplicar reglas
   }
 
   onFileChange(event: any, controlName: string) {
@@ -182,22 +193,21 @@ export class IniciarReclamoComponent implements OnInit { // <--- Implementamos O
     const file = event.target.files[0];
 
     if (!ALLOWED_MIME_TYPES.includes(file.type)) {
-      this.notificacionService.showError(`Tipo de archivo no permitido. Solo se aceptan PDF, JPG o PNG.`);
+      this.notificacionService.showError(`Formato no permitido. Use PDF, JPG o PNG.`);
       this.reclamoForm.get(controlName)?.reset(); 
       event.target.value = null; 
       return;
     }
 
     if (file.size > MAX_SIZE_BYTES) {
-      this.notificacionService.showError(`Archivo demasiado grande. El límite es 5 MB.`);
+      this.notificacionService.showError(`Archivo muy pesado. Máximo 5 MB.`);
       this.reclamoForm.get(controlName)?.reset(); 
       event.target.value = null;
       return;
     }
 
-    this.reclamoForm.patchValue({
-      [controlName]: file
-    });
+    // Guardamos el archivo y validamos
+    this.reclamoForm.patchValue({ [controlName]: file });
     this.reclamoForm.get(controlName)?.updateValueAndValidity();
   }
 }

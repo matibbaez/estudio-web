@@ -6,24 +6,77 @@
 }
 
 /* ---------------------------------- */
-/* 1. BARRA DE HERRAMIENTAS (NUEVO)
+/* 1. BARRA DE HERRAMIENTAS (MEJORADA)
 /* ---------------------------------- */
 .tools-bar {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2rem;
-  flex-wrap: wrap;
+  flex-direction: column; /* Mobile first: columna */
   gap: 1rem;
+  margin-bottom: 2rem;
 }
 
-/* Tabs de Estado (Botones limpios) */
+/* El botón para abrir filtros (Solo visible en mobile por defecto) */
+.btn-filter-toggle {
+  display: flex; /* Visible en mobile */
+  align-items: center; justify-content: center; gap: 0.5rem;
+  width: 100%;
+  padding: 0.8rem;
+  background-color: white;
+  border: 1px solid var(--color-borde-suave);
+  border-radius: 8px;
+  font-weight: 600;
+  color: var(--color-texto-principal);
+  cursor: pointer;
+  
+  svg { width: 20px; height: 20px; }
+}
+
+/* El contenedor de los filtros reales */
+.filters-wrapper {
+  display: none; /* Oculto por defecto en mobile */
+  flex-direction: column;
+  gap: 1rem;
+  
+  &.show-mobile {
+    display: flex; /* Se muestra al hacer click */
+    animation: slideDown 0.3s ease-out;
+  }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Tabs de Estado */
 .status-tabs {
   display: flex;
   gap: 0.5rem;
   background: #f1f5f9;
   padding: 4px;
   border-radius: 10px;
+  overflow-x: auto; /* Scroll horizontal si no entran */
+}
+
+/* --- DESKTOP (Mayores a 768px) --- */
+@media (min-width: 768px) {
+  .tools-bar {
+    flex-direction: row; /* Vuelve a fila */
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  /* Ocultamos el botón toggle en desktop */
+  .btn-filter-toggle { display: none; }
+
+  /* Mostramos siempre los filtros en desktop */
+  .filters-wrapper {
+    display: flex !important;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+  }
 }
 
 .tab-btn {

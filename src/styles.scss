@@ -2,32 +2,38 @@
    VARIABLES GLOBALES (Paleta Premium Legal)
    ========================================= */
 :root {
-  /* --- COLORES PRINCIPALES (Navy & Amber) --- */
-  --color-primario: #0f172a;       /* Slate 900: Azul Marino Profundo (Autoridad) */
+  /* --- COLORES PRINCIPALES --- */
+  /* Azul Marino Profundo (Autoridad y Estructura) */
+  --color-primario: #0f172a;       /* Slate 900 */
   --color-primario-hover: #1e293b; /* Slate 800 */
   
-  --color-secundario: #64748b;     /* Slate 500: Gris azulado para textos secundarios */
+  /* Gris azulado para textos secundarios */
+  --color-secundario: #64748b;     /* Slate 500 */
   
-  --color-acento: #d97706;         /* Amber 600: Ámbar Quemado (Acción/ART) */
-  --color-acento-hover: #b45309;   /* Amber 700 */
+  /* --- COLOR DE ACENTO (El Degradado del Logo) --- */
+  /* Principal: Degradado lineal de 90 grados, de rojo-naranja a naranja-claro */
+  --color-acento: linear-gradient(90deg, #ff3131, #ff914d); 
+  
+  /* Hover: Una versión ligeramente más oscura y saturada para la interacción */
+  --color-acento-hover: linear-gradient(90deg, #d92727, #d97c3f);
 
   /* --- ESTADOS DEL SISTEMA --- */
-  --color-exito: #059669;          /* Emerald 600: Un verde más elegante */
-  --color-error: #ef4444;          /* Red 500: Rojo suave */
+  --color-exito: #059669;          /* Emerald 600 */
+  --color-error: #ef4444;          /* Red 500 */
   --color-advertencia: #f59e0b;    /* Amber 500 */
   --color-info: #3b82f6;           /* Blue 500 */
 
   /* --- UI & FONDOS --- */
-  --color-fondo-pagina: #f8fafc;   /* Slate 50: Casi blanco, muy limpio */
+  --color-fondo-pagina: #f8fafc;   /* Slate 50 */
   --color-fondo-tarjeta: #ffffff;
   --color-borde-suave: #e2e8f0;    /* Slate 200 */
   
   /* --- TEXTOS --- */
-  --color-texto-principal: #334155; /* Slate 700: No es negro puro, es gris oscuro */
+  --color-texto-principal: #334155; /* Slate 700 */
   --color-texto-secundario: #64748b; /* Slate 500 */
 
   /* --- TIPOGRAFÍA & DETALLES --- */
-  --font-familia-principal: 'Outfit', sans-serif; /* Moderna y limpia */
+  --font-familia-principal: 'Outfit', sans-serif;
   --borde-redondeado: 12px;
   --sombra-tarjeta: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
@@ -129,7 +135,7 @@ html {
 
   /* 1. PRIMARIO (Azul Marino - Sobrio) */
   &.btn-primary {
-    background-color: var(--color-primario);
+    background: var(--color-primario);
     color: white;
     box-shadow: 0 4px 6px rgba(15, 23, 42, 0.2);
     
@@ -156,12 +162,12 @@ html {
 
   /* 3. WARNING / ACCIÓN (Ámbar - Para llamar la atención) */
   &.btn-warning {
-    background-color: var(--color-acento);
+    background: var(--color-acento);
     color: white;
     box-shadow: 0 4px 6px rgba(217, 119, 6, 0.25);
 
     &:hover {
-      background-color: var(--color-acento-hover);
+      background: var(--color-acento-hover);
       transform: translateY(-2px);
       box-shadow: 0 10px 15px -3px rgba(217, 119, 6, 0.4);
     }

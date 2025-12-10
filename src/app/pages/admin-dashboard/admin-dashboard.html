@@ -3,43 +3,33 @@
     
     <div class="tools-bar">
       
-      <div class="status-tabs">
-        <button 
-          class="tab-btn" 
-          [class.active]="filtroEstado === ''" 
-          (click)="cambiarEstado('')">
-          Todos
-        </button>
-        <button 
-          class="tab-btn" 
-          [class.active]="filtroEstado === 'Recibido'" 
-          (click)="cambiarEstado('Recibido')">
-          Recibidos
-        </button>
-        <button 
-          class="tab-btn" 
-          [class.active]="filtroEstado === 'En Proceso'" 
-          (click)="cambiarEstado('En Proceso')">
-          En Proceso
-        </button>
-        <button 
-          class="tab-btn" 
-          [class.active]="filtroEstado === 'Finalizado'" 
-          (click)="cambiarEstado('Finalizado')">
-          Finalizados
-        </button>
-      </div>
+      <button class="btn-filter-toggle" (click)="toggleFiltros()">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
+        </svg>
+        {{ filtrosAbiertos ? 'Ocultar Filtros' : 'Filtrar Trámites' }}
+      </button>
 
-      <div class="type-filter">
-        <select (change)="cambiarTipo($event)" class="select-profesional">
-          <option value="">Todos los Tipos</option>
-          <option value="Revoca">⚠️ Solo Revocaciones</option>
-          <option value="Rechazo">Rechazos</option>
-          <option value="Alta Medica">Altas Médicas</option>
-          <option value="Prestaciones">Prestaciones</option>
-        </select>
-      </div>
+      <div class="filters-wrapper" [class.show-mobile]="filtrosAbiertos">
+        
+        <div class="status-tabs">
+          <button class="tab-btn" [class.active]="filtroEstado === ''" (click)="cambiarEstado('')">Todos</button>
+          <button class="tab-btn" [class.active]="filtroEstado === 'Recibido'" (click)="cambiarEstado('Recibido')">Recibidos</button>
+          <button class="tab-btn" [class.active]="filtroEstado === 'En Proceso'" (click)="cambiarEstado('En Proceso')">En Proceso</button>
+          <button class="tab-btn" [class.active]="filtroEstado === 'Finalizado'" (click)="cambiarEstado('Finalizado')">Finalizados</button>
+        </div>
 
+        <div class="type-filter">
+          <select (change)="cambiarTipo($event)" class="select-profesional">
+            <option value="">Todos los Tipos</option>
+            <option value="Revoca">⚠️ Solo Revocaciones</option>
+            <option value="Rechazo">Rechazos</option>
+            <option value="Alta Medica">Altas Médicas</option>
+            <option value="Prestaciones">Prestaciones</option>
+          </select>
+        </div>
+
+      </div>
     </div>
 
     <div *ngIf="!loading; else loadingTemplate">

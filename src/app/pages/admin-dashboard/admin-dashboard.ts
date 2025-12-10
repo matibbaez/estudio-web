@@ -56,6 +56,12 @@ export class AdminDashboardComponent implements OnInit {
     this.cargarDatos();
   }
 
+  filtrosAbiertos = false;
+
+  toggleFiltros() {
+    this.filtrosAbiertos = !this.filtrosAbiertos;
+  }
+
   // 1. Carga desde Backend (Filtra por ESTADO)
   cargarDatos() {
     this.loading = true;
