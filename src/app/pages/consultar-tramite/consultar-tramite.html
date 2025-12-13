@@ -1,90 +1,88 @@
-<div class="page-container">
-  
-  <!-- Link de navegación simple -->
-  <a routerLink="/" class="back-link">
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-    Volver al inicio
-  </a>
+<div class="page-container anim-fade-in">
 
-  <app-card [titulo]="'Consultar Estado'">
+  <app-card [titulo]="'Seguimiento de Expediente'">
 
-    <!-- ESTADO 1: FORMULARIO DE BÚSQUEDA -->
-    <ng-container *ngIf="!resultado && !errorMensaje && !isLoading">
+    <ng-container *ngIf="!resultado && !isLoading">
       <div class="search-header">
-        <p>Ingresá el código de seguimiento que recibiste al iniciar el trámite.</p>
+        <h2>Consultá el estado de tu trámite</h2>
+        <p>Ingresá el código de seguimiento que recibiste por email.</p>
       </div>
       
       <form class="consulta-form" [formGroup]="consultaForm" (ngSubmit)="onSubmit()">
-        
-        <div class="form-field icon-field">
-          <label for="codigo">Código de Seguimiento</label>
-          <div class="input-wrapper">
-            <span class="icon">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" /></svg>
+        <div class="form-field">
+          <div class="input-wrapper-hero">
+            <span class="search-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" /></svg>
             </span>
-            <input id="codigo" type="text" formControlName="codigo" placeholder="Ej: A4F-8B1" autocomplete="off">
+            <input id="codigo" type="text" formControlName="codigo" placeholder="Ingresá tu código aquí..." autocomplete="off">
+          </div>
+          <div *ngIf="consultaForm.get('codigo')?.touched && consultaForm.get('codigo')?.invalid" class="error-msg">
+            El código es requerido.
           </div>
         </div>
 
-        <button type="submit" class="btn btn-primary btn-largo" [disabled]="consultaForm.invalid">
-          Consultar Ahora
+        <button type="submit" class="btn btn-primary btn-hero" [disabled]="consultaForm.invalid">
+          Buscar Expediente
         </button>
       </form>
-    </ng-container>
 
-    <!-- ESTADO 2: CARGANDO -->
-    <div *ngIf="isLoading" class="loading-container">
-      <div class="spinner-grande"></div>
-      <p>Buscando expediente...</p>
-    </div>
-
-    <!-- ESTADO 3: ÉXITO (DISEÑO TICKET) -->
-    <div *ngIf="resultado" class="resultado-container exito">
-      
-      <div class="status-card">
-        <div class="card-header-status" [ngClass]="resultado.estado.toLowerCase().replace(' ', '-')">
-          <div class="status-icon">
-            <!-- Icono dinámico según estado (podrías hacer un ngSwitch acá si querés ser detallista) -->
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" /></svg>
-          </div>
-          <h3>{{ resultado.estado }}</h3>
-          <span class="status-subtitle">Estado Actual</span>
-        </div>
-
-        <div class="card-body-status">
-          <div class="info-row">
-            <span class="label">Código:</span>
-            <span class="value code">{{ resultado.codigo_seguimiento }}</span>
-          </div>
-          <div class="divider-dashed"></div>
-          <!-- <div class="info-row">
-            <span class="label">Titular:</span>
-            <span class="value">{{ resultado.nombre }}</span>
-          </div> -->
-          <div class="info-row">
-            <span class="label">Fecha Inicio:</span>
-            <span class="value">{{ resultado.fecha_creacion | date:'dd/MM/yyyy' }}</span>
-          </div>
-        </div>
-      </div>
-
-      <button (click)="resetForm()" class="btn btn-secondary btn-largo">
-        Consultar otro código
-      </button>
-    </div>
-
-    <!-- ESTADO 4: ERROR -->
-    <div *ngIf="errorMensaje && !isLoading" class="resultado-container error">
-      <div class="error-box">
-        <div class="error-icon">
+      <div *ngIf="errorMensaje" class="alert-error anim-slide-up">
+        <div class="icon-error">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" /></svg>
         </div>
-        <h3>No encontrado</h3>
-        <p>{{ errorMensaje }}</p>
+        <span>{{ errorMensaje }}</span>
       </div>
-      <button (click)="resetForm()" class="btn btn-primary btn-largo">
-        Intentar de nuevo
+    </ng-container>
+
+    <div *ngIf="isLoading" class="loading-container anim-fade-in">
+      <div class="spinner-grande"></div>
+      <p>Consultando base de datos...</p>
+    </div>
+
+    <div *ngIf="resultado" class="resultado-container anim-slide-up">
+      
+      <div class="result-meta">
+        <div class="code-badge">
+          <span class="label">EXPEDIENTE</span>
+          <span class="code">{{ resultado.codigo_seguimiento }}</span>
+        </div>
+        <div class="date-info">
+          Iniciado el {{ resultado.fecha_creacion | date:'dd/MM/yyyy' }}
+        </div>
+      </div>
+
+      <div class="current-status-box" [ngClass]="resultado.estado.toLowerCase().replace(' ', '-')">
+        <div class="status-icon-large">
+          <svg *ngIf="resultado.estado === 'Recibido'" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 15L6 9m0 0l3-3m-3 3h15M6 9l3-3m-3 3h15" /></svg>
+          <svg *ngIf="resultado.estado === 'En Proceso'" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          <svg *ngIf="resultado.estado === 'Finalizado'" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" /></svg>
+        </div>
+        <div class="status-texts">
+          <span class="label">Estado Actual</span>
+          <h3>{{ resultado.estado }}</h3>
+        </div>
+      </div>
+
+      <div class="timeline-container">
+        <div class="step" [class.active]="true"> <div class="dot"></div> <span>Recibido</span> </div>
+        <div class="line" [class.active]="resultado.estado === 'En Proceso' || resultado.estado === 'Finalizado'"></div>
+        
+        <div class="step" [class.active]="resultado.estado === 'En Proceso' || resultado.estado === 'Finalizado'"> <div class="dot"></div> <span>En Proceso</span> </div>
+        <div class="line" [class.active]="resultado.estado === 'Finalizado'"></div>
+
+        <div class="step" [class.active]="resultado.estado === 'Finalizado'"> <div class="dot"></div> <span>Finalizado</span> </div>
+      </div>
+
+      <p class="result-message">
+        <span *ngIf="resultado.estado === 'Recibido'">Recibimos tu solicitud. Un abogado revisará tu caso pronto.</span>
+        <span *ngIf="resultado.estado === 'En Proceso'">Estamos gestionando tu trámite. Te contactaremos si necesitamos más datos.</span>
+        <span *ngIf="resultado.estado === 'Finalizado'">El trámite ha concluido. Revisá tu email para ver la resolución.</span>
+      </p>
+
+      <button (click)="resetForm()" class="btn btn-secondary btn-outline">
+        Consultar otro código
       </button>
+
     </div>
 
   </app-card>

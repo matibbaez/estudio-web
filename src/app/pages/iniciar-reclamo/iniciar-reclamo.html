@@ -1,11 +1,28 @@
-<div class="page-container">
-  <app-card [titulo]="isSubmitted ? '¡Reclamo Enviado con Éxito!' : (pasoActual === 0 ? 'Seleccioná tu Caso' : 'Completar Datos')">
+<div class="page-container" [class.container-narrow]="isSubmitted">
+  
+  <app-card [titulo]="isSubmitted ? '¡Reclamo Enviado con Éxito!' : (modoRevoca ? 'Cambio de Patrocinio' : 'Iniciar Nuevo Trámite')">
 
     <div class="custom-header" *ngIf="!isSubmitted">
-      <h1 *ngIf="pasoActual === 0">¿Cuál es tu situación?</h1>
-      <h1 *ngIf="pasoActual === 1">Iniciando trámite: <span class="text-highlight">{{ reclamoForm.get('tipo_tramite')?.value }}</span></h1>
-      <p *ngIf="pasoActual === 0">Seleccioná la opción que mejor describa tu caso para comenzar.</p>
-      <p *ngIf="pasoActual === 1">Completá la documentación requerida para gestionar tu expediente.</p>
+      
+      <ng-container *ngIf="!modoRevoca && pasoActual === 0">
+        <h1>¿Cuál es tu situación?</h1>
+        <p>Seleccioná la opción que mejor describa tu caso para comenzar.</p>
+      </ng-container>
+
+      <ng-container *ngIf="modoRevoca && pasoActual === 0">
+        <div class="badge-revoca">MODO CAMBIO DE PATROCIONIO</div>
+        <h1>¿Qué trámite tenés iniciado?</h1>
+        <p>Seleccioná el tipo de caso para gestionar el traspaso al estudio.</p>
+        <button class="btn-link-simple" (click)="cancelarModoRevoca()">
+          Cancelar y volver al inicio
+        </button>
+      </ng-container>
+
+      <ng-container *ngIf="pasoActual === 1">
+        <h1>Completando: <span class="text-highlight">{{ reclamoForm.get('tipo_tramite')?.value }}</span></h1>
+        <p>Cargá la documentación requerida para gestionar tu expediente.</p>
+      </ng-container>
+
     </div>
 
     <div class="form-content">
@@ -53,7 +70,7 @@
             <div class="card-action">Elegir</div>
           </div>
 
-          <div class="tramite-card highlight" (click)="seleccionarTramite('Revoca')">
+          <div class="tramite-card highlight" (click)="seleccionarTramite('Revoca')" *ngIf="!modoRevoca">
             <div class="card-icon">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
@@ -99,22 +116,63 @@
 
         <form [formGroup]="reclamoForm" (ngSubmit)="onSubmit()" class="reclamo-form">
 
-          <fieldset *ngIf="reclamoForm.get('tipo_tramite')?.value === 'Prestaciones'">
-            <legend>Detalle del Reclamo</legend>
-            <div class="form-grid">
-              <div class="form-field full-width">
-                <label>Especificar Prestación *</label>
-                <div class="input-wrapper">
-                  <select formControlName="subtipo_tramite" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid var(--color-borde-suave); background: #f9fafb;">
-                    <option value="Div. Alta">Divergencia en Alta</option>
-                    <option value="Div. Prestaciones">Divergencia en Prestaciones</option>
-                    <option value="Reingreso">Reingreso</option>
-                  </select>
+          <fieldset *ngIf="reclamoForm.get('tipo_tramite')?.value === 'Prestaciones'" class="fade-in-up">
+            <legend>Detalle de la Prestación</legend>
+            
+            <p class="subtitle-prestacion">Seleccioná el motivo específico de tu reclamo:</p>
+
+            <div class="prestaciones-options">
+              
+              <div class="option-card" 
+                  [class.selected]="reclamoForm.get('subtipo_tramite')?.value === 'Div. Alta'"
+                  (click)="reclamoForm.patchValue({subtipo_tramite: 'Div. Alta'})">
+                <div class="opt-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
                 </div>
-                <div *ngIf="reclamoForm.get('subtipo_tramite')?.invalid && reclamoForm.get('subtipo_tramite')?.touched" class="error">
-                  Debe especificar el tipo.
+                <div class="opt-info">
+                  <h4>Divergencia en Alta</h4>
+                  <span>No estoy de acuerdo con el alta médica.</span>
                 </div>
+                <div class="check-circle"></div>
               </div>
+
+              <div class="option-card" 
+                  [class.selected]="reclamoForm.get('subtipo_tramite')?.value === 'Div. Prestaciones'"
+                  (click)="reclamoForm.patchValue({subtipo_tramite: 'Div. Prestaciones'})">
+                <div class="opt-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" />
+                  </svg>
+                </div>
+                <div class="opt-info">
+                  <h4>Falta de Prestaciones</h4>
+                  <span>Necesito más tratamiento o estudios.</span>
+                </div>
+                <div class="check-circle"></div>
+              </div>
+
+              <div class="option-card" 
+                  [class.selected]="reclamoForm.get('subtipo_tramite')?.value === 'Reingreso'"
+                  (click)="reclamoForm.patchValue({subtipo_tramite: 'Reingreso'})">
+                <div class="opt-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
+                  </svg>
+                </div>
+                <div class="opt-info">
+                  <h4>Reingreso</h4>
+                  <span>Volvieron los síntomas tras el alta.</span>
+                </div>
+                <div class="check-circle"></div>
+              </div>
+
+            </div>
+
+            <div *ngIf="reclamoForm.get('subtipo_tramite')?.invalid && reclamoForm.get('subtipo_tramite')?.touched" class="error-text-center">
+              ⚠️ Por favor, seleccioná una de las opciones arriba.
             </div>
           </fieldset>
 
@@ -125,13 +183,22 @@
               <div class="form-field icon-field">
                 <label>Nombre Completo *</label>
                 <div class="input-wrapper">
-                  <span class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg></span>
+                  <span class="icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>
+                  </span>
                   <input type="text" formControlName="nombre" placeholder="Juan Pérez">
                 </div>
-                <div *ngIf="reclamoForm.get('nombre')?.touched">
-                  <div *ngIf="reclamoForm.get('nombre')?.errors?.['required']" class="error">El nombre es obligatorio.</div>
-                  <div *ngIf="reclamoForm.get('nombre')?.errors?.['minlength']" class="error">Mínimo 3 caracteres.</div>
-                  <div *ngIf="reclamoForm.get('nombre')?.errors?.['pattern']" class="error">Solo letras y espacios.</div>
+                
+                <div class="error-container" *ngIf="reclamoForm.get('nombre')?.invalid && (reclamoForm.get('nombre')?.dirty || reclamoForm.get('nombre')?.touched)">
+                  <div *ngIf="reclamoForm.get('nombre')?.errors?.['required']" class="error">
+                    El nombre es obligatorio.
+                  </div>
+                  <div *ngIf="reclamoForm.get('nombre')?.errors?.['minlength']" class="error">
+                    Mínimo 3 letras.
+                  </div>
+                  <div *ngIf="reclamoForm.get('nombre')?.errors?.['pattern']" class="error">
+                    No puede estar vacío, ni tener números o empezar con espacios.
+                  </div>
                 </div>
               </div>
 
@@ -141,12 +208,15 @@
                   <span class="icon">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5zm6-10.125a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0zm1.294 6.336a6.721 6.721 0 01-3.17.789 6.721 6.721 0 01-3.168-.789 3.376 3.376 0 016.338 0z" /></svg>
                   </span>
-                  <input id="dni" type="text" formControlName="dni" placeholder="Sin puntos">
+                  <input id="dni" type="text" formControlName="dni" placeholder="Sin puntos (Ej: 30123456)">
                 </div>
-                <div *ngIf="reclamoForm.get('dni')?.invalid && (reclamoForm.get('dni')?.dirty || reclamoForm.get('dni')?.touched)">
+
+                <div class="error-container" *ngIf="reclamoForm.get('dni')?.invalid && (reclamoForm.get('dni')?.dirty || reclamoForm.get('dni')?.touched)">
                   <div *ngIf="reclamoForm.get('dni')?.errors?.['required']" class="error">El DNI es obligatorio.</div>
                   <div *ngIf="reclamoForm.get('dni')?.errors?.['pattern']" class="error">Solo números (sin puntos).</div>
-                  <div *ngIf="reclamoForm.get('dni')?.errors?.['minlength'] || reclamoForm.get('dni')?.errors?.['maxlength']" class="error">Debe tener entre 7 y 8 dígitos.</div>
+                  <div *ngIf="reclamoForm.get('dni')?.errors?.['minlength'] || reclamoForm.get('dni')?.errors?.['maxlength']" class="error">
+                    Debe tener entre 7 y 8 dígitos.
+                  </div>
                 </div>
               </div>
             </div>
@@ -157,8 +227,9 @@
                 <span class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" /></svg></span>
                 <input type="email" formControlName="email" placeholder="juan@email.com">
               </div>
-              <div *ngIf="reclamoForm.get('email')?.invalid && reclamoForm.get('email')?.touched" class="error">
-                Email inválido.
+              <div class="error-container" *ngIf="reclamoForm.get('email')?.invalid && (reclamoForm.get('email')?.dirty || reclamoForm.get('email')?.touched)">
+                <div *ngIf="reclamoForm.get('email')?.errors?.['required']" class="error">El email es obligatorio.</div>
+                <div *ngIf="reclamoForm.get('email')?.errors?.['email']" class="error">Formato de email inválido.</div>
               </div>
             </div>
           </fieldset>
@@ -166,13 +237,58 @@
           <fieldset>
             <legend>Documentación Requerida</legend>
             
-            <div *ngIf="reclamoForm.get('tipo_tramite')?.value === 'Revoca'" style="background-color: #fff7ed; border: 1px solid #fed7aa; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; color: #9a3412; display: flex; gap: 10px; align-items: center;">
-               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width: 24px; height: 24px;"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" /></svg>
-               <span style="font-weight: 600; font-size: 0.9rem;">ATENCIÓN: Es obligatorio adjuntar el escrito de "Revoca Patrocinio".</span>
+            <div class="abogado-switch-card" [class.active]="reclamoForm.get('tiene_abogado_anterior')?.value">
+               
+               <div class="switch-content">
+                 <div class="switch-icon">
+                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                     <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 00.75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 00-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0112 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 01-.673-.38m0 0A2.18 2.18 0 013 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 013.413-.387m7.5 0V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25v.894m7.5 0a48.667 48.667 0 00-7.5 0M12 12.75h.008v.008H12v-.008z" />
+                   </svg>
+                 </div>
+                 <div class="switch-text">
+                   <strong>¿Ya tenes asesoramiento pero queres hacerlo con Reclamarte?</strong>
+                   <p>Activá esta opción y subí el escrito "Revoca patrocinio".</p>
+                 </div>
+               </div>
+
+               <label class="switch-big">
+                 <input type="checkbox" formControlName="tiene_abogado_anterior">
+                 <span class="slider-big round"></span>
+               </label>
             </div>
 
             <div class="files-grid">
               
+              <div class="form-field-file full-width anim-slide-down" *ngIf="reclamoForm.get('tiene_abogado_anterior')?.value">
+                
+                <div class="revoca-alert-container">
+                  <div class="alert-header">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="alert-icon">
+                      <path fill-rule="evenodd" d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z" clip-rule="evenodd" />
+                    </svg>
+                    <span>ACCIÓN REQUERIDA: Adjuntar Carta de Revoca</span>
+                  </div>
+                  
+                  <label class="file-upload-label revoca-theme" for="fileRevoca" [class.uploaded]="reclamoForm.get('fileRevoca')?.value">
+                      <div class="btn-icon-red">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" /></svg>
+                      </div>
+                      <div class="file-info">
+                        <span class="label-text-red">{{ reclamoForm.get('fileRevoca')?.value ? '¡Escrito Cargado!' : 'Tocar para subir Escrito de Revoca' }}</span>
+                        <span class="file-name-red">{{ reclamoForm.get('fileRevoca')?.value?.name || 'Formato PDF o Foto nítida' }}</span>
+                      </div>
+                      <div class="upload-arrow">
+                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" /></svg>
+                      </div>
+                  </label>
+
+                  <input id="fileRevoca" type="file" (change)="onFileChange($event, 'fileRevoca')" class="file-input-hidden" accept=".pdf,.jpg,.png">
+                  <div *ngIf="reclamoForm.get('fileRevoca')?.invalid && reclamoForm.get('fileRevoca')?.touched" class="error-text-red">
+                    ⚠️ Es obligatorio subir este documento.
+                  </div>
+                </div>
+              </div>
+
               <div class="form-field-file">
                 <label>1. DNI (Frente y Dorso) *</label>
                 <label class="file-upload-label" for="fileDNI" [class.uploaded]="reclamoForm.get('fileDNI')?.value">
@@ -262,21 +378,6 @@
                 <div *ngIf="reclamoForm.get('fileCartaDocumento')?.invalid && reclamoForm.get('fileCartaDocumento')?.touched" class="error">Obligatorio.</div>
               </div>
 
-              <div class="form-field-file" *ngIf="reclamoForm.get('tipo_tramite')?.value === 'Revoca'">
-                <label>Escrito "Revoca Patrocinio" *</label>
-                <label class="file-upload-label" for="fileRevoca" [class.uploaded]="reclamoForm.get('fileRevoca')?.value" style="border-color: #fdba74; background-color: #fff7ed;">
-                    <div class="btn-icon" style="background-color: #f97316; color: white;">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M16.881 4.346A23.112 23.112 0 018.25 6H7.5a5.25 5.25 0 00-5.25 5.25v3.75h6.614l4.871 7.04c.266.384.773.498 1.173.23.494-.33.858-.862.858-1.472V4.764c0-1.11-.896-1.928-1.885-1.418zM19.5 7.5a.75.75 0 00-1.5 0v2.25H15.75a.75.75 0 000 1.5h2.25v2.25a.75.75 0 001.5 0v-2.25h2.25a.75.75 0 000-1.5h-2.25V7.5z" /></svg>
-                    </div>
-                    <div class="file-info">
-                      <span class="label-text" style="color: #9a3412;">{{ reclamoForm.get('fileRevoca')?.value ? 'Escrito Cargado' : 'Subir Revoca' }}</span>
-                      <span class="file-name">{{ reclamoForm.get('fileRevoca')?.value?.name || 'Obligatorio' }}</span>
-                    </div>
-                </label>
-                <input id="fileRevoca" type="file" (change)="onFileChange($event, 'fileRevoca')" class="file-input-hidden" accept=".pdf,.jpg,.png">
-                <div *ngIf="reclamoForm.get('fileRevoca')?.invalid && reclamoForm.get('fileRevoca')?.touched" class="error">Obligatorio.</div>
-              </div>
-
             </div>
           </fieldset>
 
@@ -289,15 +390,41 @@
       </ng-container>
 
       <ng-container *ngIf="isSubmitted">
-        <div class="success-container">
-          <div class="success-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        
+        <div class="success-wrapper anim-scale-in">
+          
+          <div class="success-header">
+            <div class="icon-circle-check">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" />
+              </svg>
+            </div>
+            <h2>¡Reclamo Iniciado!</h2>
+            <p>Tu solicitud fue enviada correctamente a nuestro equipo.</p>
           </div>
-          <p class="success-message">Su reclamo fue iniciado correctamente.</p>
-          <p class="success-subtitle">Este es su código de seguimiento:</p>
-          <div class="success-code-box">{{ codigoExito }}</div>
-          <p class="success-note">Anote este código para consultar el estado.</p>
-          <button (click)="iniciarOtroReclamo()" class="btn btn-secondary btn-largo">Iniciar Nuevo</button>
+
+          <div class="code-ticket">
+            <span class="ticket-label">TU CÓDIGO DE SEGUIMIENTO</span>
+            
+            <div class="code-row" (click)="copiarCodigo()">
+              <span class="the-code">{{ codigoExito }}</span>
+              <button class="btn-copy" title="Copiar al portapapeles">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0013.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 01-.75.75H9a.75.75 0 01-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 01-2.25 2.25H6.75A2.25 2.25 0 014.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 011.927-.184" /></svg>
+                <span class="copy-text">Copiar</span>
+              </button>
+            </div>
+
+            <div class="ticket-footer">
+              <small>⚠️ Guardá este código para consultar el estado.</small>
+            </div>
+          </div>
+
+          <div class="result-actions">
+            <button (click)="iniciarOtroReclamo()" class="btn btn-primary btn-largo">
+              Iniciar otro reclamo
+            </button>
+          </div>
+
         </div>
       </ng-container>
 

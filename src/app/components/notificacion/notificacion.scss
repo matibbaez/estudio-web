@@ -1,92 +1,116 @@
-/* ¡¡¡FIX: VERSIÓN CON COLORES HARCODEADOS!!!
-  Ignoramos las variables de styles.scss por si no las está levantando.
-*/
-
-/* ---------------------------------- */
-/* Animaciones (Estas quedan igual)
-/* ---------------------------------- */
-@keyframes slideInLeft {
-  from {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
+/* =========================================
+   ANIMACIONES (POP IN SUAVE)
+   ========================================= */
+@keyframes popIn {
+  0% { opacity: 0; transform: scale(0.9) translateY(20px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
 }
 
-@keyframes fadeOut {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-    transform: translateY(20px);
-  }
+@keyframes fadeOutSlide {
+  0% { opacity: 1; transform: translateX(0); }
+  100% { opacity: 0; transform: translateX(100%); }
 }
 
-/* ---------------------------------- */
-/* Estilos del Toast (Con colores forzados)
-/* ---------------------------------- */
+/* =========================================
+   ESTILOS TOAST (MODERN CARD)
+   ========================================= */
 .toast {
-  display: flex;
-  align-items: center;
+  position: relative;
+  display: flex; align-items: flex-start; /* Alineado arriba por si el texto es largo */
   padding: 1rem;
   margin-bottom: 1rem;
-  border-radius: 8px; /* Borde redondeado */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Sombra */
-  background-color: #ffffff; /* ¡FORZAMOS FONDO BLANCO! */
-  border-left: 5px solid;
-  width: 350px;
   
-  animation: slideInLeft 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  /* Forma y Fondo */
+  background-color: white;
+  border-radius: 16px; /* Bordes bien redondos */
+  border: 1px solid #f1f5f9; /* Borde sutil */
+  
+  /* Sombra Premium (Difusa y suave) */
+  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.1);
+  
+  /* Tamaño */
+  width: 380px;
+  max-width: 90vw; /* Responsive para mobile */
+  
+  /* Animación Entrada */
+  animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  
+  /* Quitar borde izquierdo viejo */
+  border-left: none;
 
+  /* Animación Salida */
   &.fade-out {
-    animation: fadeOut 0.5s ease-out both;
+    animation: fadeOutSlide 0.4s ease-in forwards;
   }
+}
+
+/* Wrapper del Icono (La burbuja de color) */
+.toast-icon-wrapper {
+  margin-right: 1rem;
+  padding-top: 2px; /* Ajuste óptico */
 }
 
 .toast-icon {
-  flex-shrink: 0;
-  margin-right: 0.75rem;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
   
-  svg {
-    width: 28px;
-    height: 28px;
+  svg { width: 20px; height: 20px; }
+}
+
+/* Contenido de Texto */
+.toast-content {
+  flex-grow: 1;
+  display: flex; flex-direction: column;
+  
+  .toast-title {
+    font-size: 0.95rem; font-weight: 800;
+    margin-bottom: 2px;
+    color: #0f172a; /* Azul oscuro casi negro */
+  }
+
+  .toast-message {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #64748b; /* Gris texto secundario */
+    line-height: 1.4;
   }
 }
 
-.toast-message {
-  flex-grow: 1;
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: #212121; /* ¡¡¡FORZAMOS TEXTO NEGRO!!! */
-}
-
+/* Botón de Cerrar */
 .toast-close {
-  flex-shrink: 0;
-  margin-left: 1rem;
-  background: none;
-  border: none;
-  color: #757575; /* ¡FORZAMOS COLOR GRIS PARA LA 'X'! */
-  cursor: pointer;
-  opacity: 0.7;
-  transition: opacity 0.3s;
+  background: none; border: none; cursor: pointer;
+  color: #94a3b8; padding: 4px; margin-left: 8px; margin-top: -4px;
+  transition: all 0.2s; border-radius: 50%;
   
-  svg { width: 20px; height: 20px; }
-  &:hover { opacity: 1; }
+  svg { width: 18px; height: 18px; }
+  
+  &:hover {
+    color: #475569;
+    background-color: #f1f5f9;
+  }
 }
 
-/* ---------------------------------- */
-/* Variantes de Color (FORZADAS)
-/* ---------------------------------- */
+/* =========================================
+   VARIANTES DE COLOR (ESTILO MODERNO)
+   ========================================= */
+
+/* SUCCESS: Verde Esmeralda */
 .toast.success {
-  border-left-color: #28a745; /* Verde */
-  .toast-icon { color: #28a745; }
+  .toast-icon {
+    background-color: #dcfce7; /* Fondo verde muy claro */
+    color: #16a34a; /* Icono verde vibrante */
+  }
 }
 
+/* ERROR: Rojo Rosado (Rose) */
 .toast.error {
-  border-left-color: #dc3545; /* Rojo */
-  .toast-icon { color: #dc3545; }
+  .toast-icon {
+    background-color: #ffe4e6; /* Fondo rojo muy claro */
+    color: #e11d48; /* Icono rojo vibrante */
+  }
+  
+  /* Opcional: Si es error, el título en rojo llama más la atención */
+  .toast-title { color: #e11d48; } 
 }

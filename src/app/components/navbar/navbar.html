@@ -10,9 +10,6 @@
       <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Inicio</a>
       <a routerLink="/iniciar-reclamo" routerLinkActive="active">Iniciar Reclamo</a>
       <a routerLink="/consultar-tramite" routerLinkActive="active">Consultar</a>
-      <a routerLink="/login" class="btn-admin" routerLinkActive="active-btn">
-        Panel Admin
-      </a>
     </div>
 
     <button class="mobile-menu-button" (click)="toggleMenu()" aria-label="Menu">
@@ -27,7 +24,5 @@
     <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="cerrarMenu()">Inicio</a>
     <a routerLink="/iniciar-reclamo" routerLinkActive="active" (click)="cerrarMenu()">Iniciar Reclamo</a>
     <a routerLink="/consultar-tramite" routerLinkActive="active" (click)="cerrarMenu()">Consultar Estado</a>
-    <div class="divider"></div>
-    <a routerLink="/login" class="link-admin" (click)="cerrarMenu()">Acceso Administrativo</a>
   </div>
 </nav>

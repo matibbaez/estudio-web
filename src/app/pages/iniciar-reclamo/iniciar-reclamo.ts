@@ -31,13 +31,16 @@ export class IniciarReclamoComponent implements OnInit {
   // Controla qué pantalla vemos (0: Tarjetas, 1: Formulario)
   pasoActual = 0;
 
-  // Variable para el cartel de alerta naranja en el HTML
-  esRevocaPatrocinio = false; 
+  // NUEVO: Variable para saber si estamos en "Modo Cambio de Abogado"
+  modoRevoca = false;
 
   // --- DEFINICIÓN DEL FORMULARIO ---
-  // Nota: Los campos condicionales arrancan SIN required. Se agregan dinámicamente.
   reclamoForm = this.fb.group({
-    nombre: ['', [Validators.required, Validators.minLength(3), Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/)]],
+    nombre: ['', [
+      Validators.required, 
+      Validators.minLength(3), 
+      Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ][a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/) 
+    ]],
     dni: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(8), Validators.pattern(/^[0-9]*$/)]],
     email: ['', [Validators.required, Validators.email]],
     
@@ -45,6 +48,9 @@ export class IniciarReclamoComponent implements OnInit {
     tipo_tramite: ['', Validators.required], 
     subtipo_tramite: [''], // Se vuelve required si es 'Prestaciones'
     
+    // NUEVO: Switch para abogado anterior
+    tiene_abogado_anterior: [false],
+
     // Archivos Base (Siempre obligatorios)
     fileDNI: [null as File | null, Validators.required],
     fileRecibo: [null as File | null, Validators.required],
@@ -54,69 +60,101 @@ export class IniciarReclamoComponent implements OnInit {
     // Archivos Opcionales / Condicionales
     fileAlta: [null as File | null], 
     fileCartaDocumento: [null as File | null], // Se vuelve required si es 'Rechazo'
-    fileRevoca: [null as File | null]          // Se vuelve required si es 'Revoca'
+    fileRevoca: [null as File | null]          // Se vuelve required si 'tiene_abogado_anterior' es true
   });
 
   constructor() {}
 
   ngOnInit(): void {
-    // Detectamos si viene del banner del Home (Query Param ?revoca=true)
+    // 1. Detectar si viene del banner (?revoca=true)
     this.route.queryParams.subscribe(params => {
       if (params['revoca'] === 'true') {
-        // Entramos directo al modo Revoca
-        this.seleccionarTramite('Revoca');
+        this.activarModoRevoca();
       }
+    });
+
+    // 2. ESCUCHAR CAMBIOS DEL SWITCH "TIENE ABOGADO ANTERIOR"
+    // Esto hace que la validación del archivo sea dinámica
+    this.reclamoForm.get('tiene_abogado_anterior')?.valueChanges.subscribe(tieneAbogado => {
+      const fileRevocaCtrl = this.reclamoForm.get('fileRevoca');
+      
+      if (tieneAbogado) {
+        fileRevocaCtrl?.setValidators([Validators.required]);
+      } else {
+        fileRevocaCtrl?.clearValidators();
+      }
+      fileRevocaCtrl?.updateValueAndValidity();
     });
   }
 
   // =========================================================
-  // 1. LÓGICA DE SELECCIÓN (EL CEREBRO DEL FORMULARIO)
+  // 1. LÓGICA DE MODOS Y SELECCIÓN
   // =========================================================
-  seleccionarTramite(tipo: string) {
-    // A. Seteamos el valor
-    this.reclamoForm.patchValue({ tipo_tramite: tipo });
-    
-    // B. Actualizamos bandera para el HTML (Cartel Naranja)
-    this.esRevocaPatrocinio = (tipo === 'Revoca');
 
-    // C. ACTUALIZAMOS LAS REGLAS DE VALIDACIÓN (CRÍTICO)
-    this.actualizarReglasValidacion(tipo);
-
-    // D. Cambiamos de pantalla
-    this.pasoActual = 1;
+  // Activa el modo visual y pre-setea el switch
+  // Activa el modo visual y pre-setea el switch
+  activarModoRevoca() {
+    this.modoRevoca = true;
+    this.pasoActual = 0; 
+    this.reclamoForm.patchValue({ tiene_abogado_anterior: true });
     
-    // E. Scroll arriba suave
+    // AGREGAR ESTA LÍNEA AQUÍ:
+    // Fuerza al navegador a subir suavemente para que vean el nuevo título naranja
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // Método auxiliar para limpiar y re-asignar validators
+  cancelarModoRevoca() {
+    this.modoRevoca = false;
+    this.reclamoForm.patchValue({ tiene_abogado_anterior: false });
+  }
+
+  seleccionarTramite(tipo: string) {
+    // A. Si el usuario tocó la tarjeta "Cambiar de asesoramiento" (la que aparece en el grid normal)
+    if (tipo === 'Revoca') {
+      this.activarModoRevoca();
+      return; // No avanzamos al form todavía, esperamos que elija el tipo de accidente
+    }
+
+    // B. Seteamos el valor del trámite
+    this.reclamoForm.patchValue({ tipo_tramite: tipo });
+
+    // C. Si estamos en Modo Revoca, aseguramos que el switch esté en TRUE
+    if (this.modoRevoca) {
+      this.reclamoForm.patchValue({ tiene_abogado_anterior: true });
+    }
+
+    // D. ACTUALIZAMOS LAS REGLAS DE VALIDACIÓN (Carta Doc / Subtipo)
+    this.actualizarReglasValidacion(tipo);
+
+    // E. Avanzamos
+    this.pasoActual = 1;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Método auxiliar para validaciones dependientes del TIPO (no del switch)
   private actualizarReglasValidacion(tipo: string) {
     const subtipoCtrl = this.reclamoForm.get('subtipo_tramite');
     const cartaDocCtrl = this.reclamoForm.get('fileCartaDocumento');
-    const revocaCtrl = this.reclamoForm.get('fileRevoca');
-
-    // 1. LIMPIEZA: Primero sacamos la obligatoriedad a todo lo condicional
+    
+    // 1. LIMPIEZA
     subtipoCtrl?.clearValidators();
     cartaDocCtrl?.clearValidators();
-    revocaCtrl?.clearValidators();
 
-    // 2. ASIGNACIÓN: Según el caso, hacemos obligatorio lo que corresponda
+    // 2. ASIGNACIÓN
     if (tipo === 'Rechazo') {
       cartaDocCtrl?.setValidators([Validators.required]); // Pide Carta Doc
     } 
     else if (tipo === 'Prestaciones') {
       subtipoCtrl?.setValidators([Validators.required]); // Pide Select Subtipo
-    } 
-    else if (tipo === 'Revoca') {
-      revocaCtrl?.setValidators([Validators.required]); // Pide Escrito Revoca
     }
-    // 'Alta Medica' no pide nada extra, queda con los base.
+    
+    // NOTA: La validación de 'fileRevoca' ya no va aquí, 
+    // la maneja el listener de 'tiene_abogado_anterior' en ngOnInit.
 
-    // 3. ACTUALIZACIÓN: Avisamos a Angular que recalcule el estado
+    // 3. ACTUALIZACIÓN
     subtipoCtrl?.updateValueAndValidity();
     cartaDocCtrl?.updateValueAndValidity();
-    revocaCtrl?.updateValueAndValidity();
-    this.reclamoForm.updateValueAndValidity(); // Actualiza el form completo
+    this.reclamoForm.updateValueAndValidity();
   }
 
   // =========================================================
@@ -139,6 +177,9 @@ export class IniciarReclamoComponent implements OnInit {
     formData.append('email', formValue.email!);
     formData.append('tipo_tramite', formValue.tipo_tramite!);
     
+    // Enviamos el booleano también (útil para el backend)
+    formData.append('tiene_abogado_anterior', String(formValue.tiene_abogado_anterior));
+    
     if (formValue.subtipo_tramite) {
       formData.append('subtipo_tramite', formValue.subtipo_tramite);
     }
@@ -149,10 +190,14 @@ export class IniciarReclamoComponent implements OnInit {
     formData.append('fileForm1', formValue.fileForm1!);
     formData.append('fileForm2', formValue.fileForm2!);
 
-    // Append Archivos Condicionales (Solo si tienen valor)
+    // Append Archivos Condicionales
     if (formValue.fileAlta) formData.append('fileAlta', formValue.fileAlta);
     if (formValue.fileCartaDocumento) formData.append('fileCartaDocumento', formValue.fileCartaDocumento);
-    if (formValue.fileRevoca) formData.append('fileRevoca', formValue.fileRevoca);
+    
+    // Revoca solo si el switch es true y hay archivo
+    if (formValue.tiene_abogado_anterior && formValue.fileRevoca) {
+      formData.append('fileRevoca', formValue.fileRevoca);
+    }
 
     const url = `${environment.apiUrl}/reclamos`;
 
@@ -179,9 +224,11 @@ export class IniciarReclamoComponent implements OnInit {
   iniciarOtroReclamo() {
     this.isSubmitted = false;
     this.codigoExito = null;
-    this.esRevocaPatrocinio = false; 
-    this.pasoActual = 0; // Vuelve a las tarjetas
+    this.modoRevoca = false; // Reseteamos modo
+    this.pasoActual = 0; 
     this.reclamoForm.reset();
+    // Reseteamos valores por defecto
+    this.reclamoForm.patchValue({ tiene_abogado_anterior: false });
   }
 
   onFileChange(event: any, controlName: string) {
@@ -209,5 +256,15 @@ export class IniciarReclamoComponent implements OnInit {
     // Guardamos el archivo y validamos
     this.reclamoForm.patchValue({ [controlName]: file });
     this.reclamoForm.get(controlName)?.updateValueAndValidity();
+  }
+
+  copiarCodigo() {
+    if (this.codigoExito) {
+      navigator.clipboard.writeText(this.codigoExito).then(() => {
+        this.notificacionService.showSuccess('Código copiado al portapapeles');
+      }).catch(err => {
+        console.error('Error al copiar', err);
+      });
+    }
   }
 }
