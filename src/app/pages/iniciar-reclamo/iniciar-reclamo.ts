@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms'; 
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router'; 
 import { environment } from '../../../environments/environment';
 import { CardComponent } from '../../components/card/card';
@@ -31,7 +31,7 @@ export class IniciarReclamoComponent implements OnInit {
   // Controla qué pantalla vemos (0: Tarjetas, 1: Formulario)
   pasoActual = 0;
 
-  // NUEVO: Variable para saber si estamos en "Modo Cambio de Abogado"
+  // Variable para saber si estamos en "Modo Cambio de Abogado"
   modoRevoca = false;
 
   // --- DEFINICIÓN DEL FORMULARIO ---
@@ -48,7 +48,12 @@ export class IniciarReclamoComponent implements OnInit {
     tipo_tramite: ['', Validators.required], 
     subtipo_tramite: [''], // Se vuelve required si es 'Prestaciones'
     
-    // NUEVO: Switch para abogado anterior
+    // --- NUEVOS CAMPOS DE TEXTO (Para Rechazo) ---
+    jornada_laboral: [''],
+    direccion_laboral: [''],
+    trayecto_habitual: [''],
+
+    // Switch para abogado anterior
     tiene_abogado_anterior: [false],
 
     // Archivos Base (Siempre obligatorios)
@@ -74,7 +79,6 @@ export class IniciarReclamoComponent implements OnInit {
     });
 
     // 2. ESCUCHAR CAMBIOS DEL SWITCH "TIENE ABOGADO ANTERIOR"
-    // Esto hace que la validación del archivo sea dinámica
     this.reclamoForm.get('tiene_abogado_anterior')?.valueChanges.subscribe(tieneAbogado => {
       const fileRevocaCtrl = this.reclamoForm.get('fileRevoca');
       
@@ -91,15 +95,10 @@ export class IniciarReclamoComponent implements OnInit {
   // 1. LÓGICA DE MODOS Y SELECCIÓN
   // =========================================================
 
-  // Activa el modo visual y pre-setea el switch
-  // Activa el modo visual y pre-setea el switch
   activarModoRevoca() {
     this.modoRevoca = true;
     this.pasoActual = 0; 
     this.reclamoForm.patchValue({ tiene_abogado_anterior: true });
-    
-    // AGREGAR ESTA LÍNEA AQUÍ:
-    // Fuerza al navegador a subir suavemente para que vean el nuevo título naranja
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -109,10 +108,10 @@ export class IniciarReclamoComponent implements OnInit {
   }
 
   seleccionarTramite(tipo: string) {
-    // A. Si el usuario tocó la tarjeta "Cambiar de asesoramiento" (la que aparece en el grid normal)
+    // A. Si el usuario tocó la tarjeta "Cambiar de asesoramiento"
     if (tipo === 'Revoca') {
       this.activarModoRevoca();
-      return; // No avanzamos al form todavía, esperamos que elija el tipo de accidente
+      return; 
     }
 
     // B. Seteamos el valor del trámite
@@ -123,7 +122,7 @@ export class IniciarReclamoComponent implements OnInit {
       this.reclamoForm.patchValue({ tiene_abogado_anterior: true });
     }
 
-    // D. ACTUALIZAMOS LAS REGLAS DE VALIDACIÓN (Carta Doc / Subtipo)
+    // D. ACTUALIZAMOS LAS REGLAS DE VALIDACIÓN
     this.actualizarReglasValidacion(tipo);
 
     // E. Avanzamos
@@ -131,29 +130,59 @@ export class IniciarReclamoComponent implements OnInit {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // Método auxiliar para validaciones dependientes del TIPO (no del switch)
+  // Método auxiliar para validaciones dependientes del TIPO
+  // Asegurate de importar 'Validators' arriba
+  // import { Validators } from '@angular/forms';
+
+  // Asegurate de que Validators esté importado
+// import { Validators } from '@angular/forms';
+
   private actualizarReglasValidacion(tipo: string) {
     const subtipoCtrl = this.reclamoForm.get('subtipo_tramite');
     const cartaDocCtrl = this.reclamoForm.get('fileCartaDocumento');
     
-    // 1. LIMPIEZA
+    const rechazoControls = ['jornada_laboral', 'direccion_laboral', 'trayecto_habitual'];
+
+    // Limpieza inicial
     subtipoCtrl?.clearValidators();
     cartaDocCtrl?.clearValidators();
+    rechazoControls.forEach(key => this.reclamoForm.get(key)?.clearValidators());
 
-    // 2. ASIGNACIÓN
     if (tipo === 'Rechazo') {
-      cartaDocCtrl?.setValidators([Validators.required]); // Pide Carta Doc
-    } 
-    else if (tipo === 'Prestaciones') {
-      subtipoCtrl?.setValidators([Validators.required]); // Pide Select Subtipo
+      cartaDocCtrl?.setValidators([Validators.required]);
+
+      // --- VALIDACIÓN ANTI-ESPACIOS ---
+      const antiEspacios = Validators.pattern(/.*\S.*/); // <--- ESTA ES LA CLAVE
+
+      // a) Jornada
+      this.reclamoForm.get('jornada_laboral')?.setValidators([
+        Validators.required,
+        Validators.minLength(5),
+        antiEspacios // Agregamos la validación acá
+      ]);
+
+      // b) Dirección
+      this.reclamoForm.get('direccion_laboral')?.setValidators([
+        Validators.required,
+        Validators.minLength(5),
+        antiEspacios
+      ]);
+
+      // c) Trayecto
+      this.reclamoForm.get('trayecto_habitual')?.setValidators([
+        Validators.required,
+        Validators.minLength(20),
+        antiEspacios
+      ]);
+
+    } else if (tipo === 'Prestaciones') {
+      subtipoCtrl?.setValidators([Validators.required]);
     }
     
-    // NOTA: La validación de 'fileRevoca' ya no va aquí, 
-    // la maneja el listener de 'tiene_abogado_anterior' en ngOnInit.
-
-    // 3. ACTUALIZACIÓN
+    // Actualizamos todo
     subtipoCtrl?.updateValueAndValidity();
     cartaDocCtrl?.updateValueAndValidity();
+    rechazoControls.forEach(key => this.reclamoForm.get(key)?.updateValueAndValidity());
     this.reclamoForm.updateValueAndValidity();
   }
 
@@ -171,17 +200,22 @@ export class IniciarReclamoComponent implements OnInit {
     const formData = new FormData();
     const formValue = this.reclamoForm.value;
 
-    // Append Datos Texto
+    // Append Datos Básicos
     formData.append('nombre', formValue.nombre!);
     formData.append('dni', formValue.dni!);
     formData.append('email', formValue.email!);
     formData.append('tipo_tramite', formValue.tipo_tramite!);
-    
-    // Enviamos el booleano también (útil para el backend)
     formData.append('tiene_abogado_anterior', String(formValue.tiene_abogado_anterior));
     
     if (formValue.subtipo_tramite) {
       formData.append('subtipo_tramite', formValue.subtipo_tramite);
+    }
+
+    // Append Datos de Rechazo (si corresponde)
+    if (formValue.tipo_tramite === 'Rechazo') {
+      formData.append('jornada_laboral', formValue.jornada_laboral || '');
+      formData.append('direccion_laboral', formValue.direccion_laboral || '');
+      formData.append('trayecto_habitual', formValue.trayecto_habitual || '');
     }
 
     // Append Archivos Base
@@ -194,7 +228,6 @@ export class IniciarReclamoComponent implements OnInit {
     if (formValue.fileAlta) formData.append('fileAlta', formValue.fileAlta);
     if (formValue.fileCartaDocumento) formData.append('fileCartaDocumento', formValue.fileCartaDocumento);
     
-    // Revoca solo si el switch es true y hay archivo
     if (formValue.tiene_abogado_anterior && formValue.fileRevoca) {
       formData.append('fileRevoca', formValue.fileRevoca);
     }
@@ -224,10 +257,9 @@ export class IniciarReclamoComponent implements OnInit {
   iniciarOtroReclamo() {
     this.isSubmitted = false;
     this.codigoExito = null;
-    this.modoRevoca = false; // Reseteamos modo
+    this.modoRevoca = false; 
     this.pasoActual = 0; 
     this.reclamoForm.reset();
-    // Reseteamos valores por defecto
     this.reclamoForm.patchValue({ tiene_abogado_anterior: false });
   }
 
@@ -253,7 +285,6 @@ export class IniciarReclamoComponent implements OnInit {
       return;
     }
 
-    // Guardamos el archivo y validamos
     this.reclamoForm.patchValue({ [controlName]: file });
     this.reclamoForm.get(controlName)?.updateValueAndValidity();
   }
@@ -262,9 +293,7 @@ export class IniciarReclamoComponent implements OnInit {
     if (this.codigoExito) {
       navigator.clipboard.writeText(this.codigoExito).then(() => {
         this.notificacionService.showSuccess('Código copiado al portapapeles');
-      }).catch(err => {
-        console.error('Error al copiar', err);
-      });
+      }).catch(err => console.error('Error al copiar', err));
     }
   }
 }

@@ -937,3 +937,142 @@ input:checked + .slider-big:before { transform: translateX(28px); }
     }
   }
 }
+
+/* --- ESTILOS PARA EL TEXTAREA PREMIUM --- */
+
+.textarea-wrapper {
+  align-items: flex-start !important; /* Importante: Alinea el icono arriba */
+  height: auto !important; /* Permitir que crezca */
+  min-height: 120px; /* Altura mínima cómoda */
+  border-radius: 16px !important; /* Bordes bien redondos */
+  background-color: #ffffff;
+  transition: all 0.3s ease;
+  
+  /* Icono alineado arriba con un poco de ajuste */
+  .top-icon {
+    margin-top: 4px; 
+    color: #94a3b8;
+    svg { width: 24px; height: 24px; }
+  }
+
+  /* El Textarea en sí */
+  .custom-textarea {
+    width: 100%;
+    height: 100%;
+    min-height: 100px;
+    border: none;
+    background: transparent;
+    padding: 0 0.5rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #1e293b; /* Color de texto oscuro */
+    resize: vertical; /* Permite agrandar solo hacia abajo */
+    font-family: inherit; /* Hereda la fuente de la app (no Courier) */
+    outline: none;
+
+    &::placeholder {
+      color: #cbd5e1;
+      font-weight: 400;
+    }
+  }
+
+  /* Efecto Focus (Cuando escribís) */
+  &:focus-within {
+    border-color: var(--color-primario); /* Tu azul */
+    box-shadow: 0 4px 20px rgba(37, 99, 235, 0.15); /* Sombra azul suave */
+    transform: translateY(-1px);
+    
+    .top-icon { color: var(--color-primario); }
+  }
+}
+
+/* --- ESTILOS DEL TEXTAREA (Igual a los inputs) --- */
+
+.textarea-wrapper {
+  position: relative; /* Necesario para ubicar el ícono arriba a la izquierda */
+  display: flex;
+  
+  /* 1. El Ícono (Anclado arriba) */
+  .top-icon {
+    position: absolute;
+    left: 16px; 
+    top: 16px; /* Alineado con la primera línea de texto */
+    color: #94a3b8; /* Gris suave */
+    pointer-events: none; /* Para que el click pase al textarea */
+    transition: color 0.3s ease;
+    
+    svg { width: 22px; height: 22px; }
+  }
+
+  /* 2. El Input (Textarea) */
+  .custom-textarea {
+    width: 100%;
+    height: 140px; /* Altura fija para que quede prolijo */
+    
+    /* Padding: 3.2rem a la izquierda para dejar lugar al ícono */
+    padding: 1rem 1rem 1rem 3.2rem; 
+    
+    /* --- AQUÍ ESTÁ EL BORDE QUE PEDISTE --- */
+    border: 1px solid var(--color-borde-suave); /* O usá #e2e8f0 si no te toma la variable */
+    border-radius: 12px;
+    background-color: #fff;
+    
+    /* Tipografía igual al resto */
+    font-size: 1.05rem;
+    font-family: inherit;
+    color: var(--color-texto-principal);
+    line-height: 1.5;
+    
+    resize: none; /* Bloqueamos que se agrande/achique */
+    outline: none;
+    transition: all 0.2s ease-in-out;
+
+    &::placeholder {
+      color: #cbd5e1;
+      font-weight: 400;
+    }
+
+    /* Estado Focus (Borde Azul y Sombra) */
+    &:focus {
+      border-color: var(--color-primario);
+      box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.1);
+    }
+  }
+
+  /* Cuando escribís, pintamos el ícono de azul */
+  &:focus-within {
+    .top-icon { color: var(--color-primario); }
+  }
+}
+
+/* Footer del input (hint) */
+.footer-hint {
+  display: flex; justify-content: space-between;
+  margin-top: 6px; padding-left: 10px;
+  
+  small { 
+    color: #64748b; font-size: 0.85rem; font-weight: 500; 
+  }
+}
+
+/* Scrollbar personalizada (para que no se vea fea) */
+textarea::-webkit-scrollbar {
+  width: 8px;
+}
+textarea::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+textarea::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+textarea::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Clase utilitaria por si querés que ocupe todo el ancho en desktop */
+.full-width {
+  grid-column: 1 / -1; /* Si estás usando CSS Grid */
+  width: 100%;
+}
