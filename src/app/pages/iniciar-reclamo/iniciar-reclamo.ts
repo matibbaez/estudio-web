@@ -140,49 +140,44 @@ export class IniciarReclamoComponent implements OnInit {
   private actualizarReglasValidacion(tipo: string) {
     const subtipoCtrl = this.reclamoForm.get('subtipo_tramite');
     const cartaDocCtrl = this.reclamoForm.get('fileCartaDocumento');
+    const altaMedicaCtrl = this.reclamoForm.get('fileAlta'); // <--- AGARRAR CONTROL
     
     const rechazoControls = ['jornada_laboral', 'direccion_laboral', 'trayecto_habitual'];
 
-    // Limpieza inicial
+    // 1. LIMPIEZA INICIAL DE TODOS
     subtipoCtrl?.clearValidators();
     cartaDocCtrl?.clearValidators();
+    altaMedicaCtrl?.clearValidators(); // <--- LIMPIAMOS ALTA
     rechazoControls.forEach(key => this.reclamoForm.get(key)?.clearValidators());
 
+    // 2. LÓGICA SEGÚN TIPO
     if (tipo === 'Rechazo') {
+      // Rechazo: Pide Carta Doc + Textos. NO pide Alta obligatoria.
       cartaDocCtrl?.setValidators([Validators.required]);
 
-      // --- VALIDACIÓN ANTI-ESPACIOS ---
-      const antiEspacios = Validators.pattern(/.*\S.*/); // <--- ESTA ES LA CLAVE
+      const antiEspacios = Validators.pattern(/.*\S.*/);
+      this.reclamoForm.get('jornada_laboral')?.setValidators([Validators.required, Validators.minLength(5), antiEspacios]);
+      this.reclamoForm.get('direccion_laboral')?.setValidators([Validators.required, Validators.minLength(5), antiEspacios]);
+      this.reclamoForm.get('trayecto_habitual')?.setValidators([Validators.required, Validators.minLength(20), antiEspacios]);
+    } 
+    else {
+      // CASO: 'Medico' o 'Incapacidad'
+      // El audio dice: "Necesitamos DNI y Alta Médica".
+      // Entonces acá el Alta es OBLIGATORIA.
+      altaMedicaCtrl?.setValidators([Validators.required]);
 
-      // a) Jornada
-      this.reclamoForm.get('jornada_laboral')?.setValidators([
-        Validators.required,
-        Validators.minLength(5),
-        antiEspacios // Agregamos la validación acá
-      ]);
-
-      // b) Dirección
-      this.reclamoForm.get('direccion_laboral')?.setValidators([
-        Validators.required,
-        Validators.minLength(5),
-        antiEspacios
-      ]);
-
-      // c) Trayecto
-      this.reclamoForm.get('trayecto_habitual')?.setValidators([
-        Validators.required,
-        Validators.minLength(20),
-        antiEspacios
-      ]);
-
-    } else if (tipo === 'Prestaciones') {
-      subtipoCtrl?.setValidators([Validators.required]);
+      if (tipo === 'Medico') {
+        subtipoCtrl?.setValidators([Validators.required]); // Medico pide subtipo
+      }
+      // Incapacidad no pide subtipo, solo el Alta que ya pusimos arriba.
     }
     
-    // Actualizamos todo
+    // 3. ACTUALIZAR ESTADOS
     subtipoCtrl?.updateValueAndValidity();
     cartaDocCtrl?.updateValueAndValidity();
+    altaMedicaCtrl?.updateValueAndValidity(); // <--- ACTUALIZAR ALTA
     rechazoControls.forEach(key => this.reclamoForm.get(key)?.updateValueAndValidity());
+    
     this.reclamoForm.updateValueAndValidity();
   }
 
