@@ -13,7 +13,7 @@ export const authGuard: CanActivateFn = (route, state) => {
     return true;
   } else {
     // ¡NO TIENE SELLO!
-    console.log('AuthGuard: No hay token, redirigiendo a /login');
+    // console.log('AuthGuard: No hay token, redirigiendo a /login');
 
     // 2. Lo pateamos de vuelta al Login
     router.navigate(['/login']);

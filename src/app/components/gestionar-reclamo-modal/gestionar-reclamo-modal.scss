@@ -264,3 +264,60 @@
   /* Ajustamos el tamaño de fuente para que entre mejor */
   .modal-header h3 { font-size: 1.2rem; }
 }
+
+/* --- TARJETA DE DATOS RECHAZO --- */
+.rechazo-info-card {
+  background-color: #fff;
+  border: 1px solid #fed7aa; /* Naranja suave */
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 2rem; /* Separación de los archivos */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+
+  .card-header-red {
+    background-color: #fff7ed; /* Naranja muy clarito */
+    padding: 0.8rem 1.2rem;
+    border-bottom: 1px solid #fed7aa;
+    display: flex; align-items: center; gap: 8px;
+    color: #c2410c; font-weight: 700; font-size: 0.95rem;
+    
+    svg { width: 20px; height: 20px; color: #ea580c; }
+  }
+
+  .card-body-red {
+    padding: 1.2rem;
+  }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+    @media(max-width: 500px) { grid-template-columns: 1fr; gap: 1rem; }
+  }
+
+  .info-item {
+    display: flex; flex-direction: column; gap: 4px;
+    
+    label {
+      font-size: 0.75rem; font-weight: 700; color: #9a3412; /* Marrón rojizo */
+      text-transform: uppercase; letter-spacing: 0.5px; margin: 0;
+    }
+    
+    p {
+      font-size: 1rem; color: #1e293b; font-weight: 500; margin: 0;
+    }
+  }
+
+  /* Caja especial para el texto largo */
+  .trayecto-box {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 1rem;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #334155;
+    font-style: italic; /* Estilo cita */
+  }
+}

@@ -6,6 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { CardComponent } from '../../components/card/card';
 import { NotificacionService } from '../../services/notificacion';
+import { ImageCompressService } from '../../services/image-compress.service';
 
 const MAX_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB
 const ALLOWED_MIME_TYPES = ['application/pdf', 'image/jpeg', 'image/png'];
@@ -18,86 +19,90 @@ const ALLOWED_MIME_TYPES = ['application/pdf', 'image/jpeg', 'image/png'];
   styleUrl: './iniciar-reclamo.scss'
 })
 export class IniciarReclamoComponent implements OnInit {
-  
+
   private fb = inject(FormBuilder);
   private http = inject(HttpClient); 
   private notificacionService = inject(NotificacionService);
   private route = inject(ActivatedRoute);
+  private imageCompress = inject(ImageCompressService);
 
   isLoading = false;
   isSubmitted = false; 
   codigoExito: string | null = null; 
-  
-  // Controla qué pantalla vemos (0: Tarjetas, 1: Formulario)
-  pasoActual = 0;
 
-  // Variable para saber si estamos en "Modo Cambio de Abogado"
+  pasoActual = 0;
   modoRevoca = false;
 
-  // --- DEFINICIÓN DEL FORMULARIO ---
   reclamoForm = this.fb.group({
     nombre: ['', [
       Validators.required, 
       Validators.minLength(3), 
       Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ][a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/) 
     ]],
-    dni: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(8), Validators.pattern(/^[0-9]*$/)]],
+    dni: ['', [
+      Validators.required,
+      Validators.minLength(7),
+      Validators.maxLength(8),
+      Validators.pattern(/^[0-9]*$/)
+    ]],
     email: ['', [Validators.required, Validators.email]],
-    
-    // Tipo de Trámite
+
     tipo_tramite: ['', Validators.required], 
-    subtipo_tramite: [''], // Se vuelve required si es 'Prestaciones'
-    
-    // --- NUEVOS CAMPOS DE TEXTO (Para Rechazo) ---
+    subtipo_tramite: [''], 
+
     jornada_laboral: [''],
     direccion_laboral: [''],
     trayecto_habitual: [''],
 
-    // Switch para abogado anterior
     tiene_abogado_anterior: [false],
 
-    // Archivos Base (Siempre obligatorios)
     fileDNI: [null as File | null, Validators.required],
-    fileRecibo: [null as File | null, Validators.required],
-    fileForm1: [null as File | null, Validators.required], 
-    fileForm2: [null as File | null, Validators.required],
-    
-    // Archivos Opcionales / Condicionales
-    fileAlta: [null as File | null], 
-    fileCartaDocumento: [null as File | null], // Se vuelve required si es 'Rechazo'
-    fileRevoca: [null as File | null]          // Se vuelve required si 'tiene_abogado_anterior' es true
+    fileRecibo: [null as File | null],
+    fileForm1: [null as File | null],
+    fileForm2: [null as File | null],
+    fileAlta: [null as File | null],
+    fileCartaDocumento: [null as File | null],
+    fileRevoca: [null as File | null]
   });
 
-  constructor() {}
-
   ngOnInit(): void {
-    // 1. Detectar si viene del banner (?revoca=true)
     this.route.queryParams.subscribe(params => {
       if (params['revoca'] === 'true') {
         this.activarModoRevoca();
       }
     });
 
-    // 2. ESCUCHAR CAMBIOS DEL SWITCH "TIENE ABOGADO ANTERIOR"
     this.reclamoForm.get('tiene_abogado_anterior')?.valueChanges.subscribe(tieneAbogado => {
       const fileRevocaCtrl = this.reclamoForm.get('fileRevoca');
-      
       if (tieneAbogado) {
         fileRevocaCtrl?.setValidators([Validators.required]);
       } else {
         fileRevocaCtrl?.clearValidators();
+        // No reseteamos acá para no borrar el archivo si fue un missclick
       }
       fileRevocaCtrl?.updateValueAndValidity();
     });
   }
 
   // =========================================================
-  // 1. LÓGICA DE MODOS Y SELECCIÓN
+  // FILES
   // =========================================================
+  private resetFiles() {
+    const fileControls = [
+      'fileDNI', 'fileRecibo', 'fileForm1', 'fileForm2', 
+      'fileAlta', 'fileCartaDocumento', 'fileRevoca'
+    ];
+    fileControls.forEach(ctrl => {
+      this.reclamoForm.get(ctrl)?.reset();
+    });
+  }
 
+  // =========================================================
+  // MODOS Y SELECCIÓN
+  // =========================================================
   activarModoRevoca() {
     this.modoRevoca = true;
-    this.pasoActual = 0; 
+    this.pasoActual = 0;
     this.reclamoForm.patchValue({ tiene_abogado_anterior: true });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
@@ -108,187 +113,245 @@ export class IniciarReclamoComponent implements OnInit {
   }
 
   seleccionarTramite(tipo: string) {
-    // A. Si el usuario tocó la tarjeta "Cambiar de asesoramiento"
     if (tipo === 'Revoca') {
       this.activarModoRevoca();
-      return; 
+      return;
     }
 
-    // B. Seteamos el valor del trámite
+    this.resetFiles(); 
+
     this.reclamoForm.patchValue({ tipo_tramite: tipo });
 
-    // C. Si estamos en Modo Revoca, aseguramos que el switch esté en TRUE
     if (this.modoRevoca) {
       this.reclamoForm.patchValue({ tiene_abogado_anterior: true });
     }
 
-    // D. ACTUALIZAMOS LAS REGLAS DE VALIDACIÓN
     this.actualizarReglasValidacion(tipo);
 
-    // E. Avanzamos
     this.pasoActual = 1;
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // Método auxiliar para validaciones dependientes del TIPO
-  // Asegurate de importar 'Validators' arriba
-  // import { Validators } from '@angular/forms';
+  get pideAlta(): boolean {
+    const t = this.reclamoForm.get('tipo_tramite')?.value;
+    return t === 'Medico' || t === 'Incapacidad';
+  }
 
-  // Asegurate de que Validators esté importado
-// import { Validators } from '@angular/forms';
+  get pideFormularios(): boolean {
+    const t = this.reclamoForm.get('tipo_tramite')?.value;
+    return t === 'Incapacidad' || t === 'Rechazo';
+  }
+
+  get pideRecibo(): boolean {
+    const t = this.reclamoForm.get('tipo_tramite')?.value;
+    return t === 'Incapacidad' || t === 'Rechazo';
+  }
+
+  get pideCartaYTextos(): boolean {
+    return this.reclamoForm.get('tipo_tramite')?.value === 'Rechazo';
+  }
 
   private actualizarReglasValidacion(tipo: string) {
-    const subtipoCtrl = this.reclamoForm.get('subtipo_tramite');
-    const cartaDocCtrl = this.reclamoForm.get('fileCartaDocumento');
-    const altaMedicaCtrl = this.reclamoForm.get('fileAlta'); // <--- AGARRAR CONTROL
-    
-    const rechazoControls = ['jornada_laboral', 'direccion_laboral', 'trayecto_habitual'];
+    const c = this.reclamoForm.controls;
 
-    // 1. LIMPIEZA INICIAL DE TODOS
-    subtipoCtrl?.clearValidators();
-    cartaDocCtrl?.clearValidators();
-    altaMedicaCtrl?.clearValidators(); // <--- LIMPIAMOS ALTA
-    rechazoControls.forEach(key => this.reclamoForm.get(key)?.clearValidators());
+    // 🔥 CORRECCIÓN 1: Agregué 'subtipo_tramite' y 'fileRevoca' a la limpieza
+    const campos = [
+      'fileRecibo', 'fileForm1', 'fileForm2', 'fileAlta', 'fileCartaDocumento', 'fileRevoca',
+      'subtipo_tramite', 'jornada_laboral', 'direccion_laboral', 'trayecto_habitual'
+    ];
 
-    // 2. LÓGICA SEGÚN TIPO
-    if (tipo === 'Rechazo') {
-      // Rechazo: Pide Carta Doc + Textos. NO pide Alta obligatoria.
-      cartaDocCtrl?.setValidators([Validators.required]);
+    campos.forEach(key => {
+      // @ts-ignore
+      const ctrl = this.reclamoForm.get(key);
+      ctrl?.clearValidators();
+      ctrl?.setErrors(null);
+      // OJO: Acá reseteamos para que no queden datos viejos de otro trámite
+      if (key !== 'fileRevoca') { // No borramos revoca si estaba cargado
+         ctrl?.reset();
+      }
+      ctrl?.updateValueAndValidity({ emitEvent: false });
+    });
+
+    if (tipo === 'Medico') {
+      c.fileAlta.setValidators([Validators.required]);
+      c.subtipo_tramite.setValidators([Validators.required]); // Esto fallaba antes si quedaba sucio
+    }
+
+    else if (tipo === 'Incapacidad') {
+      c.fileAlta.setValidators([Validators.required]);
+      c.fileForm1.setValidators([Validators.required]);
+      c.fileForm2.setValidators([Validators.required]);
+      c.fileRecibo.setValidators([Validators.required]);
+    }
+
+    else if (tipo === 'Rechazo') {
+      c.fileForm1.setValidators([Validators.required]);
+      c.fileForm2.setValidators([Validators.required]);
+      c.fileRecibo.setValidators([Validators.required]);
+      c.fileCartaDocumento.setValidators([Validators.required]);
 
       const antiEspacios = Validators.pattern(/.*\S.*/);
-      this.reclamoForm.get('jornada_laboral')?.setValidators([Validators.required, Validators.minLength(5), antiEspacios]);
-      this.reclamoForm.get('direccion_laboral')?.setValidators([Validators.required, Validators.minLength(5), antiEspacios]);
-      this.reclamoForm.get('trayecto_habitual')?.setValidators([Validators.required, Validators.minLength(20), antiEspacios]);
-    } 
-    else {
-      // CASO: 'Medico' o 'Incapacidad'
-      // El audio dice: "Necesitamos DNI y Alta Médica".
-      // Entonces acá el Alta es OBLIGATORIA.
-      altaMedicaCtrl?.setValidators([Validators.required]);
-
-      if (tipo === 'Medico') {
-        subtipoCtrl?.setValidators([Validators.required]); // Medico pide subtipo
-      }
-      // Incapacidad no pide subtipo, solo el Alta que ya pusimos arriba.
+      c.jornada_laboral.setValidators([Validators.required, Validators.minLength(5), antiEspacios]);
+      c.direccion_laboral.setValidators([Validators.required, Validators.minLength(5), antiEspacios]);
+      c.trayecto_habitual.setValidators([Validators.required, Validators.minLength(20), antiEspacios]);
     }
-    
-    // 3. ACTUALIZAR ESTADOS
-    subtipoCtrl?.updateValueAndValidity();
-    cartaDocCtrl?.updateValueAndValidity();
-    altaMedicaCtrl?.updateValueAndValidity(); // <--- ACTUALIZAR ALTA
-    rechazoControls.forEach(key => this.reclamoForm.get(key)?.updateValueAndValidity());
-    
-    this.reclamoForm.updateValueAndValidity();
+
+    // 🔥 CORRECCIÓN 2: Si el switch de abogado está activo, REACTIVAMOS la validación de fileRevoca
+    if (this.reclamoForm.get('tiene_abogado_anterior')?.value) {
+      c.fileRevoca.setValidators([Validators.required]);
+      c.fileRevoca.updateValueAndValidity();
+    }
+
+    this.reclamoForm.updateValueAndValidity({ emitEvent: false });
   }
 
   // =========================================================
-  // 2. LOGICA DE ENVÍO
+  // ENVÍO
   // =========================================================
   onSubmit() {
     if (this.reclamoForm.invalid) {
       this.reclamoForm.markAllAsTouched();
-      this.notificacionService.showError('Faltan datos obligatorios. Revise el formulario.');
+      
+      // 🕵️‍♂️ DEBUGGER: Abrí la consola (F12) y mirá qué dice acá
+      Object.keys(this.reclamoForm.controls).forEach(key => {
+        // @ts-ignore
+        if (this.reclamoForm.get(key).invalid) {
+          console.error(`❌ CAMPO INVÁLIDO: ${key}`);
+        }
+      });
+
+      this.notificacionService.showError('Faltan datos obligatorios para este trámite.');
       return;
     }
 
     this.isLoading = true;
     const formData = new FormData();
-    const formValue = this.reclamoForm.value;
+    const v = this.reclamoForm.value;
 
-    // Append Datos Básicos
-    formData.append('nombre', formValue.nombre!);
-    formData.append('dni', formValue.dni!);
-    formData.append('email', formValue.email!);
-    formData.append('tipo_tramite', formValue.tipo_tramite!);
-    formData.append('tiene_abogado_anterior', String(formValue.tiene_abogado_anterior));
+    formData.append('nombre', v.nombre!);
+    formData.append('dni', v.dni!);
+    formData.append('email', v.email!);
+    formData.append('tipo_tramite', v.tipo_tramite!);
     
-    if (formValue.subtipo_tramite) {
-      formData.append('subtipo_tramite', formValue.subtipo_tramite);
+    // 🔥 CORRECCIÓN 3: Envío explícito de 'true' o 'false' (evita 'null')
+    const tieneAbogado = v.tiene_abogado_anterior ? 'true' : 'false';
+    formData.append('tiene_abogado_anterior', tieneAbogado);
+
+    // SUBTIPO (Solo si es Medico)
+    if (this.reclamoForm.get('tipo_tramite')?.value === 'Medico' && v.subtipo_tramite) {
+      formData.append('subtipo_tramite', v.subtipo_tramite);
     }
 
-    // Append Datos de Rechazo (si corresponde)
-    if (formValue.tipo_tramite === 'Rechazo') {
-      formData.append('jornada_laboral', formValue.jornada_laboral || '');
-      formData.append('direccion_laboral', formValue.direccion_laboral || '');
-      formData.append('trayecto_habitual', formValue.trayecto_habitual || '');
+    // TEXTOS DE RECHAZO
+    if (this.pideCartaYTextos) {
+      formData.append('jornada_laboral', v.jornada_laboral || '');
+      formData.append('direccion_laboral', v.direccion_laboral || '');
+      formData.append('trayecto_habitual', v.trayecto_habitual || '');
     }
 
-    // Append Archivos Base
-    formData.append('fileDNI', formValue.fileDNI!);
-    formData.append('fileRecibo', formValue.fileRecibo!);
-    formData.append('fileForm1', formValue.fileForm1!);
-    formData.append('fileForm2', formValue.fileForm2!);
-
-    // Append Archivos Condicionales
-    if (formValue.fileAlta) formData.append('fileAlta', formValue.fileAlta);
-    if (formValue.fileCartaDocumento) formData.append('fileCartaDocumento', formValue.fileCartaDocumento);
+    // ARCHIVOS
+    if (v.fileDNI) formData.append('fileDNI', v.fileDNI);
     
-    if (formValue.tiene_abogado_anterior && formValue.fileRevoca) {
-      formData.append('fileRevoca', formValue.fileRevoca);
+    if (this.pideRecibo && v.fileRecibo) formData.append('fileRecibo', v.fileRecibo);
+    
+    if (this.pideFormularios) {
+      if (v.fileForm1) formData.append('fileForm1', v.fileForm1);
+      if (v.fileForm2) formData.append('fileForm2', v.fileForm2);
+    }
+    
+    if (this.pideAlta && v.fileAlta) formData.append('fileAlta', v.fileAlta);
+    
+    if (this.pideCartaYTextos && v.fileCartaDocumento) {
+      formData.append('fileCartaDocumento', v.fileCartaDocumento);
+    }
+    
+    if (v.tiene_abogado_anterior && v.fileRevoca) {
+      formData.append('fileRevoca', v.fileRevoca);
     }
 
-    const url = `${environment.apiUrl}/reclamos`;
-
-    this.http.post(url, formData).subscribe({
-      next: (response: any) => {
+    this.http.post(`${environment.apiUrl}/reclamos`, formData).subscribe({
+      next: (res: any) => {
         this.isLoading = false;
-        this.isSubmitted = true; 
-        this.codigoExito = response.codigo_seguimiento; 
+        this.isSubmitted = true;
+        this.codigoExito = res.codigo_seguimiento;
         this.notificacionService.showSuccess('¡Reclamo enviado con éxito!');
         window.scrollTo({ top: 0, behavior: 'smooth' });
       },
-      error: (error) => {
+      error: err => {
         this.isLoading = false;
-        console.error('Error backend:', error);
-        const msg = error.error?.message || 'Error al enviar el reclamo.';
+        console.error('Error Backend:', err);
+        const msg = err.error?.message || 'Error al enviar el reclamo.';
         this.notificacionService.showError(msg);
       }
     });
   }
 
   // =========================================================
-  // 3. UTILS (Archivos, Reiniciar)
+  // UTILIDADES
   // =========================================================
   iniciarOtroReclamo() {
     this.isSubmitted = false;
     this.codigoExito = null;
-    this.modoRevoca = false; 
-    this.pasoActual = 0; 
+    this.modoRevoca = false;
+    this.pasoActual = 0;
     this.reclamoForm.reset();
     this.reclamoForm.patchValue({ tiene_abogado_anterior: false });
+    this.resetFiles();
   }
 
-  onFileChange(event: any, controlName: string) {
-    if (event.target.files.length === 0) {
-      this.reclamoForm.get(controlName)?.reset(); 
+  volverAStep1() {
+    this.reclamoForm.reset();
+    this.reclamoForm.patchValue({ tiene_abogado_anterior: false });
+    this.resetFiles();
+    this.modoRevoca = false;
+    this.pasoActual = 0;
+    this.actualizarReglasValidacion('');
+  }
+
+  async onFileChange(event: any, controlName: string) {
+    if (!event.target.files || event.target.files.length === 0) {
+      this.reclamoForm.get(controlName)?.reset();
       return;
     }
 
-    const file = event.target.files[0];
+    const fileOriginal = event.target.files[0];
 
-    if (!ALLOWED_MIME_TYPES.includes(file.type)) {
-      this.notificacionService.showError(`Formato no permitido. Use PDF, JPG o PNG.`);
-      this.reclamoForm.get(controlName)?.reset(); 
+    if (!ALLOWED_MIME_TYPES.includes(fileOriginal.type)) {
+      this.notificacionService.showError('Formato no permitido (Use PDF, JPG o PNG).');
+      this.reclamoForm.get(controlName)?.reset();
       event.target.value = null; 
       return;
     }
 
-    if (file.size > MAX_SIZE_BYTES) {
-      this.notificacionService.showError(`Archivo muy pesado. Máximo 5 MB.`);
-      this.reclamoForm.get(controlName)?.reset(); 
-      event.target.value = null;
-      return;
-    }
+    this.isLoading = true;
 
-    this.reclamoForm.patchValue({ [controlName]: file });
-    this.reclamoForm.get(controlName)?.updateValueAndValidity();
+    try {
+      const fileProcesado = await this.imageCompress.compressFile(fileOriginal);
+
+      if (fileProcesado.size > MAX_SIZE_BYTES) {
+        this.notificacionService.showError('El archivo sigue siendo muy pesado (máx 5MB).');
+        this.reclamoForm.get(controlName)?.reset();
+        event.target.value = null;
+        return;
+      }
+
+      this.reclamoForm.patchValue({ [controlName]: fileProcesado });
+      this.reclamoForm.get(controlName)?.updateValueAndValidity();
+
+    } catch (error) {
+      console.error('Error al procesar archivo:', error);
+      this.notificacionService.showError('Error al procesar la imagen.');
+      this.reclamoForm.get(controlName)?.reset();
+      event.target.value = null;
+    } finally {
+      this.isLoading = false;
+    }
   }
 
   copiarCodigo() {
     if (this.codigoExito) {
-      navigator.clipboard.writeText(this.codigoExito).then(() => {
-        this.notificacionService.showSuccess('Código copiado al portapapeles');
-      }).catch(err => console.error('Error al copiar', err));
+      navigator.clipboard.writeText(this.codigoExito);
+      this.notificacionService.showSuccess('Código copiado');
     }
   }
 }

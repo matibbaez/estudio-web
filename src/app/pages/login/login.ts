@@ -45,7 +45,7 @@ export class LoginComponent {
     this.http.post(url, credentials).subscribe({
       next: (response: any) => {
         this.isLoading = false;
-        console.log('¡Login exitoso! Token:', response.access_token);
+        // console.log('¡Login exitoso! Token:', response.access_token);
         
         // 3. ¡LA MAGIA! Guardamos el "sello" en el navegador
         localStorage.setItem('access_token', response.access_token);

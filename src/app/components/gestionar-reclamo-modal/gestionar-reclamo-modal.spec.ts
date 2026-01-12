@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GestionarReclamoModal } from './gestionar-reclamo-modal';
+import { GestionarReclamoModalComponent } from './gestionar-reclamo-modal';
 
 describe('GestionarReclamoModal', () => {
-  let component: GestionarReclamoModal;
-  let fixture: ComponentFixture<GestionarReclamoModal>;
+  let component: GestionarReclamoModalComponent;
+  let fixture: ComponentFixture<GestionarReclamoModalComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [GestionarReclamoModal]
+      imports: [GestionarReclamoModalComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(GestionarReclamoModal);
+    fixture = TestBed.createComponent(GestionarReclamoModalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

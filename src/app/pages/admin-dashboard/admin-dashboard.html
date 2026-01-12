@@ -19,14 +19,31 @@
           <button class="tab-btn" [class.active]="filtroEstado === 'Finalizado'" (click)="cambiarEstado('Finalizado')">Finalizados</button>
         </div>
 
-        <div class="type-filter">
-          <select (change)="cambiarTipo($event)" class="select-profesional">
-            <option value="">Todos los Tipos</option>
-            <option value="Revoca">⚠️ Solo Revocaciones</option>
-            <option value="Rechazo">Rechazos</option>
-            <option value="Alta Medica">Altas Médicas</option>
-            <option value="Prestaciones">Prestaciones</option>
-          </select>
+        <div class="filters-right">
+          
+          <div class="custom-select-wrapper">
+            <select (change)="cambiarTipo($event)" class="custom-select">
+              <option value="">Todos los Tipos</option>
+              <option value="Revoca">Solo Revocaciones</option>
+              <option value="Rechazo">Rechazos</option>
+              <option value="Medico">Médicos (Dolor)</option>
+              <option value="Incapacidad">Incapacidad (Cobrar)</option>
+            </select>
+            <div class="select-arrow">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+              </svg>
+            </div>
+          </div>
+
+          <button class="btn-sort" (click)="alternarOrden()" [title]="ordenDescendente ? 'Ver más antiguos primero' : 'Ver más recientes primero'">
+            <span class="sort-text">{{ ordenDescendente ? 'Más Recientes' : 'Más Antiguos' }}</span>
+            <div class="sort-icon">
+              <svg *ngIf="ordenDescendente" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4.5h14.25M3 9h9.75M3 13.5h9.75m4.5-4.5v12m0 0l-3.75-3.75M17.25 21L21 17.25" /></svg>
+              <svg *ngIf="!ordenDescendente" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4.5h14.25M3 9h9.75M3 13.5h5.25m5.25-.75L17.25 9m0 0L21 12.75M17.25 9v12" /></svg>
+            </div>
+          </button>
+
         </div>
 
       </div>
@@ -71,9 +88,6 @@
 
                   <span *ngIf="reclamo.path_revoca_patrocinio" class="badge-pill red">
                     REVOCACIÓN
-                  </span>
-                  <span *ngIf="reclamo.tipo_tramite === 'Rechazo'" class="badge-pill orange">
-                    RECHAZO
                   </span>
                 </div>
               </td>

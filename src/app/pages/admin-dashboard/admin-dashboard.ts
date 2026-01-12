@@ -4,7 +4,7 @@ import { ReclamosService } from '../../services/reclamos.service';
 import { CardComponent } from '../../components/card/card';
 import { GestionarReclamoModalComponent } from '../../components/gestionar-reclamo-modal/gestionar-reclamo-modal';
 
-// Interfaz (Agregamos los campos opcionales)
+// Interfaz completa con todos los campos nuevos
 export interface IReclamo {
   id: string;
   nombre: string;
@@ -14,18 +14,26 @@ export interface IReclamo {
   estado: 'Recibido' | 'En Proceso' | 'Finalizado';
   fecha_creacion: string;
   
-  // Archivos
+  // Archivos Base
   path_dni: string;
   path_recibo: string;
   path_form1: string;
   path_form2: string;
-  path_alta_medica?: string;
   
-  // Nuevos
-  tipo_tramite: string;
-  subtipo_tramite?: string;
+  // Archivos Opcionales
+  path_alta_medica?: string;
   path_carta_documento?: string;
   path_revoca_patrocinio?: string;
+  
+  // Datos Lógicos
+  tipo_tramite: string;
+  subtipo_tramite?: string;
+  tiene_abogado_anterior?: boolean; // Llega como boolean de la BD
+
+  // Datos Texto (Rechazo)
+  jornada_laboral?: string;
+  direccion_laboral?: string;
+  trayecto_habitual?: string;
 }
 
 @Component({
@@ -40,8 +48,9 @@ export class AdminDashboardComponent implements OnInit {
   private reclamosService = inject(ReclamosService);
 
   // Variables de Datos
-  reclamosOriginales: IReclamo[] = []; // Todos los que trajo el backend
-  reclamosFiltrados: IReclamo[] = [];  // Los que mostramos en pantalla
+  ordenDescendente = true;
+  reclamosOriginales: IReclamo[] = []; 
+  reclamosFiltrados: IReclamo[] = [];  
   loading = true;
 
   // Variables de Filtro
@@ -54,6 +63,11 @@ export class AdminDashboardComponent implements OnInit {
 
   ngOnInit() {
     this.cargarDatos();
+  }
+
+  alternarOrden() {
+    this.ordenDescendente = !this.ordenDescendente;
+    this.aplicarFiltrosLocales(); // Re-aplicamos filtros y orden
   }
 
   filtrosAbiertos = false;
@@ -80,28 +94,42 @@ export class AdminDashboardComponent implements OnInit {
 
   // 2. Filtro Local (Filtra por TIPO)
   aplicarFiltrosLocales() {
+    let resultado = [];
+
+    // 1. Filtrado
     if (!this.filtroTipo) {
-      this.reclamosFiltrados = this.reclamosOriginales;
+      resultado = [...this.reclamosOriginales]; // Copia
     } else {
       if (this.filtroTipo === 'Revoca') {
-        // Lógica especial para Revoca (busca si tiene archivo)
-        this.reclamosFiltrados = this.reclamosOriginales.filter(r => !!r.path_revoca_patrocinio);
+        resultado = this.reclamosOriginales.filter(r => !!r.path_revoca_patrocinio);
       } else {
-        // Lógica normal por nombre de tipo
-        this.reclamosFiltrados = this.reclamosOriginales.filter(r => r.tipo_tramite === this.filtroTipo);
+        resultado = this.reclamosOriginales.filter(r => r.tipo_tramite === this.filtroTipo);
       }
     }
+
+    // 2. Ordenamiento (Sorting)
+    resultado.sort((a, b) => {
+      // Convertimos strings de fecha a objetos Date para comparar
+      const fechaA = new Date(a.fecha_creacion).getTime();
+      const fechaB = new Date(b.fecha_creacion).getTime();
+
+      return this.ordenDescendente 
+        ? fechaB - fechaA  // Descendente (Recientes arriba)
+        : fechaA - fechaB; // Ascendente (Antiguos arriba)
+    });
+
+    this.reclamosFiltrados = resultado;
   }
 
   // Eventos de UI
   cambiarEstado(nuevoEstado: string) {
     this.filtroEstado = nuevoEstado;
-    this.cargarDatos(); // Recarga del backend
+    this.cargarDatos(); 
   }
 
   cambiarTipo(event: any) {
     this.filtroTipo = event.target.value;
-    this.aplicarFiltrosLocales(); // Filtra en memoria (rápido)
+    this.aplicarFiltrosLocales(); 
   }
 
   // Modal
@@ -118,12 +146,12 @@ export class AdminDashboardComponent implements OnInit {
     
     const id = this.reclamoSeleccionado.id;
     this.actualizandoId = id;
-    this.cerrarModal(); // Cerramos visualmente rápido
+    this.cerrarModal(); 
     
     this.reclamosService.update(id, { estado: nuevoEstado }).subscribe({
       next: () => {
         this.actualizandoId = null;
-        this.cargarDatos(); // Refrescamos la tabla
+        this.cargarDatos(); 
       },
       error: (err) => {
         console.error('Error actualizando', err);
