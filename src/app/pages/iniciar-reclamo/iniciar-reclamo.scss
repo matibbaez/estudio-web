@@ -1076,3 +1076,46 @@ textarea::-webkit-scrollbar-thumb:hover {
   grid-column: 1 / -1; /* Si estás usando CSS Grid */
   width: 100%;
 }
+
+.info-subtitle {
+  font-size: 0.9rem;
+  color: #64748b;
+  margin-bottom: 10px;
+}
+
+.info-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  
+  .link-descarga {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #f1f5f9;
+    color: #0f172a;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: all 0.2s;
+    border: 1px solid #e2e8f0;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    &:hover {
+      background-color: #e2e8f0;
+      color: #000;
+      border-color: #cbd5e1;
+    }
+  }
+
+  .separator {
+    display: none; // Ocultamos el separador viejo si usamos botones
+  }
+}
