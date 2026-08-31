@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
 
-// Definimos la interfaz acá o la importamos si la tenés en otro lado
 export interface IReclamo {
   id: string;
   nombre: string;
@@ -16,8 +15,7 @@ export interface IReclamo {
   // Archivos
   path_dni: string;
   path_recibo: string;
-  path_form1: string;
-  path_form2: string;
+  path_form_srt: string; // <-- UNIFICADO
   path_alta_medica?: string;
   
   // Nuevos campos
@@ -33,14 +31,10 @@ export interface IReclamo {
 export class ReclamosService {
 
   private http = inject(HttpClient);
-  private apiUrl = `${environment.apiUrl}/reclamos`; // Base URL: .../reclamos
+  private apiUrl = `${environment.apiUrl}/reclamos`; 
 
   constructor() { }
 
-  /**
-   * Obtener todos los reclamos (filtro opcional por estado)
-   * GET /reclamos?estado=Recibido
-   */
   findAll(estado?: string): Observable<IReclamo[]> {
     let url = this.apiUrl;
     if (estado) {
@@ -49,10 +43,6 @@ export class ReclamosService {
     return this.http.get<IReclamo[]>(url);
   }
 
-  /**
-   * Actualizar estado de un reclamo
-   * PATCH /reclamos/:id
-   */
   update(id: string, body: { estado: string }): Observable<IReclamo> {
     const url = `${this.apiUrl}/${id}`;
     return this.http.patch<IReclamo>(url, body);

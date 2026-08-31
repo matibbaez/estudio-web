@@ -58,8 +58,7 @@ export class IniciarReclamoComponent implements OnInit {
 
     fileDNI: [null as File | null, Validators.required],
     fileRecibo: [null as File | null],
-    fileForm1: [null as File | null],
-    fileForm2: [null as File | null],
+    fileFormSRT: [null as File | null],
     fileAlta: [null as File | null],
     fileCartaDocumento: [null as File | null],
     fileRevoca: [null as File | null]
@@ -78,7 +77,6 @@ export class IniciarReclamoComponent implements OnInit {
         fileRevocaCtrl?.setValidators([Validators.required]);
       } else {
         fileRevocaCtrl?.clearValidators();
-        // No reseteamos acá para no borrar el archivo si fue un missclick
       }
       fileRevocaCtrl?.updateValueAndValidity();
     });
@@ -89,7 +87,7 @@ export class IniciarReclamoComponent implements OnInit {
   // =========================================================
   private resetFiles() {
     const fileControls = [
-      'fileDNI', 'fileRecibo', 'fileForm1', 'fileForm2', 
+      'fileDNI', 'fileRecibo', 'fileFormSRT', 
       'fileAlta', 'fileCartaDocumento', 'fileRevoca'
     ];
     fileControls.forEach(ctrl => {
@@ -154,9 +152,8 @@ export class IniciarReclamoComponent implements OnInit {
   private actualizarReglasValidacion(tipo: string) {
     const c = this.reclamoForm.controls;
 
-    // 🔥 CORRECCIÓN 1: Agregué 'subtipo_tramite' y 'fileRevoca' a la limpieza
     const campos = [
-      'fileRecibo', 'fileForm1', 'fileForm2', 'fileAlta', 'fileCartaDocumento', 'fileRevoca',
+      'fileRecibo', 'fileFormSRT', 'fileAlta', 'fileCartaDocumento', 'fileRevoca',
       'subtipo_tramite', 'jornada_laboral', 'direccion_laboral', 'trayecto_habitual'
     ];
 
@@ -165,8 +162,7 @@ export class IniciarReclamoComponent implements OnInit {
       const ctrl = this.reclamoForm.get(key);
       ctrl?.clearValidators();
       ctrl?.setErrors(null);
-      // OJO: Acá reseteamos para que no queden datos viejos de otro trámite
-      if (key !== 'fileRevoca') { // No borramos revoca si estaba cargado
+      if (key !== 'fileRevoca') { 
          ctrl?.reset();
       }
       ctrl?.updateValueAndValidity({ emitEvent: false });
@@ -174,19 +170,15 @@ export class IniciarReclamoComponent implements OnInit {
 
     if (tipo === 'Medico') {
       c.fileAlta.setValidators([Validators.required]);
-      c.subtipo_tramite.setValidators([Validators.required]); // Esto fallaba antes si quedaba sucio
+      c.subtipo_tramite.setValidators([Validators.required]);
     }
-
     else if (tipo === 'Incapacidad') {
       c.fileAlta.setValidators([Validators.required]);
-      c.fileForm1.setValidators([Validators.required]);
-      c.fileForm2.setValidators([Validators.required]);
+      c.fileFormSRT.setValidators([Validators.required]);
       c.fileRecibo.setValidators([Validators.required]);
     }
-
     else if (tipo === 'Rechazo') {
-      c.fileForm1.setValidators([Validators.required]);
-      c.fileForm2.setValidators([Validators.required]);
+      c.fileFormSRT.setValidators([Validators.required]);
       c.fileRecibo.setValidators([Validators.required]);
       c.fileCartaDocumento.setValidators([Validators.required]);
 
@@ -196,7 +188,6 @@ export class IniciarReclamoComponent implements OnInit {
       c.trayecto_habitual.setValidators([Validators.required, Validators.minLength(20), antiEspacios]);
     }
 
-    // 🔥 CORRECCIÓN 2: Si el switch de abogado está activo, REACTIVAMOS la validación de fileRevoca
     if (this.reclamoForm.get('tiene_abogado_anterior')?.value) {
       c.fileRevoca.setValidators([Validators.required]);
       c.fileRevoca.updateValueAndValidity();
@@ -212,7 +203,6 @@ export class IniciarReclamoComponent implements OnInit {
     if (this.reclamoForm.invalid) {
       this.reclamoForm.markAllAsTouched();
       
-      // 🕵️‍♂️ DEBUGGER: Abrí la consola (F12) y mirá qué dice acá
       Object.keys(this.reclamoForm.controls).forEach(key => {
         // @ts-ignore
         if (this.reclamoForm.get(key).invalid) {
@@ -233,30 +223,25 @@ export class IniciarReclamoComponent implements OnInit {
     formData.append('email', v.email!);
     formData.append('tipo_tramite', v.tipo_tramite!);
     
-    // 🔥 CORRECCIÓN 3: Envío explícito de 'true' o 'false' (evita 'null')
     const tieneAbogado = v.tiene_abogado_anterior ? 'true' : 'false';
     formData.append('tiene_abogado_anterior', tieneAbogado);
 
-    // SUBTIPO (Solo si es Medico)
     if (this.reclamoForm.get('tipo_tramite')?.value === 'Medico' && v.subtipo_tramite) {
       formData.append('subtipo_tramite', v.subtipo_tramite);
     }
 
-    // TEXTOS DE RECHAZO
     if (this.pideCartaYTextos) {
       formData.append('jornada_laboral', v.jornada_laboral || '');
       formData.append('direccion_laboral', v.direccion_laboral || '');
       formData.append('trayecto_habitual', v.trayecto_habitual || '');
     }
 
-    // ARCHIVOS
     if (v.fileDNI) formData.append('fileDNI', v.fileDNI);
     
     if (this.pideRecibo && v.fileRecibo) formData.append('fileRecibo', v.fileRecibo);
     
-    if (this.pideFormularios) {
-      if (v.fileForm1) formData.append('fileForm1', v.fileForm1);
-      if (v.fileForm2) formData.append('fileForm2', v.fileForm2);
+    if (this.pideFormularios && v.fileFormSRT) {
+      formData.append('fileFormSRT', v.fileFormSRT);
     }
     
     if (this.pideAlta && v.fileAlta) formData.append('fileAlta', v.fileAlta);

@@ -269,3 +269,64 @@
   .mobile-menu-button { display: block; }
   .mobile-menu-dropdown { display: block; }
 }
+
+/* --- EXTRAS PARA LINKS DE ESCRITORIO --- */
+.navbar-links-desktop {
+  .divider-vertical {
+    width: 1px;
+    height: 24px;
+    background-color: rgba(255, 255, 255, 0.2);
+    margin: 0 0.5rem;
+  }
+
+  .link-perfil {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    
+    svg {
+      width: 18px;
+      height: 18px;
+      margin-bottom: 2px;
+    }
+  }
+
+  .btn-logout-desktop {
+    background-color: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    color: white;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    margin-left: 0.5rem;
+
+    &:hover {
+      background-color: rgba(239, 68, 68, 0.15); /* Fondo rojizo sutil */
+      border-color: #ef4444; /* Borde rojo */
+      color: #fca5a5;
+    }
+  }
+}
+
+/* --- EXTRAS PARA EL MENÚ MÓVIL --- */
+.mobile-menu-dropdown {
+  .link-admin {
+    font-weight: 700;
+    color: #93c5fd; /* Un azul clarito para destacar */
+  }
+
+  .link-logout {
+    color: #fca5a5; /* Rojo pastel */
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 0.5rem;
+
+    &:hover {
+      background-color: rgba(239, 68, 68, 0.1);
+      color: #f87171;
+    }
+  }
+}

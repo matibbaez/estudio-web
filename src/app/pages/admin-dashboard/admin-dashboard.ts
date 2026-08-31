@@ -4,7 +4,6 @@ import { ReclamosService } from '../../services/reclamos.service';
 import { CardComponent } from '../../components/card/card';
 import { GestionarReclamoModalComponent } from '../../components/gestionar-reclamo-modal/gestionar-reclamo-modal';
 
-// Interfaz completa con todos los campos nuevos
 export interface IReclamo {
   id: string;
   nombre: string;
@@ -17,8 +16,7 @@ export interface IReclamo {
   // Archivos Base
   path_dni: string;
   path_recibo: string;
-  path_form1: string;
-  path_form2: string;
+  path_form_srt: string; // <-- UNIFICADO
   
   // Archivos Opcionales
   path_alta_medica?: string;
@@ -28,7 +26,7 @@ export interface IReclamo {
   // Datos Lógicos
   tipo_tramite: string;
   subtipo_tramite?: string;
-  tiene_abogado_anterior?: boolean; // Llega como boolean de la BD
+  tiene_abogado_anterior?: boolean; 
 
   // Datos Texto (Rechazo)
   jornada_laboral?: string;
@@ -54,8 +52,8 @@ export class AdminDashboardComponent implements OnInit {
   loading = true;
 
   // Variables de Filtro
-  filtroEstado: string = ''; // '' = Todos
-  filtroTipo: string = '';   // '' = Todos
+  filtroEstado: string = ''; 
+  filtroTipo: string = '';   
 
   // Variables Modal
   reclamoSeleccionado: IReclamo | null = null;
@@ -67,7 +65,7 @@ export class AdminDashboardComponent implements OnInit {
 
   alternarOrden() {
     this.ordenDescendente = !this.ordenDescendente;
-    this.aplicarFiltrosLocales(); // Re-aplicamos filtros y orden
+    this.aplicarFiltrosLocales(); 
   }
 
   filtrosAbiertos = false;
@@ -76,13 +74,12 @@ export class AdminDashboardComponent implements OnInit {
     this.filtrosAbiertos = !this.filtrosAbiertos;
   }
 
-  // 1. Carga desde Backend (Filtra por ESTADO)
   cargarDatos() {
     this.loading = true;
     this.reclamosService.findAll(this.filtroEstado).subscribe({
       next: (data) => {
         this.reclamosOriginales = data as IReclamo[];
-        this.aplicarFiltrosLocales(); // Aplicamos el filtro de tipo
+        this.aplicarFiltrosLocales(); 
         this.loading = false;
       },
       error: (err) => {
@@ -92,13 +89,11 @@ export class AdminDashboardComponent implements OnInit {
     });
   }
 
-  // 2. Filtro Local (Filtra por TIPO)
   aplicarFiltrosLocales() {
     let resultado = [];
 
-    // 1. Filtrado
     if (!this.filtroTipo) {
-      resultado = [...this.reclamosOriginales]; // Copia
+      resultado = [...this.reclamosOriginales]; 
     } else {
       if (this.filtroTipo === 'Revoca') {
         resultado = this.reclamosOriginales.filter(r => !!r.path_revoca_patrocinio);
@@ -107,21 +102,18 @@ export class AdminDashboardComponent implements OnInit {
       }
     }
 
-    // 2. Ordenamiento (Sorting)
     resultado.sort((a, b) => {
-      // Convertimos strings de fecha a objetos Date para comparar
       const fechaA = new Date(a.fecha_creacion).getTime();
       const fechaB = new Date(b.fecha_creacion).getTime();
 
       return this.ordenDescendente 
-        ? fechaB - fechaA  // Descendente (Recientes arriba)
-        : fechaA - fechaB; // Ascendente (Antiguos arriba)
+        ? fechaB - fechaA  
+        : fechaA - fechaB; 
     });
 
     this.reclamosFiltrados = resultado;
   }
 
-  // Eventos de UI
   cambiarEstado(nuevoEstado: string) {
     this.filtroEstado = nuevoEstado;
     this.cargarDatos(); 
@@ -132,7 +124,6 @@ export class AdminDashboardComponent implements OnInit {
     this.aplicarFiltrosLocales(); 
   }
 
-  // Modal
   abrirModal(reclamo: IReclamo) {
     this.reclamoSeleccionado = reclamo;
   }

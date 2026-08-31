@@ -1,0 +1,241 @@
+.page-container {
+  display: flex;
+  justify-content: center;
+  padding: 3rem 1rem;
+  background-color: #f8fafc;
+  min-height: calc(100vh - 80px);
+}
+
+.anim-fade-in {
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.profile-layout {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 2rem;
+  width: 100%;
+  max-width: 1000px;
+  align-items: start;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --- SIDEBAR: Identidad --- */
+.profile-sidebar {
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+  border: 1px solid #f1f5f9;
+
+  .avatar-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+
+    .avatar-circle {
+      width: 90px;
+      height: 90px;
+      background-color: #0f172a;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 10px rgba(15, 23, 42, 0.2);
+
+      span {
+        color: #ffffff;
+        font-size: 2.5rem;
+        font-weight: 600;
+      }
+    }
+  }
+
+  .user-info {
+    .user-name {
+      margin: 0 0 0.25rem 0;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .user-email {
+      margin: 0 0 1.5rem 0;
+      font-size: 0.9rem;
+      color: #64748b;
+    }
+
+    .role-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background-color: #f1f5f9;
+      color: #334155;
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border: 1px solid #e2e8f0;
+
+      svg {
+        width: 16px;
+        height: 16px;
+        color: #059669; // Verde sutil para denotar validación/seguridad
+      }
+    }
+  }
+}
+
+/* --- MAIN CONTENT: Seguridad --- */
+.profile-content {
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  padding: 2.5rem;
+  border: 1px solid #f1f5f9;
+
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #e2e8f0;
+
+    svg {
+      width: 28px;
+      height: 28px;
+      color: #334155;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .header-text {
+      h3 {
+        margin: 0 0 0.25rem 0;
+        font-size: 1.35rem;
+        font-weight: 600;
+        color: #0f172a;
+        letter-spacing: -0.025em;
+      }
+
+      p {
+        margin: 0;
+        font-size: 0.9rem;
+        color: #64748b;
+      }
+    }
+  }
+
+  .perfil-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+
+      @media (max-width: 640px) {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      label {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #475569;
+      }
+
+      .form-input {
+        padding: 0.875rem 1rem;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        font-size: 1rem;
+        color: #1e293b;
+        background-color: #f8fafc;
+        transition: all 0.2s ease-in-out;
+
+        &:focus {
+          outline: none;
+          border-color: #3b82f6;
+          background-color: #ffffff;
+          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+      }
+
+      .error {
+        color: #ef4444;
+        font-size: 0.85rem;
+        font-weight: 500;
+        margin-top: 0.25rem;
+      }
+    }
+
+    .form-actions {
+      margin-top: 1rem;
+      display: flex;
+      justify-content: flex-end;
+      
+      .btn-primary {
+        min-width: 200px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0.875rem 1.5rem;
+        background-color: #0f172a;
+        color: #ffffff;
+        font-size: 1rem;
+        font-weight: 600;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.2s ease-in-out, transform 0.1s;
+
+        &:hover:not(:disabled) {
+          background-color: #1e293b;
+        }
+
+        &:active:not(:disabled) {
+          transform: scale(0.98);
+        }
+
+        &:disabled {
+          background-color: #94a3b8;
+          cursor: not-allowed;
+        }
+      }
+    }
+  }
+}
+
+/* --- SPINNER PARA EL BOTÓN --- */
+.spinner-chico {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #ffffff;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto; /* Para centrarlo perfectamente en el botón */
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

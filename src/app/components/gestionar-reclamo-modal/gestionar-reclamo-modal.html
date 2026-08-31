@@ -70,14 +70,9 @@
           <span *ngIf="descargando === 'recibo'"><div class="spinner-chico"></div></span>
         </button>
 
-        <button *ngIf="reclamo.path_form1" class="btn-archivo" (click)="descargarArchivo('form1')" [disabled]="descargando === 'form1'">
-          <span *ngIf="descargando !== 'form1'">📄 Ver Formulario 1</span>
-          <span *ngIf="descargando === 'form1'"><div class="spinner-chico"></div></span>
-        </button>
-
-        <button *ngIf="reclamo.path_form2" class="btn-archivo" (click)="descargarArchivo('form2')" [disabled]="descargando === 'form2'">
-          <span *ngIf="descargando !== 'form2'">📄 Ver Formulario 2</span>
-          <span *ngIf="descargando === 'form2'"><div class="spinner-chico"></div></span>
+        <button *ngIf="reclamo.path_form_srt" class="btn-archivo" (click)="descargarArchivo('formSRT')" [disabled]="descargando === 'formSRT'">
+          <span *ngIf="descargando !== 'formSRT'">📄 Ver Formulario SRT</span>
+          <span *ngIf="descargando === 'formSRT'"><div class="spinner-chico"></div></span>
         </button>
 
         <button *ngIf="reclamo.path_alta_medica" class="btn-archivo" (click)="descargarArchivo('alta')" [disabled]="descargando === 'alta'">

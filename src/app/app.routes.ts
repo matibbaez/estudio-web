@@ -1,11 +1,10 @@
 import { Routes } from '@angular/router';
-
-// 1. IMPORTAMOS LOS COMPONENTES
 import { InicioComponent } from './pages/inicio/inicio';
 import { IniciarReclamoComponent } from './pages/iniciar-reclamo/iniciar-reclamo';
 import { ConsultarTramiteComponent } from './pages/consultar-tramite/consultar-tramite';
 import { LoginComponent } from './pages/login/login';
-import { AdminDashboardComponent } from './pages/admin-dashboard/admin-dashboard'; // <-- ¡NUEVO!
+import { AdminDashboardComponent } from './pages/admin-dashboard/admin-dashboard'; 
+import { PerfilComponent } from './pages/perfil/perfil';
 
 import { authGuard } from './auth/auth-guard';
 
@@ -36,6 +35,12 @@ export const routes: Routes = [
     component: AdminDashboardComponent, 
     canActivate: [authGuard],
     data: { animation: 'AdminPage' } 
+  },
+  {
+    path: 'perfil',
+    component: PerfilComponent,
+    canActivate: [authGuard],
+    data: { animation: 'PerfilPage' }
   },
   
   { path: '**', redirectTo: '' } 

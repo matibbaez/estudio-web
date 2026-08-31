@@ -7,7 +7,8 @@ import { environment } from '../../../environments/environment';
 import { IReclamo } from '../../pages/admin-dashboard/admin-dashboard';
 import { NotificacionService } from '../../services/notificacion';
 
-type TipoArchivo = 'dni' | 'recibo' | 'alta' | 'form1' | 'form2' | 'carta_documento' | 'revoca';
+// Actualizado para reflejar el backend: formSRT
+type TipoArchivo = 'dni' | 'recibo' | 'alta' | 'formSRT' | 'carta_documento' | 'revoca';
 
 @Component({
   selector: 'app-gestionar-reclamo-modal',
