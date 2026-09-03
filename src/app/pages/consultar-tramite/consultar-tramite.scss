@@ -113,20 +113,36 @@
   }
 }
 
-/* Timeline */
+/* =========================================
+   LÍNEA DE TIEMPO (TIMELINE FIX 7 PASOS)
+   ========================================= */
 .timeline-container {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 1rem; margin-bottom: 1.5rem; position: relative;
+  display: flex;
+  align-items: flex-start; /* CRÍTICO: Alinea los puntos arriba para que no salten por el texto */
+  justify-content: space-between;
+  padding: 0;
+  margin-bottom: 2rem;
+  width: 100%;
+  overflow-x: auto; /* Permite deslizar si la pantalla es muy angosta */
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
 }
 
 .step {
   display: flex; flex-direction: column; align-items: center; gap: 8px; z-index: 2;
+  width: 75px; /* Ancho fijo para que los textos bajen en 2 renglones prolijos */
+  flex-shrink: 0; /* Evita que los pasos se aplasten entre sí */
+
   .dot {
     width: 16px; height: 16px; border-radius: 50%; background-color: #cbd5e1;
     border: 3px solid white; box-shadow: 0 0 0 2px #cbd5e1; transition: all 0.3s;
+    margin-top: 4px; /* Un empujoncito para alinearlo al centro de la línea */
   }
-  span { font-size: 0.85rem; color: #94a3b8; font-weight: 600; }
-  
+  span {
+    font-size: 0.75rem; color: #94a3b8; font-weight: 600;
+    text-align: center; line-height: 1.2; white-space: normal;
+  }
+
   &.active {
     .dot { background-color: var(--color-primario); box-shadow: 0 0 0 2px var(--color-primario); }
     span { color: var(--color-primario); }
@@ -134,7 +150,10 @@
 }
 
 .line {
-  flex-grow: 1; height: 2px; background-color: #e2e8f0; margin: 0 10px; margin-bottom: 24px;
+  flex-grow: 1; height: 2px; background-color: #e2e8f0;
+  margin: 0;
+  margin-top: 11px; /* Baja la línea para que cruce justo por el medio de los puntos */
+  min-width: 15px; /* Asegura que la línea SIEMPRE se vea y conecte */
   &.active { background-color: var(--color-primario); }
 }
 
@@ -186,19 +205,26 @@
     .status-texts h3 { font-size: 1.5rem; }
   }
 
-  /* Timeline Compacto */
-  .timeline-container { padding: 0; margin-bottom: 1rem; }
+  /* Timeline Compacto Mobile */
+  .timeline-container { padding: 0 0.5rem; margin-bottom: 1.5rem; }
   .step {
+    width: 65px; /* Un poquito más angosto en celu */
     gap: 6px;
     .dot { width: 14px; height: 14px; border-width: 2px; }
-    span { font-size: 0.75rem; max-width: 60px; text-align: center; line-height: 1.1; }
+    span { font-size: 0.7rem; }
   }
-  .line { margin-bottom: 30px; margin-left: 5px; margin-right: 5px; }
+  .line { 
+    margin: 0; 
+    margin-top: 10px; /* Reajustamos el centro por el dot más chico */
+    min-width: 10px; 
+  }
   
   .result-message { font-size: 0.9rem; padding: 0; }
 }
 
-/* Estilos dinámicos para los nuevos estados */
+/* =========================================
+   ESTILOS DINÁMICOS Y WHATSAPP
+   ========================================= */
 .estado-normal {
   background-color: #eff6ff; 
   color: var(--color-primario); 
