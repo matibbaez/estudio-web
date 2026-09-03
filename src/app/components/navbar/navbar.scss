@@ -6,62 +6,6 @@
   width: 100%;
 }
 
-.brand-logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none;
-  transition: opacity 0.3s ease;
-
-  &:hover {
-    opacity: 0.9;
-  }
-}
-
-/* El Ícono (Escudo de protección con Check) */
-.logo-icon {
-  width: 36px;
-  height: 36px;
-  background: linear-gradient(135deg, #b45309 0%, #d97706 100%);  
-  border-radius: 8px; /* Un poco cuadrado para seriedad */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 6px -1px rgba(245, 158, 11, 0.3);
-  
-  svg {
-    width: 20px;
-    height: 20px;
-    color: white;
-  }
-}
-
-/* El Texto Tipográfico */
-.logo-text {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 1.5rem;
-  font-weight: 500; /* Peso medio para "Reclam" */
-  color: #fff; /* Azul Oscuro (Casi negro) */
-  letter-spacing: -0.5px; /* Un poquito apretado queda más moderno */
-  line-height: 1;
-
-  .highlight {
-    font-weight: 900; /* Extra gordo para ART */
-    color: #d97706; /* Naranja quemado */
-  }
-}
-
-/* Ajuste para móviles */
-@media (max-width: 768px) {
-  .logo-text {
-    font-size: 1.2rem;
-  }
-  .logo-icon {
-    width: 32px;
-    height: 32px;
-  }
-}
-
 .navbar {
   background-color: var(--color-primario); /* Azul puro */
   color: white;
@@ -91,19 +35,26 @@
   align-items: center;
   text-decoration: none;
   cursor: pointer;
-  height: 100%; /* Ocupa toda la altura para centrar */
+  height: 100%; 
   transition: opacity 0.2s;
 
   &:hover { opacity: 0.9; }
 
   .logo-img {
-    height: 60px; /* Altura controlada para que no rompa el navbar */
-    width: auto;  /* El ancho se ajusta solo */
-    object-fit: contain; /* Asegura que se vea entera */
+    height: 60px; 
+    width: auto;  
+    object-fit: contain;
+    transform: scale(1.5); 
+    transform-origin: left center; 
     
-    /* Opcional: si sentís que el logo está muy pegado al borde en móvil */
+    /* Compensamos el espacio transparente tirando la imagen hacia la izquierda */
+    margin-left: -15px; 
+    
     @media (max-width: 768px) {
-        height: 50px; 
+        height: 50px;
+        transform: scale(1.4); 
+        /* En el celu lo tiramos un poquito más para que quede a la misma altura que los textos */
+        margin-left: -20px; 
     }
   }
 }
@@ -147,29 +98,6 @@
       font-weight: 700;
       &::after { transform: scaleX(1); }
     }
-  }
-
-  .btn-admin {
-    background-color: rgba(255, 255, 255, 0.1);
-    padding: 0.6rem 1.4rem;
-    border-radius: 50px;
-    font-size: 0.9rem;
-    color: white;
-    font-weight: 600;
-    border: 1px solid transparent;
-
-    &:hover {
-      background-color: white;
-      color: var(--color-primario);
-      transform: translateY(-1px);
-    }
-
-    &.active-btn {
-      background-color: white;
-      color: var(--color-primario);
-    }
-
-    &::after { display: none; }
   }
 }
 
@@ -315,11 +243,11 @@
 .mobile-menu-dropdown {
   .link-admin {
     font-weight: 700;
-    color: #93c5fd; /* Un azul clarito para destacar */
+    color: #93c5fd; 
   }
 
   .link-logout {
-    color: #fca5a5; /* Rojo pastel */
+    color: #fca5a5; 
     font-weight: 600;
     cursor: pointer;
     margin-top: 0.5rem;

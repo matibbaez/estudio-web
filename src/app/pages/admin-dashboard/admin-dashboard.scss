@@ -17,7 +17,7 @@
 
 /* El botón para abrir filtros (Solo visible en mobile por defecto) */
 .btn-filter-toggle {
-  display: flex; /* Visible en mobile */
+  display: flex; 
   align-items: center; justify-content: center; gap: 0.5rem;
   width: 100%;
   padding: 0.8rem;
@@ -33,7 +33,7 @@
 
 /* --- FILTROS WRAPPER --- */
 .filters-wrapper {
-  display: none; /* Mobile first: oculto */
+  display: none; 
   flex-direction: column;
   gap: 1rem;
   width: 100%;
@@ -73,11 +73,11 @@
   /* El Select Real (Transparente pero funcional) */
   .custom-select {
     width: 100%;
-    appearance: none; /* Oculta flecha default */
+    appearance: none; 
     background-color: white;
     border: 1px solid #cbd5e1;
     border-radius: 8px;
-    padding: 0.6rem 2.5rem 0.6rem 1rem; /* Espacio a la derecha para la flecha */
+    padding: 0.6rem 2.5rem 0.6rem 1rem; 
     font-size: 0.9rem;
     font-weight: 600;
     color: #334155;
@@ -87,8 +87,9 @@
 
     &:hover { border-color: #94a3b8; }
     &:focus {
-      border-color: var(--color-primario);
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+      border-color: var(--color-acento);
+      /* Sombra de focus en Azul ReclamARTe */
+      box-shadow: 0 0 0 3px rgba(5, 90, 154, 0.15);
     }
   }
 
@@ -98,7 +99,7 @@
     right: 12px;
     top: 50%;
     transform: translateY(-50%);
-    pointer-events: none; /* Click pasa a través */
+    pointer-events: none; 
     color: #64748b;
     display: flex;
     svg { width: 16px; height: 16px; }
@@ -119,11 +120,11 @@
   color: #475569;
   font-weight: 600;
   font-size: 0.9rem;
-  white-space: nowrap; /* Que no se rompa el texto */
+  white-space: nowrap; 
 
   .sort-icon {
     display: flex;
-    color: var(--color-primario);
+    color: var(--color-acento); /* Flechas en Azul corporativo */
     svg { width: 18px; height: 18px; }
   }
 
@@ -153,21 +154,19 @@
   background: #f1f5f9;
   padding: 4px;
   border-radius: 10px;
-  overflow-x: auto; /* Scroll horizontal si no entran */
+  overflow-x: auto; 
 }
 
 /* --- DESKTOP (Mayores a 768px) --- */
 @media (min-width: 768px) {
   .tools-bar {
-    flex-direction: row; /* Vuelve a fila */
+    flex-direction: row; 
     justify-content: space-between;
     align-items: center;
   }
 
-  /* Ocultamos el botón toggle en desktop */
   .btn-filter-toggle { display: none; }
 
-  /* Mostramos siempre los filtros en desktop */
   .filters-wrapper {
     display: flex !important;
     flex-direction: row;
@@ -190,12 +189,12 @@
 
   &.active {
     background: white;
-    color: var(--color-primario);
+    color: var(--color-acento); /* Tab activo en Azul */
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
   }
   
   &:hover:not(.active) { 
-    color: var(--color-primario); 
+    color: var(--color-acento); 
     background-color: rgba(255,255,255,0.5);
   }
 }
@@ -206,7 +205,7 @@
 }
 
 .select-profesional {
-  appearance: none; /* Saca el estilo default del navegador */
+  appearance: none; 
   padding: 0.6rem 2.5rem 0.6rem 1rem;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
@@ -221,7 +220,7 @@
   background-position: right 1rem center;
   background-size: 16px;
   
-  &:focus { border-color: var(--color-primario); }
+  &:focus { border-color: var(--color-acento); }
 }
 
 /* ---------------------------------- */
@@ -238,7 +237,7 @@
 
 .admin-table {
   width: 100%;
-  border-collapse: separate; /* Necesario para efectos de borde */
+  border-collapse: separate; 
   border-spacing: 0;
   min-width: 900px; 
   font-size: 0.95rem;
@@ -265,7 +264,7 @@
   /* Efecto Hover en las filas */
   tbody tr {
     transition: background-color 0.2s ease;
-    &:hover { background-color: #f8fafc; }
+    &:hover { background-color: #f0f9ff; } /* Hover de fila en celeste muy sutil */
     &:last-child td { border-bottom: none; }
   }
 
@@ -281,11 +280,10 @@
 /* 3. FILA URGENTE (REVOCA)
 /* ---------------------------------- */
 .row-urgente {
-  background-color: #fffbfc; /* Fondo apenas rosado */
+  background-color: #fffbfc; 
 
   td:first-child {
-    /* Truco CSS para borde izquierdo dentro de la celda sin romper la tabla */
-    box-shadow: inset 4px 0 0 #ef4444; 
+    box-shadow: inset 4px 0 0 var(--color-error); 
   }
 }
 
@@ -293,7 +291,6 @@
 /* 4. CONTENIDO DE CELDAS
 /* ---------------------------------- */
 
-/* Info del Cliente (Nombre + Email gris abajo) */
 .cliente-info {
   display: flex; 
   flex-direction: column;
@@ -303,7 +300,6 @@
   .email-chico { font-size: 0.8rem; color: #94a3b8; }
 }
 
-/* Info del Trámite (Tipo + Badges) */
 .tipo-wrapper {
   display: flex;
   flex-direction: column;
@@ -321,7 +317,6 @@
   }
 }
 
-/* Badges Profesionales (Pastillas) */
 .badge-pill {
   font-size: 0.65rem;
   font-weight: 800;
@@ -344,7 +339,7 @@
 }
 
 /* ---------------------------------- */
-/* 5. ESTADO (PUNTITO DE COLOR)
+/* 5. ESTADOS (PUNTITOS DE COLOR PARA LOS 9 ESTADOS)
 /* ---------------------------------- */
 .status-dot {
   display: inline-block;
@@ -353,9 +348,29 @@
   border-radius: 50%;
   margin-right: 6px;
   
-  &.recibido { background-color: #3b82f6; box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2); }
-  &.en-proceso { background-color: #f59e0b; box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2); }
-  &.finalizado { background-color: #10b981; box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2); }
+  /* 1. Estados de Avance Normal (Azul Corporativo) */
+  &.recibido, &.en-revisión, &.presentado, &.con-fecha, &.audiencia-hecha, &.dictamen { 
+    background-color: var(--color-acento); 
+    box-shadow: 0 0 0 2px rgba(5, 90, 154, 0.2); 
+  }
+  
+  /* 2. Estado Finalizado/Exitoso (Verde) */
+  &.cerrado { 
+    background-color: var(--color-exito); 
+    box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.2); 
+  }
+  
+  /* 3. Estados de Excepción (Pausa o Rechazo) */
+  &.falta-documentación { 
+    background-color: var(--color-advertencia); 
+    box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2); 
+  }
+  
+  /* Por el replace(' ', '-') de Angular, 'No podemos tomarlo' genera la clase .no-podemos */
+  &.no-podemos { 
+    background-color: var(--color-error); 
+    box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2); 
+  }
 }
 
 /* ---------------------------------- */
@@ -375,8 +390,8 @@
   svg { width: 20px; height: 20px; }
   
   &:hover { 
-    background-color: #e2e8f0; 
-    color: var(--color-primario); 
+    background-color: #e0f2fe; 
+    color: var(--color-acento); /* Icono en Azul corporativo al hacer hover */
   }
 }
 
@@ -390,7 +405,7 @@
   
   .spinner {
     width: 30px; height: 30px;
-    border: 3px solid #e2e8f0; border-top-color: var(--color-primario);
+    border: 3px solid #e2e8f0; border-top-color: var(--color-acento);
     border-radius: 50%; margin: 0 auto 1rem;
     animation: spin 1s linear infinite;
   }

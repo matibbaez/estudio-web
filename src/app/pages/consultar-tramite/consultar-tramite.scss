@@ -43,11 +43,13 @@
   border-radius: 50px; background: white;
   border: 1px solid #e2e8f0;
 
-  &:focus-within { box-shadow: 0 8px 30px rgba(37, 99, 235, 0.15); border-color: #cbd5e1; }
+  /* Sombra del focus ajustada al Azul ReclamARTe */
+  &:focus-within { box-shadow: 0 8px 30px rgba(5, 90, 154, 0.15); border-color: #cbd5e1; }
 
   .search-icon {
     position: absolute; left: 20px; top: 50%; transform: translateY(-50%);
-    color: var(--color-primario); svg { width: 24px; height: 24px; }
+    color: var(--color-acento); /* Icono en Azul Institucional */
+    svg { width: 24px; height: 24px; }
   }
   
   input {
@@ -64,7 +66,8 @@
 .btn-hero {
   width: 100%; padding: 1.2rem; font-size: 1.1rem; border-radius: 50px;
   background: var(--color-primario); border: none; font-weight: 700;
-  box-shadow: 0 10px 20px -5px rgba(37, 99, 235, 0.4); transition: all 0.2s;
+  box-shadow: 0 10px 20px -5px rgba(15, 23, 42, 0.4); /* Sombra alineada al Slate */
+  transition: all 0.2s;
   &:hover { background-color: var(--color-primario-hover); transform: translateY(-2px); }
   &:disabled { opacity: 0.7; transform: none; box-shadow: none; cursor: not-allowed; }
 }
@@ -97,10 +100,6 @@
 .current-status-box {
   padding: 1.5rem; border-radius: 16px; margin-bottom: 2.5rem;
   display: flex; align-items: center; gap: 1.5rem;
-  
-  &.recibido { background-color: #eff6ff; color: #1e40af; .status-icon-large { background: #dbeafe; } }
-  &.en-proceso { background-color: #fff7ed; color: #9a3412; .status-icon-large { background: #ffedd5; } }
-  &.finalizado { background-color: #f0fdf4; color: #166534; .status-icon-large { background: #dcfce7; } }
 
   .status-icon-large {
     width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
@@ -119,15 +118,14 @@
 .timeline-container {
   display: flex;
   align-items: flex-start;
-  justify-content: flex-start; /* CLAVE: Alinea al principio, sin aplastar */
-  padding: 0.5rem 0 1rem 0; /* Padding abajo para la barra de scroll */
+  justify-content: flex-start;
+  padding: 0.5rem 0 1rem 0;
   margin-bottom: 2rem;
   width: 100%;
-  overflow-x: auto; /* Permite deslizar horizontalmente */
+  overflow-x: auto;
   scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch; /* Suavidad en celulares iOS/Android */
+  -webkit-overflow-scrolling: touch;
   
-  /* Barrita de scroll sutil para que el cliente sepa que puede deslizar */
   scrollbar-width: thin;
   scrollbar-color: #cbd5e1 transparent;
   &::-webkit-scrollbar { height: 6px; }
@@ -136,8 +134,8 @@
 
 .step {
   display: flex; flex-direction: column; align-items: center; gap: 8px; z-index: 2;
-  width: 90px; /* Ancho fijo e innegociable para el texto */
-  flex-shrink: 0; /* CLAVE: Evita que el contenedor lo comprima */
+  width: 90px;
+  flex-shrink: 0;
 
   .dot {
     width: 16px; height: 16px; border-radius: 50%; background-color: #cbd5e1;
@@ -149,19 +147,20 @@
     text-align: center; line-height: 1.2; white-space: normal;
   }
 
+  /* La magia: Pasamos de slate oscuro al Azul Corporativo cuando está activo */
   &.active {
-    .dot { background-color: var(--color-primario); box-shadow: 0 0 0 2px var(--color-primario); }
-    span { color: var(--color-primario); }
+    .dot { background-color: var(--color-acento); box-shadow: 0 0 0 2px var(--color-acento); }
+    span { color: var(--color-acento); }
   }
 }
 
 .line {
-  flex-shrink: 0; /* CLAVE: Evita que la línea desaparezca */
-  width: 25px; /* Ancho fijo en lugar de flex-grow */
+  flex-shrink: 0; 
+  width: 25px; 
   height: 2px; background-color: #e2e8f0;
   margin: 0;
-  margin-top: 11px; /* Centrado con el dot */
-  &.active { background-color: var(--color-primario); }
+  margin-top: 11px; 
+  &.active { background-color: var(--color-acento); } /* Línea activa en azul */
 }
 
 .result-message {
@@ -221,7 +220,7 @@
     span { font-size: 0.7rem; }
   }
   .line { 
-    width: 15px; /* Línea más cortita en celu */
+    width: 15px; 
     margin-top: 10px; 
   }
   
@@ -232,9 +231,10 @@
    ESTILOS DINÁMICOS Y WHATSAPP
    ========================================= */
 .estado-normal {
-  background-color: #eff6ff; 
-  color: var(--color-primario); 
-  .status-icon-large { background: #dbeafe; }
+  background-color: #f0f9ff; /* Fondo celeste muy suave */
+  color: var(--color-acento); /* Azul corporativo para los estados de avance */
+  border: 1px solid #bae6fd;
+  .status-icon-large { background: #e0f2fe; }
 }
 
 .estado-excepcion {

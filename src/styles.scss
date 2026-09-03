@@ -3,19 +3,19 @@
    ========================================= */
 :root {
   /* --- COLORES PRINCIPALES --- */
-  /* Azul Marino Profundo (Autoridad y Estructura) */
+  /* Gris/Azul muy oscuro para la estructura (El "Gris" del logo) */
   --color-primario: #0f172a;       /* Slate 900 */
   --color-primario-hover: #1e293b; /* Slate 800 */
   
   /* Gris azulado para textos secundarios */
   --color-secundario: #64748b;     /* Slate 500 */
   
-  /* --- COLOR DE ACENTO (El Degradado del Logo) --- */
-  /* Principal: Degradado lineal de 90 grados, de rojo-naranja a naranja-claro */
-  --color-acento: linear-gradient(90deg, #ff3131, #ff914d); 
+  /* --- COLOR DE ACENTO (Azul ReclamARTe) --- */
+  /* Reemplazamos el fuego por el azul institucional pedido por el cliente */
+  --color-acento: #055A9A; 
   
-  /* Hover: Una versión ligeramente más oscura y saturada para la interacción */
-  --color-acento-hover: linear-gradient(90deg, #d92727, #d97c3f);
+  /* Hover: Una versión ligeramente más oscura para la interacción */
+  --color-acento-hover: #044b82;
 
   /* --- ESTADOS DEL SISTEMA --- */
   --color-exito: #059669;          /* Emerald 600 */
@@ -52,13 +52,13 @@ html, body {
   background-color: var(--color-fondo-pagina);
   color: var(--color-texto-principal);
   line-height: 1.6;
-  -webkit-font-smoothing: antialiased; /* Texto nítido */
+  -webkit-font-smoothing: antialiased; 
   -moz-osx-font-smoothing: grayscale;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
-  color: var(--color-primario); /* Títulos en Azul Marino */
+  color: var(--color-primario);
   line-height: 1.2;
 }
 
@@ -103,7 +103,7 @@ html {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #cbd5e1; /* Gris suave por defecto */
+  background-color: #cbd5e1; 
   border-radius: 10px;
   border: 2px solid transparent;
   background-clip: content-box;
@@ -111,7 +111,7 @@ html {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: var(--color-primario); /* Se pone azul al hover */
+  background-color: var(--color-primario); 
 }
 
 /* =========================================
@@ -124,7 +124,7 @@ html {
   gap: 0.5rem;
   padding: 0.75rem 2rem;
   font-size: 1rem;
-  font-weight: 600; /* Un poco más bold */
+  font-weight: 600; 
   text-decoration: none;
   border-radius: var(--borde-redondeado);
   border: 1px solid transparent;
@@ -133,7 +133,7 @@ html {
   text-align: center;
   white-space: nowrap;
 
-  /* 1. PRIMARIO (Azul Marino - Sobrio) */
+  /* 1. PRIMARIO (Gris/Azul Oscuro - Sobrio) */
   &.btn-primary {
     background: var(--color-primario);
     color: white;
@@ -146,7 +146,7 @@ html {
     }
   }
 
-  /* 2. SECUNDARIO (Borde Azul - Elegante) */
+  /* 2. SECUNDARIO (Borde Azul Claro - Elegante) */
   &.btn-secondary {
     background-color: white;
     color: var(--color-primario);
@@ -160,27 +160,27 @@ html {
     }
   }
 
-  /* 3. WARNING / ACCIÓN (Ámbar - Para llamar la atención) */
+  /* 3. WARNING / ACCIÓN (Ahora es el Azul Oficial de la marca) */
   &.btn-warning {
     background: var(--color-acento);
     color: white;
-    box-shadow: 0 4px 6px rgba(217, 119, 6, 0.25);
+    box-shadow: 0 4px 6px rgba(5, 90, 154, 0.25);
 
     &:hover {
       background: var(--color-acento-hover);
       transform: translateY(-2px);
-      box-shadow: 0 10px 15px -3px rgba(217, 119, 6, 0.4);
+      box-shadow: 0 10px 15px -3px rgba(5, 90, 154, 0.4);
     }
   }
 
-  /* 4. BLANCO (Para usar sobre fondos oscuros/naranjas) */
+  /* 4. BLANCO (Para usar sobre fondos oscuros o el azul oficial) */
   &.btn-white {
     background-color: white;
     color: var(--color-acento);
     font-weight: 800;
     
     &:hover {
-      background-color: #fffbeb;
+      background-color: #f0f9ff;
       transform: translateY(-2px);
     }
   }
@@ -198,7 +198,7 @@ html {
 }
 
 /* =========================================
-   LENIS (Smooth Scroll - Si lo usás)
+   LENIS (Smooth Scroll)
    ========================================= */
 html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }

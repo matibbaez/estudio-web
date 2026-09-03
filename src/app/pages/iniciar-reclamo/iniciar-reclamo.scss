@@ -1,1121 +1,498 @@
 /* =========================================
-   CONFIGURACIÓN Y ESTRUCTURA
+   CONFIGURACIÓN GENERAL
    ========================================= */
 .page-container {
-  /* Ancho por defecto (para las tarjetas de selección y el formulario) */
-  max-width: 1500px; 
+  max-width: 900px; /* Ancho default para el formulario de reclamo */
   margin: 4rem auto;
   padding: 0 1.5rem;
-  animation: fadeIn 0.5s ease-out;
-  transition: max-width 0.5s ease; /* Efecto suave al achicarse */
-
-  /* CUANDO ESTÁ EN MODO ÉXITO (Ticket) */
+  transition: max-width 0.3s ease;
+  
+  /* Cuando muestra el ticket de éxito, se hace más angosto */
   &.container-narrow {
-    max-width: 550px; /* El mismo ancho que "Consultar Trámite" */
+    max-width: 600px;
   }
 }
 
+/* =========================================
+   CABECERA DEL FORMULARIO
+   ========================================= */
 .custom-header {
   text-align: center;
   margin-bottom: 3rem;
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
-
+  
   h1 {
-    font-size: 2.5rem;
+    font-size: 2.2rem;
     color: var(--color-primario);
-    margin-bottom: 0.75rem;
-    font-weight: 800;
+    margin-bottom: 0.5rem;
+  }
+  
+  p {
+    font-size: 1.1rem;
+    color: var(--color-texto-secundario);
+    margin: 0;
+  }
+
+  .text-highlight {
+    color: var(--color-acento);
+    position: relative;
+    white-space: nowrap;
     
-    .text-highlight {
-      color: #ff914d; /* Naranja vibrante */
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 2px; left: 0;
+      width: 100%; height: 8px;
+      background-color: rgba(5, 90, 154, 0.15); /* Celeste Suave ReclamARTe */
+      z-index: -1;
+      border-radius: 4px;
     }
   }
 
-  p {
-    color: var(--color-texto-secundario);
-    font-size: 1.2rem;
-    line-height: 1.6;
+  /* Badge para el modo revocar abogado */
+  .badge-revoca {
+    display: inline-block;
+    background-color: #fef2f2;
+    color: #ef4444;
+    padding: 0.3rem 1rem;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    border: 1px solid #fca5a5;
+    letter-spacing: 1px;
   }
 }
 
-/* BADGE Y BOTÓN DEL MODO REVOCA */
-.badge-revoca {
-  display: inline-block;
-  background-color: #fff7ed;
-  color: #c2410c;
-  font-weight: 800;
-  font-size: 0.8rem;
-  padding: 0.5rem 1rem;
-  border-radius: 50px;
-  border: 1px solid #fdba74;
-  margin-bottom: 1rem;
-}
-
+/* Botón simple para volver */
 .btn-link-simple {
-  background: none; border: none; 
-  color: #64748b; text-decoration: underline; cursor: pointer;
-  margin-top: 0.5rem; font-size: 0.9rem;
+  background: none; border: none;
+  color: var(--color-texto-secundario);
+  text-decoration: underline;
+  font-size: 0.95rem; font-weight: 500;
+  margin-top: 1rem; cursor: pointer;
   transition: color 0.2s;
+  
   &:hover { color: var(--color-primario); }
 }
 
-.form-content {
-  padding: 1rem 0;
-}
-
 /* =========================================
-   PASO 0: GRID DE SELECCIÓN (TARJETAS)
+   PASO 0: GRID DE SELECCIÓN DE TRÁMITE
    ========================================= */
 .tramite-grid {
   display: grid;
-  /* Bajamos el minmax a 250px para dar aire en pantallas intermedias */
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  justify-content: center; 
-  gap: 2rem;
-  margin-bottom: 3rem;
+  gap: 1.5rem;
 }
 
 .tramite-card {
-  background: white;
+  background-color: white;
   border: 1px solid var(--color-borde-suave);
-  border-radius: 20px;
-  padding: 2.5rem 2rem;
+  border-radius: 16px;
+  padding: 2rem 1.5rem;
+  text-align: center;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 10px 30px -10px rgba(0,0,0,0.05);
-  height: 100%;
-
-  /* --- ÍCONO --- */
-  .card-icon {
-    width: 60px;
-    height: 60px;
-    background-color: #f8fafc;
-    border-radius: 16px;
-    display: flex; align-items: center; justify-content: center;
-    margin-bottom: 1.5rem;
-    color: var(--color-primario);
-    transition: all 0.3s ease;
-    svg { width: 32px; height: 32px; }
+  display: flex; flex-direction: column;
+  
+  &::before {
+    content: ''; position: absolute;
+    top: 0; left: 0; width: 100%; height: 4px;
+    background-color: var(--color-acento); /* Línea superior Azul */
+    transform: scaleX(0); transition: transform 0.3s ease;
   }
 
-  /* --- TEXTO --- */
-  .card-content {
-    margin-bottom: 2.5rem;
-    h3 { 
-      font-size: 1.4rem; 
-      margin-bottom: 0.75rem; 
-      font-weight: 700; 
-      color: var(--color-primario); 
-      line-height: 1.2; 
-    }
-    p { 
-      font-size: 1rem; 
-      color: var(--color-texto-secundario); 
-      line-height: 1.6; 
-      margin: 0; 
-    }
-  }
-
-  /* --- ACCIÓN --- */
-  .card-action {
-    margin-top: auto;
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--color-primario);
-    display: flex; align-items: center; gap: 0.5rem;
-    transition: gap 0.3s ease, color 0.3s ease;
-  }
-
-  /* --- HOVER EFFECT --- */
   &:hover {
-    transform: translateY(-8px);
-    border-color: transparent; 
-    background: linear-gradient(#fff, #fff) padding-box, var(--color-acento) border-box;
-    box-shadow: 0 20px 40px -10px rgba(255, 49, 49, 0.15);
-
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+    border-color: var(--color-acento);
+    
+    &::before { transform: scaleX(1); }
+    
     .card-icon {
-      background: var(--color-acento); 
-      border-color: transparent;
-      color: white;
-      box-shadow: 0 10px 20px rgba(255, 49, 49, 0.3);
+      background-color: rgba(5, 90, 154, 0.1); /* Fondo celeste al hover */
+      color: var(--color-acento);
+      transform: scale(1.1);
     }
     
     .card-action {
-      gap: 1.2rem;
-      color: #ff3131; 
+      background-color: var(--color-acento);
+      color: white;
+      border-color: var(--color-acento);
     }
   }
-}
 
-/* Tarjeta Destacada (Revoca) - Por si se usa en el futuro */
-.tramite-card.highlight {
-  background-color: #fffaf5; 
-  border-color: #ffedd5;
-  transition: all 0.3s ease;
+  /* Variante Especial (Revocar Patrocinio) */
+  &.highlight {
+    background-color: #f8fafc;
+    border: 1px dashed var(--color-acento);
+    
+    .card-icon { color: var(--color-acento); background: white; }
+    &:hover { border-style: solid; background-color: white; }
+  }
+
   .card-icon {
-    background-color: #fff7ed;
-    color: #ff914d;
-    border-color: #ffedd5;
-  } 
-  &:hover {
-    .card-icon {
-      color: #ffffff;
-      background-color: #ff914d;
-      border-color: #ff914d;
-    }
-  }
-}
-
-/* =========================================
-   PASO 1: FORMULARIO
-   ========================================= */
-
-/* BOTÓN VOLVER PREMIUM */
-.back-nav-container {
-  margin-bottom: 2rem;
-  display: flex;
-  align-items: center;
-}
-
-.btn-back-premium {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  background-color: white;
-  border: 1px solid var(--color-borde-suave); 
-  border-radius: 50px;
-  padding: 0.6rem 1.5rem 0.6rem 0.6rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-  
-  .back-text {
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: var(--color-texto-secundario);
-    transition: color 0.3s;
-  }
-
-  .back-icon {
-    width: 36px;
-    height: 36px;
+    width: 60px; height: 60px;
+    margin: 0 auto 1.5rem auto;
     background-color: #f1f5f9;
+    color: var(--color-secundario);
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    color: var(--color-texto-secundario);
     transition: all 0.3s ease;
-    svg { width: 18px; height: 18px; }
-  }
-
-  &:hover {
-    background-color: #f8fafc; 
-    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-    .back-text { color: var(--color-primario); }
-    .back-icon {
-      background: var(--color-acento);
-      color: white;
-      box-shadow: 0 2px 8px rgba(255, 49, 49, 0.3);
-    }
-  }
-  &:active { transform: scale(0.98); }
-}
-
-/* Caja Info Formularios */
-.info-box {
-  background-color: #eff6ff; border: 1px solid #dbeafe; border-radius: 12px;
-  padding: 1.5rem 2rem; display: flex; gap: 1.5rem; align-items: center; margin-bottom: 3rem;
-  
-  .info-icon {
-    color: #3b82f6; flex-shrink: 0; background: white; padding: 10px; border-radius: 50%;
+    
     svg { width: 28px; height: 28px; }
   }
-  .info-content {
-    .info-title { font-weight: 700; color: #1e40af; margin-bottom: 0.25rem; font-size: 1.1rem; }
-    .info-links { font-size: 1rem; a { color: #2563eb; font-weight: 600; &:hover { text-decoration: underline; } } }
-  }
-}
 
-/* Formulario Inputs */
-.reclamo-form {
-  fieldset {
-    border: none; margin: 0; padding: 0; margin-bottom: 3.5rem;
-    legend {
-      font-size: 1.5rem; font-weight: 800; color: var(--color-primario);
-      margin-bottom: 2rem; display: block; width: 100%;
-      padding-bottom: 1rem; border-bottom: 2px solid #f1f5f9;
-    }
-  }
-}
-
-.form-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr; 
-  gap: 2.5rem; 
-  @media (max-width: 768px) { grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
-}
-
-.form-field {
-  margin-bottom: 0.5rem;
-  &.full-width { grid-column: 1 / -1; }
-
-  label {
-    display: block; font-size: 0.95rem; font-weight: 600;
-    color: var(--color-texto-secundario); margin-bottom: 0.75rem;
+  .card-content {
+    flex-grow: 1; margin-bottom: 1.5rem;
+    h3 { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--color-primario); }
+    p { font-size: 0.95rem; color: var(--color-texto-secundario); margin: 0; line-height: 1.5; }
   }
 
-  .input-wrapper {
-    position: relative;
-    .icon {
-      position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
-      color: #94a3b8; display: flex; svg { width: 22px; height: 22px; }
-    }
-
-    input, select {
-      width: 100%; padding: 1rem 1.2rem 1rem 3.2rem;
-      border: 1px solid var(--color-borde-suave); border-radius: 12px;
-      font-size: 1.05rem; color: var(--color-texto-principal); background-color: #fff;
-      transition: all 0.2s;
-      &:focus { outline: none; border-color: var(--color-primario); box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.1); }
-    }
-    select { padding-left: 1.2rem; appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 1rem center; background-size: 16px; }
-    
-    /* Input simple sin icono */
-    .input-style { padding-left: 1rem; }
+  .card-action {
+    display: inline-block; padding: 0.6rem 1.5rem;
+    border-radius: 50px; border: 2px solid #e2e8f0;
+    font-weight: 600; font-size: 0.9rem;
+    color: var(--color-texto-secundario);
+    transition: all 0.3s ease;
+    width: fit-content; margin: 0 auto;
   }
-  .error { color: var(--color-error); font-size: 0.85rem; margin-top: 0.5rem; font-weight: 500; }
 }
 
 /* =========================================
-   NUEVO: SWITCH DE ABOGADO (TARJETA PREMIUM)
+   PASO 1: FORMULARIO DETALLADO
    ========================================= */
-.abogado-switch-card {
-  background-color: #f8fafc;
-  border: 2px solid #e2e8f0; 
-  border-radius: 16px;
-  padding: 1.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 2rem;
-  transition: all 0.3s ease;
+.back-nav-container { margin-bottom: 2rem; }
+
+.btn-back-premium {
+  display: inline-flex; align-items: center; gap: 0.8rem;
+  background: transparent; border: none; padding: 0;
+  cursor: pointer; group: hover;
   
-  /* Estado Activo (Rosado/Rojo) */
-  &.active {
-    background-color: #fff1f2; 
-    border-color: #e11d48;
-    box-shadow: 0 4px 12px rgba(225, 29, 72, 0.15);
-    
-    .switch-icon {
-      background-color: #e11d48;
-      color: white;
-    }
+  .back-icon {
+    width: 36px; height: 36px;
+    border-radius: 50%; background-color: white;
+    border: 1px solid var(--color-borde-suave);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--color-secundario); transition: all 0.2s ease;
+    svg { width: 18px; height: 18px; }
+  }
+  
+  .back-text {
+    font-size: 0.95rem; font-weight: 600; color: var(--color-secundario); transition: color 0.2s;
   }
 
-  /* Responsive */
-  @media(max-width: 600px) {
-    flex-direction: column; 
-    align-items: flex-start;
-    gap: 1rem;
-    .switch-big { align-self: flex-end; }
+  &:hover {
+    .back-icon { background-color: var(--color-primario); border-color: var(--color-primario); color: white; }
+    .back-text { color: var(--color-primario); }
   }
 }
 
-.switch-content {
-  display: flex; gap: 1rem; align-items: center;
+/* --- Caja de Información (Formularios) --- */
+.info-box {
+  background-color: #eff6ff; /* Celeste suave */
+  border: 1px solid #bfdbfe;
+  border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem;
+  display: flex; gap: 1rem; align-items: flex-start;
   
-  .switch-icon {
-    width: 48px; height: 48px;
-    background-color: #e2e8f0;
-    color: #64748b;
-    border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-    transition: all 0.3s;
+  .info-icon svg { width: 24px; height: 24px; color: #2563eb; }
+  
+  .info-content {
+    .info-title { font-weight: 700; color: #1e3a8a; margin-bottom: 0.25rem; font-size: 1.05rem; }
+    .info-subtitle { color: #1e40af; font-size: 0.95rem; margin-bottom: 1rem; }
+    
+    .info-links {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+      
+      .link-descarga {
+        display: inline-flex; align-items: center; gap: 0.5rem;
+        background-color: white; color: #2563eb;
+        padding: 0.5rem 1rem; border-radius: 6px; font-weight: 600; font-size: 0.9rem;
+        border: 1px solid #bfdbfe; transition: all 0.2s;
+        
+        &:hover { background-color: #2563eb; color: white; border-color: #2563eb; }
+      }
+    }
+  }
+}
+
+/* --- Estructura del Formulario --- */
+fieldset {
+  border: none; margin: 0; padding: 0; margin-bottom: 3rem;
+  
+  legend {
+    font-size: 1.25rem; font-weight: 700; color: var(--color-primario);
+    margin-bottom: 0.5rem; width: 100%; border-bottom: 2px solid var(--color-borde-suave);
+    padding-bottom: 0.5rem;
+    
+    &.legend-red { border-bottom-color: #fca5a5; color: #b91c1c; }
+  }
+}
+
+.subtitle-prestacion { font-size: 0.95rem; color: var(--color-texto-secundario); margin-bottom: 1.5rem; }
+
+.form-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
+}
+
+/* --- Inputs Genéricos --- */
+.form-field {
+  display: flex; flex-direction: column; gap: 0.5rem; position: relative;
+  
+  &.full-width { grid-column: 1 / -1; }
+  
+  label { font-size: 0.9rem; font-weight: 600; color: var(--color-texto-principal); }
+  
+  .input-wrapper {
+    position: relative; display: flex; align-items: center;
+    background-color: white; border: 1px solid var(--color-borde-suave);
+    border-radius: 8px; transition: all 0.2s; overflow: hidden;
+    
+    &:focus-within { border-color: var(--color-primario); box-shadow: 0 0 0 3px rgba(15,23,42,0.1); }
+    
+    .icon {
+      padding: 0 12px; color: var(--color-secundario); display: flex; align-items: center; justify-content: center;
+      svg { width: 20px; height: 20px; }
+      &.top-icon { align-self: flex-start; padding-top: 12px; }
+    }
+    
+    input {
+      flex-grow: 1; border: none; padding: 0.75rem 1rem 0.75rem 0; font-size: 1rem;
+      color: var(--color-texto-principal); background: transparent; outline: none;
+      &::placeholder { color: #94a3b8; }
+    }
+  }
+
+  /* Variante Textarea */
+  .textarea-wrapper {
+    align-items: flex-start;
+    .custom-textarea {
+      flex-grow: 1; border: none; padding: 0.75rem 1rem 0.75rem 0; font-size: 1rem;
+      color: var(--color-texto-principal); background: transparent; outline: none;
+      resize: vertical; min-height: 100px;
+      &::placeholder { color: #94a3b8; }
+    }
+  }
+}
+
+.footer-hint { margin-top: 4px; color: #64748b; font-style: italic; }
+
+/* --- Mensajes de Error --- */
+.error-container { min-height: 20px; margin-top: 4px; }
+.error { color: #dc2626; font-size: 0.85rem; font-weight: 500; display: flex; align-items: center; gap: 4px; }
+.error-text-center { text-align: center; color: #dc2626; font-size: 0.9rem; font-weight: 600; margin-top: 1rem; }
+.error-text-red { color: #dc2626; font-size: 0.85rem; font-weight: 600; margin-top: 0.5rem; text-align: center; }
+.error-global { background-color: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; padding: 1rem; border-radius: 8px; text-align: center; font-weight: 600; margin-bottom: 1.5rem; }
+
+
+/* --- Opciones Tipo "Card" (Para Selección Médica) --- */
+.prestaciones-options {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;
+}
+
+.option-card {
+  border: 2px solid var(--color-borde-suave); border-radius: 12px; padding: 1.25rem;
+  cursor: pointer; position: relative; transition: all 0.2s ease;
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+  background-color: white;
+  
+  .opt-icon {
+    width: 48px; height: 48px; border-radius: 50%; background-color: #f1f5f9;
+    color: var(--color-secundario); display: flex; align-items: center; justify-content: center;
+    margin-bottom: 1rem; transition: all 0.2s;
     svg { width: 24px; height: 24px; }
   }
 
-  .switch-text {
-    strong { display: block; font-size: 1.05rem; color: #1e293b; margin-bottom: 4px; }
-    p { margin: 0; font-size: 0.9rem; color: #64748b; line-height: 1.4; }
+  .opt-info {
+    h4 { font-size: 1rem; margin-bottom: 0.5rem; color: var(--color-primario); }
+    span { font-size: 0.85rem; color: var(--color-texto-secundario); line-height: 1.4; display: block; }
+  }
+
+  .check-circle {
+    position: absolute; top: 12px; right: 12px; width: 20px; height: 20px;
+    border-radius: 50%; border: 2px solid var(--color-borde-suave); transition: all 0.2s;
+  }
+
+  &:hover { border-color: #cbd5e1; background-color: #f8fafc; }
+
+  &.selected {
+    border-color: var(--color-acento); background-color: #f0f9ff;
+    .opt-icon { background-color: var(--color-acento); color: white; }
+    .check-circle { 
+      border-color: var(--color-acento); background-color: var(--color-acento);
+      &::after {
+        content: ''; position: absolute; left: 5px; top: 2px; width: 4px; height: 8px;
+        border: solid white; border-width: 0 2px 2px 0; transform: rotate(45deg);
+      }
+    }
   }
 }
 
-/* SWITCH GRANDE */
-.switch-big {
-  position: relative; display: inline-block; width: 60px; height: 32px; flex-shrink: 0;
-  input { opacity: 0; width: 0; height: 0; }
+
+/* --- Subida de Archivos (Inputs File) --- */
+.files-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;
 }
 
-.slider-big {
-  position: absolute; cursor: pointer;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background-color: #cbd5e1; transition: .4s;
-  &:before {
-    position: absolute; content: ""; height: 24px; width: 24px;
-    left: 4px; bottom: 4px; background-color: white; transition: .4s;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+.form-field-file {
+  display: flex; flex-direction: column; gap: 0.5rem;
+  &.full-width { grid-column: 1 / -1; }
+  label { font-size: 0.95rem; font-weight: 600; color: var(--color-texto-principal); }
+  .file-input-hidden { display: none; }
+}
+
+.file-upload-label {
+  display: flex; align-items: center; gap: 1rem; padding: 1rem;
+  background-color: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 12px;
+  cursor: pointer; transition: all 0.2s ease; margin: 0;
+
+  &:hover { border-color: var(--color-acento); background-color: #f0f9ff; .btn-icon { transform: scale(1.05); } }
+
+  .btn-icon {
+    width: 42px; height: 42px; border-radius: 10px; background-color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: center;
+    color: var(--color-secundario); transition: all 0.2s; flex-shrink: 0;
+    svg { width: 20px; height: 20px; }
   }
-  &.round { border-radius: 34px; &:before { border-radius: 50%; } }
-}
-input:checked + .slider-big { background-color: #e11d48; } 
-input:checked + .slider-big:before { transform: translateX(28px); }
 
-/* =========================================
-   NUEVO: ZONA DE CARGA ROJA (REVOCA)
-   ========================================= */
-.revoca-alert-container {
-  background-color: #fef2f2;
-  border: 1px dashed #f87171;
-  border-radius: 12px;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-  animation: slideInDown 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.alert-header {
-  display: flex; align-items: center; gap: 8px;
-  margin-bottom: 1rem;
-  color: #991b1b;
-  font-weight: 700;
-  font-size: 0.9rem;
-  letter-spacing: 0.5px;
-  .alert-icon { width: 20px; height: 20px; color: #dc2626; }
-}
-
-/* Botón Rojo de Revoca */
-.file-upload-label.revoca-theme {
-  background-color: white;
-  border: 2px solid #fecaca;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 1rem 1.5rem;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.2s;
-  
-  &:hover {
-    border-color: #ef4444; background-color: #fff5f5; transform: translateY(-2px);
+  .file-info {
+    display: flex; flex-direction: column; overflow: hidden; flex-grow: 1;
+    .label-text { font-size: 0.9rem; font-weight: 600; color: var(--color-primario); }
+    .file-name { font-size: 0.8rem; color: var(--color-texto-secundario); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   }
 
   &.uploaded {
-    background-color: #ecfdf5; border-color: #10b981;
-    .btn-icon-red { background-color: #10b981; color: white; }
-    .label-text-red { color: #047857; }
+    border-style: solid; border-color: var(--color-exito); background-color: #ecfdf5;
+    .btn-icon { background-color: var(--color-exito); color: white; }
+    .label-text { color: var(--color-exito); }
+  }
+}
+
+/* Switch & Alerta para "Abogado Anterior" */
+.abogado-switch-card {
+  background-color: white; border: 1px solid var(--color-borde-suave); border-radius: 12px;
+  padding: 1.5rem; margin-bottom: 2rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  transition: all 0.3s;
+  
+  .switch-content {
+    display: flex; align-items: flex-start; gap: 1rem;
+    .switch-icon { width: 40px; height: 40px; border-radius: 8px; background-color: #f1f5f9; color: var(--color-secundario); display: flex; align-items: center; justify-content: center; flex-shrink: 0; svg { width: 24px; height: 24px; } }
+    .switch-text { strong { display: block; font-size: 1rem; color: var(--color-primario); margin-bottom: 0.25rem; } p { margin: 0; font-size: 0.85rem; color: var(--color-texto-secundario); } }
+  }
+  
+  &.active { border-color: #fca5a5; background-color: #fef2f2; .switch-icon { background-color: #fee2e2; color: #dc2626; } }
+}
+
+/* Switch Estilo iOS (Grande) */
+.switch-big { position: relative; display: inline-block; width: 60px; height: 34px; flex-shrink: 0; }
+.switch-big input { opacity: 0; width: 0; height: 0; }
+.slider-big { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e1; transition: .4s; border-radius: 34px; }
+.slider-big:before { position: absolute; content: ""; height: 26px; width: 26px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+input:checked + .slider-big { background-color: var(--color-acento); }
+input:focus + .slider-big { box-shadow: 0 0 1px var(--color-acento); }
+input:checked + .slider-big:before { transform: translateX(26px); }
+
+
+/* Bloque Alerta Revoca */
+.revoca-alert-container {
+  background-color: #fff; border: 2px dashed #fca5a5; border-radius: 12px; padding: 1.5rem; text-align: center;
+  
+  .alert-header {
+    display: inline-flex; align-items: center; gap: 0.5rem; background-color: #fee2e2; color: #b91c1c;
+    padding: 0.5rem 1rem; border-radius: 50px; font-weight: 700; font-size: 0.85rem; margin-bottom: 1rem;
+    .alert-icon { width: 18px; height: 18px; }
+  }
+}
+
+.file-upload-label.revoca-theme {
+  border: 1px solid #e2e8f0; border-style: dashed; max-width: 400px; margin: 0 auto;
+  .upload-arrow { color: #94a3b8; svg { width: 24px; height: 24px; animation: bounceRight 2s infinite; } }
+  
+  &.uploaded {
+    border-style: solid; border-color: #ef4444; background-color: #fef2f2;
+    .btn-icon-red { background-color: #ef4444; color: white; }
+    .label-text-red { color: #b91c1c; }
     .upload-arrow { display: none; }
   }
 }
 
-.btn-icon-red {
-  width: 44px; height: 44px;
-  background-color: #fee2e2; color: #dc2626;
-  border-radius: 10px;
-  display: flex; align-items: center; justify-content: center;
-  margin-right: 1rem;
-  svg { width: 24px; height: 24px; }
-}
+.btn-icon-red { width: 42px; height: 42px; border-radius: 10px; background-color: #fef2f2; display: flex; align-items: center; justify-content: center; color: #dc2626; flex-shrink: 0; svg { width: 20px; height: 20px; } }
+.label-text-red { font-size: 0.9rem; font-weight: 700; color: #dc2626; display: block; }
+.file-name-red { font-size: 0.8rem; color: #64748b; display: block; }
 
-.label-text-red { font-weight: 700; color: #b91c1c; font-size: 1rem; }
-.file-name-red { font-size: 0.85rem; color: #7f1d1d; }
-.upload-arrow { color: #ef4444; svg { width: 24px; height: 24px; } }
-.error-text-red { color: #dc2626; font-weight: 600; font-size: 0.85rem; margin-top: 0.5rem; display: block; }
 
-/* Archivos Standard (Azules) */
-.form-field-file {
-  grid-column: 1 / -1;
-  label { font-size: 1rem; font-weight: 600; color: var(--color-texto-principal); margin-bottom: 0.75rem; display: block; }
-}
-.file-input-hidden { display: none; }
-
-.file-upload-label {
-  display: flex; align-items: center; padding: 1.5rem;
-  border: 2px dashed #cbd5e1; border-radius: 16px; background-color: #f8fafc;
-  cursor: pointer; transition: all 0.2s ease; gap: 1.5rem;
-
-  &:hover {
-    border-color: var(--color-primario); background-color: #f0f9ff;
-    .btn-icon { background-color: var(--color-primario); color: white; transform: scale(1.1); }
-  }
-
-  &.uploaded {
-    border-style: solid; border-color: var(--color-exito); background-color: #f0fdf4;
-    .btn-icon { background-color: var(--color-exito); color: white; }
-    .label-text { color: var(--color-exito); font-weight: 700; }
-  }
-
-  .btn-icon {
-    width: 50px; height: 50px; border-radius: 10px; background-color: #e2e8f0; color: #64748b;
-    display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0;
-    svg { width: 28px; height: 28px; }
-  }
-
-  .file-info {
-    display: flex; flex-direction: column;
-    .label-text { font-size: 1rem; font-weight: 700; color: var(--color-primario); margin-bottom: 0.25rem; }
-    .file-name { font-size: 0.9rem; color: #64748b; }
-  }
-}
-
-/* Botón Submit */
-.btn-largo {
-  width: 100%; padding: 1.2rem; font-size: 1.2rem; font-weight: 700; margin-top: 1rem; border-radius: 12px;
-  background: var(--color-acento); border: none; box-shadow: 0 10px 25px -5px rgba(255, 49, 49, 0.4);
-  &:hover { background: var(--color-acento-hover); box-shadow: 0 15px 35px -5px rgba(255, 49, 49, 0.5); transform: translateY(-2px); }
-  &:disabled { background: #cbd5e1; box-shadow: none; transform: none; }
-}
-
-/* =========================================
-   PANTALLA DE ÉXITO (TICKET COMPACTO)
-   ========================================= */
-
-.success-wrapper {
-  text-align: center;
-  /* 1. ANCHO MÁS PEQUEÑO: Match con Consultar Trámite */
-  max-width: 480px; 
-  margin: 0 auto; /* Centrado */
-  padding: 1rem 0; /* Menos aire vertical */
-}
-
-/* 1. Header con Icono */
-.success-header {
-  margin-bottom: 2rem; /* Menos separación */
-  
-  .icon-circle-check {
-    width: 70px; height: 70px; /* Un poco más chico */
-    margin: 0 auto 1rem auto;
-    color: #10b981; background-color: #ecfdf5;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 0 0 6px #f0fdf4;
-    animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    
-    svg { width: 40px; height: 40px; }
-  }
-
-  h2 {
-    font-size: 1.8rem; /* Tamaño equilibrado */
-    font-weight: 800; color: var(--color-texto-principal);
-    margin-bottom: 0.5rem; letter-spacing: -0.5px;
-  }
-  p { font-size: 1rem; color: var(--color-texto-secundario); }
-}
-
-/* 2. El Ticket del Código (Compacto) */
-.code-ticket {
-  background-color: #f8fafc;
-  border: 2px dashed #cbd5e1;
-  border-radius: 12px;
-  padding: 1.5rem; /* Menos padding interno */
-  margin-bottom: 2rem;
-  position: relative;
-  transition: all 0.2s ease;
-
-  &:hover { border-color: var(--color-primario); background-color: #f0f9ff; }
-
-  .ticket-label {
-    display: block; font-size: 0.7rem; font-weight: 800; letter-spacing: 1px;
-    text-transform: uppercase; color: #64748b; margin-bottom: 0.8rem;
-  }
-
-  .code-row {
-    display: flex; flex-direction: column; /* En columna por defecto queda mejor en ticket angosto */
-    align-items: center; justify-content: center; gap: 0.8rem;
-    cursor: pointer;
-    
-    .the-code {
-      font-family: 'Courier New', monospace;
-      font-size: 2.2rem; /* Código grande pero no gigante */
-      font-weight: 800; color: var(--color-primario);
-      letter-spacing: 2px; line-height: 1;
-    }
-
-    .btn-copy {
-      background-color: white; border: 1px solid #e2e8f0;
-      color: #64748b; padding: 0.4rem 1rem; border-radius: 50px;
-      display: flex; align-items: center; gap: 6px; font-size: 0.8rem; font-weight: 600;
-      cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-      svg { width: 14px; height: 14px; }
-      
-      &:hover { background-color: var(--color-primario); color: white; border-color: var(--color-primario); }
-      &:active { transform: scale(0.95); }
-    }
-  }
-
-  .ticket-footer {
-    margin-top: 1.2rem; border-top: 1px solid #e2e8f0; padding-top: 0.8rem;
-    small { font-size: 0.85rem; color: #94a3b8; font-weight: 500; }
-  }
-}
-
-/* 3. Botones Finales (Idénticos y Estáticos) */
-.success-actions {
-  display: flex; 
-  flex-direction: column; 
-  gap: 1rem; 
-  margin-top: 2rem;
-  
-  /* Estilo BASE compartido para que midan EXACTAMENTE lo mismo */
-  .btn-largo {
-    width: 100%;
-    /* Altura fija o padding idéntico */
-    padding: 1rem; 
-    font-size: 1rem; 
-    font-weight: 700;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    box-sizing: border-box; /* Clave: para que el borde no sume tamaño extra */
-    cursor: pointer;
-  }
-
-  /* Botón Primario (Con animación suave) */
-  .btn-primary {
-    background-color: var(--color-primario);
-    color: white;
-    border: 2px solid var(--color-primario); /* Borde invisible para igualar tamaño */
-    transition: background-color 0.2s;
-    
-    &:hover {
-      background-color: var(--color-primario-hover);
-      border-color: var(--color-primario-hover);
-    }
-  }
-
-  /* Botón Secundario (SIN ANIMACIÓN DE MOVIMIENTO) */
-  .btn-secondary {
-    background: transparent;
-    border: 2px solid #e2e8f0;
-    color: #64748b;
-    /* Quitamos transition para que sea instantáneo o solo color */
-    transition: none; 
-    
-    &:hover {
-      /* Solo cambio de color, SIN transform, SIN shadow */
-      background-color: #f8fafc;
-      border-color: #cbd5e1;
-      color: #334155;
-    }
-    
-    &:active {
-      background-color: #f1f5f9;
-    }
-  }
-}
-
-/* Animaciones */
-@keyframes popIn {
-  0% { transform: scale(0); opacity: 0; }
-  80% { transform: scale(1.1); opacity: 1; }
-  100% { transform: scale(1); }
-}
-.anim-scale-in { animation: popIn 0.4s ease-out; }
-
-/* Mobile específico */
-@media (max-width: 600px) {
-  .success-wrapper { padding: 0; } /* Sin padding extra en mobile */
-  .code-ticket { padding: 1.2rem; }
-  .code-row .the-code { font-size: 1.8rem; }
-}
-
-/* =========================================
-   AJUSTES MOBILE ESPECÍFICOS (Ticket)
-   ========================================= */
-@media (max-width: 600px) {
-  
-  .success-wrapper { padding: 1rem 0; }
-
-  .success-header {
-    h2 { font-size: 1.8rem; }
-    p { font-size: 1rem; }
-  }
-
-  .code-ticket {
-    padding: 1.5rem 1rem; /* Menos padding interno */
-    
-    .code-row {
-      flex-direction: column; /* Apilamos código y botón */
-      gap: 0.8rem;
-      
-      .the-code {
-        font-size: 2rem; /* Un poco más chico para que entre seguro */
-        word-break: break-all; /* Seguridad por si el código es larguísimo */
-      }
-      
-      .btn-copy {
-        width: 100%; justify-content: center; padding: 0.8rem; /* Botón fácil de tocar */
-      }
-    }
-  }
-}
-
-/* =========================================
-   SPINNER & ANIMACIONES
-   ========================================= */
-.spinner {
-  width: 24px; height: 24px; border: 3px solid rgba(255, 255, 255, 0.3); border-top-color: #ffffff;
-  border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto;
-}
+.btn-largo { width: 100%; padding: 1rem; font-size: 1.1rem; border-radius: 12px; margin-top: 1rem; }
+.spinner { width: 24px; height: 24px; border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: #fff; animation: spin 1s ease-in-out infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes slideInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes bounceRight { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(5px); } }
+
 
 /* =========================================
-   AJUSTES MOBILE ESPECÍFICOS
+   PASO 2: TICKET DE ÉXITO
    ========================================= */
+.success-wrapper {
+  text-align: center; padding: 2rem 1rem;
+  
+  .success-header {
+    margin-bottom: 2.5rem;
+    
+    .icon-circle-check {
+      width: 80px; height: 80px; margin: 0 auto 1.5rem auto;
+      background-color: #dcfce7; color: #16a34a; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 0 10px rgba(22, 163, 74, 0.1);
+      svg { width: 40px; height: 40px; }
+    }
+    
+    h2 { font-size: 2rem; color: #166534; margin-bottom: 0.5rem; }
+    p { color: var(--color-texto-secundario); font-size: 1.1rem; }
+  }
+}
+
+.code-ticket {
+  background: white; border: 2px dashed var(--color-borde-suave); border-radius: 16px;
+  padding: 2rem; margin-bottom: 3rem; position: relative;
+  
+  .ticket-label {
+    position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+    background: white; padding: 0 1rem; font-size: 0.8rem; font-weight: 700;
+    color: var(--color-secundario); letter-spacing: 1px;
+  }
+  
+  .code-row {
+    display: flex; align-items: center; justify-content: center; gap: 1.5rem;
+    background-color: #f8fafc; padding: 1.5rem; border-radius: 12px; cursor: pointer;
+    transition: all 0.2s; border: 1px solid transparent;
+    
+    &:hover { border-color: var(--color-acento); background-color: #f0f9ff; }
+    
+    .the-code { font-family: monospace; font-size: 2.5rem; font-weight: 800; color: var(--color-primario); letter-spacing: 4px; }
+    
+    .btn-copy {
+      background: var(--color-primario); color: white; border: none;
+      padding: 0.5rem 1rem; border-radius: 8px; display: flex; align-items: center; gap: 0.5rem;
+      font-weight: 600; cursor: pointer; transition: background 0.2s;
+      svg { width: 18px; height: 18px; }
+      &:hover { background: var(--color-acento); }
+    }
+  }
+  
+  .ticket-footer { margin-top: 1.5rem; color: #b45309; font-weight: 500; }
+}
+
+.result-actions { max-width: 300px; margin: 0 auto; }
+
+/* Utilidades de Animación */
+.anim-slide-down { animation: slideDown 0.3s ease-out; transform-origin: top; }
+@keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+.anim-scale-in { animation: scaleIn 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+@keyframes scaleIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+.fade-in-up { animation: fadeInUp 0.4s ease-out; }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Responsive */
 @media (max-width: 768px) {
-  .page-container { padding: 0 1rem; }
-
-  /* FIX DEL GRID PARA QUE NO SE CORTE */
-  .tramite-grid {
-    display: grid;
-    grid-template-columns: 1fr; /* 1 columna forzada */
-    gap: 1.5rem;
-    width: 100%;
-  }
-
-  .tramite-card {
-    padding: 1.5rem;
-  }
-
-  .back-nav-container { margin-bottom: 1.5rem; }
-  .btn-back-premium {
-    padding: 0.4rem 1rem 0.4rem 0.4rem;
-    .back-icon { width: 32px; height: 32px; svg { width: 16px; height: 16px; } }
-    .back-text { font-size: 0.85rem; }
-  }
-
-  .info-box {
-    padding: 1rem; gap: 0.8rem; align-items: flex-start; flex-direction: row;
-    .info-icon { padding: 8px; border-radius: 8px; svg { width: 20px; height: 20px; } }
-    .info-content {
-      .info-title { font-size: 0.95rem; margin-bottom: 0.2rem; line-height: 1.3; }
-      .info-links {
-        font-size: 0.9rem; display: flex; flex-wrap: wrap; gap: 0.5rem;
-        .separator { display: none; }
-        a { background-color: white; padding: 2px 8px; border-radius: 4px; border: 1px solid #dbeafe; text-decoration: none; font-size: 0.8rem; margin-right: 5px; }
-      }
-    }
-  }
-}
-
-/* -------------------------------------------
-   SELECCIÓN DE PRESTACIONES (CARDS)
-   ------------------------------------------- */
-.subtitle-prestacion {
-  color: #64748b;
-  font-size: 0.95rem;
-  margin-bottom: 1.5rem;
-}
-
-.prestaciones-options {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-
-.option-card {
-  background-color: #fff;
-  border: 2px solid #e2e8f0;
-  border-radius: 16px;
-  padding: 1.25rem;
-  cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-
-  /* HOVER */
-  &:hover {
-    border-color: #cbd5e1;
-    background-color: #f8fafc;
-    transform: translateY(-2px);
-  }
-
-  /* SELECTED STATE (Activo) */
-  &.selected {
-    border-color: var(--color-primario);
-    background-color: #eff6ff; /* Azul muy suave */
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
-
-    .opt-icon {
-      background-color: var(--color-primario);
-      color: white;
-    }
-
-    .check-circle {
-      border-color: var(--color-primario);
-      background-color: var(--color-primario);
-      &::after { transform: scale(1); } /* Muestra el tick */
-    }
-  }
-}
-
-/* Ícono de la izquierda */
-.opt-icon {
-  width: 44px; height: 44px;
-  background-color: #f1f5f9;
-  color: #64748b;
-  border-radius: 12px;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-  transition: all 0.3s;
-  svg { width: 24px; height: 24px; }
-}
-
-/* Textos */
-.opt-info {
-  flex-grow: 1;
-  h4 { margin: 0 0 0.25rem 0; font-size: 1rem; color: #334155; font-weight: 700; }
-  span { font-size: 0.85rem; color: #64748b; line-height: 1.3; display: block; }
-}
-
-/* Círculo de selección (Radio fake) */
-.check-circle {
-  width: 20px; height: 20px;
-  border: 2px solid #cbd5e1;
-  border-radius: 50%;
-  position: relative;
-  transition: all 0.2s;
-  flex-shrink: 0;
-
-  /* El puntito blanco del medio */
-  &::after {
-    content: '';
-    position: absolute;
-    width: 8px; height: 8px;
-    background-color: white;
-    border-radius: 50%;
-    top: 50%; left: 50%;
-    margin-left: -4px; margin-top: -4px;
-    transform: scale(0); /* Oculto por defecto */
-    transition: transform 0.2s;
-  }
-}
-
-/* Error centrado */
-.error-text-center {
-  text-align: center;
-  color: var(--color-error);
-  font-weight: 600;
-  font-size: 0.9rem;
-  margin-top: 1rem;
-  background-color: #fef2f2;
-  padding: 0.5rem;
-  border-radius: 8px;
-}
-
-/* Animación de entrada */
-.fade-in-up {
-  animation: fadeInUp 0.4s ease-out;
-}
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* Ajuste Mobile */
-@media(max-width: 600px) {
-  .prestaciones-options {
-    grid-template-columns: 1fr; /* Una abajo de otra en celus */
-  }
-}
-
-/* =========================================
-   AJUSTES MOBILE ESPECÍFICOS (FINAL DEL ARCHIVO)
-   ========================================= */
-@media (max-width: 768px) {
-  
-  /* 1. Contenedor con menos aire lateral */
-  .page-container {
-    padding: 0 1rem;
-    margin: 2rem auto; /* Menos margen arriba/abajo */
-  }
-
-  /* 2. HEADER COMPACTO (CRÍTICO) */
-  .custom-header {
-    margin-bottom: 2rem;
-    
-    h1 {
-      font-size: 1.75rem; /* Bajamos de 2.5rem a 1.75rem */
-      line-height: 1.2;
-    }
-    
-    p {
-      font-size: 1rem; /* Texto estándar de lectura */
-      margin-top: 0.5rem;
-    }
-
-    .badge-revoca {
-      font-size: 0.7rem; /* Badge más discreto */
-      padding: 0.4rem 0.8rem;
-    }
-  }
-
-  /* 3. FIX DEL GRID PARA QUE NO SE CORTE */
-  .tramite-grid {
-    display: grid;
-    grid-template-columns: 1fr; /* 1 columna forzada */
-    gap: 1rem;
-    width: 100%;
-  }
-
-  /* 4. TARJETAS MÁS COMPACTAS */
-  .tramite-card {
-    padding: 1.5rem;
-    
-    .card-icon { 
-      width: 50px; height: 50px; margin-bottom: 1rem;
-      svg { width: 24px; height: 24px; }
-    }
-
-    .card-content {
-      margin-bottom: 1.5rem;
-      h3 { font-size: 1.2rem; } /* Título de tarjeta más chico */
-      p { font-size: 0.9rem; line-height: 1.5; }
-    }
-  }
-
-  /* 5. SWITCH ABOGADO MOBILE */
-  .abogado-switch-card {
-    flex-direction: column; /* Icono/Texto arriba, Switch abajo */
-    align-items: flex-start;
-    gap: 1rem;
-    padding: 1.2rem;
-
-    .switch-big {
-      align-self: flex-end; /* Switch a la derecha */
-    }
-    
-    .switch-content {
-      align-items: flex-start; /* Icono alineado al inicio del texto */
-      .switch-text strong { font-size: 1rem; }
-      .switch-text p { font-size: 0.85rem; }
-    }
-  }
-
-  /* 6. OPCIONES PRESTACIONES (Una abajo de otra) */
-  .prestaciones-options {
-    grid-template-columns: 1fr;
-  }
-  
-  .option-card {
-    padding: 1rem;
-    .opt-info h4 { font-size: 0.95rem; }
-    .opt-info span { font-size: 0.8rem; }
-  }
-
-  /* 7. BOTONES NAVEGACIÓN */
-  .back-nav-container { margin-bottom: 1rem; }
-  .btn-back-premium {
-    padding: 0.4rem 1rem 0.4rem 0.4rem;
-    .back-icon { width: 32px; height: 32px; svg { width: 16px; height: 16px; } }
-    .back-text { font-size: 0.85rem; }
-  }
-
-  /* 8. INFO BOX COMPACTA */
-  .info-box {
-    padding: 1rem; gap: 0.8rem; align-items: flex-start; flex-direction: column;
-    text-align: center;
-    
-    .info-content { width: 100%; }
-    .info-links {
-      justify-content: center; margin-top: 0.5rem;
-      .separator { display: none; }
-      a { 
-        display: block; width: 100%; margin: 5px 0; 
-        background: white; border: 1px solid #dbeafe; padding: 8px; border-radius: 6px;
-      }
-    }
-  }
-}
-
-/* --- ESTILOS PARA EL TEXTAREA PREMIUM --- */
-
-.textarea-wrapper {
-  align-items: flex-start !important; /* Importante: Alinea el icono arriba */
-  height: auto !important; /* Permitir que crezca */
-  min-height: 120px; /* Altura mínima cómoda */
-  border-radius: 16px !important; /* Bordes bien redondos */
-  background-color: #ffffff;
-  transition: all 0.3s ease;
-  
-  /* Icono alineado arriba con un poco de ajuste */
-  .top-icon {
-    margin-top: 4px; 
-    color: #94a3b8;
-    svg { width: 24px; height: 24px; }
-  }
-
-  /* El Textarea en sí */
-  .custom-textarea {
-    width: 100%;
-    height: 100%;
-    min-height: 100px;
-    border: none;
-    background: transparent;
-    padding: 0 0.5rem;
-    font-size: 1rem;
-    line-height: 1.5;
-    color: #1e293b; /* Color de texto oscuro */
-    resize: vertical; /* Permite agrandar solo hacia abajo */
-    font-family: inherit; /* Hereda la fuente de la app (no Courier) */
-    outline: none;
-
-    &::placeholder {
-      color: #cbd5e1;
-      font-weight: 400;
-    }
-  }
-
-  /* Efecto Focus (Cuando escribís) */
-  &:focus-within {
-    border-color: var(--color-primario); /* Tu azul */
-    box-shadow: 0 4px 20px rgba(37, 99, 235, 0.15); /* Sombra azul suave */
-    transform: translateY(-1px);
-    
-    .top-icon { color: var(--color-primario); }
-  }
-}
-
-/* --- ESTILOS DEL TEXTAREA (Igual a los inputs) --- */
-
-.textarea-wrapper {
-  position: relative; /* Necesario para ubicar el ícono arriba a la izquierda */
-  display: flex;
-  
-  /* 1. El Ícono (Anclado arriba) */
-  .top-icon {
-    position: absolute;
-    left: 16px; 
-    top: 16px; /* Alineado con la primera línea de texto */
-    color: #94a3b8; /* Gris suave */
-    pointer-events: none; /* Para que el click pase al textarea */
-    transition: color 0.3s ease;
-    
-    svg { width: 22px; height: 22px; }
-  }
-
-  /* 2. El Input (Textarea) */
-  .custom-textarea {
-    width: 100%;
-    height: 140px; /* Altura fija para que quede prolijo */
-    
-    /* Padding: 3.2rem a la izquierda para dejar lugar al ícono */
-    padding: 1rem 1rem 1rem 3.2rem; 
-    
-    /* --- AQUÍ ESTÁ EL BORDE QUE PEDISTE --- */
-    border: 1px solid var(--color-borde-suave); /* O usá #e2e8f0 si no te toma la variable */
-    border-radius: 12px;
-    background-color: #fff;
-    
-    /* Tipografía igual al resto */
-    font-size: 1.05rem;
-    font-family: inherit;
-    color: var(--color-texto-principal);
-    line-height: 1.5;
-    
-    resize: none; /* Bloqueamos que se agrande/achique */
-    outline: none;
-    transition: all 0.2s ease-in-out;
-
-    &::placeholder {
-      color: #cbd5e1;
-      font-weight: 400;
-    }
-
-    /* Estado Focus (Borde Azul y Sombra) */
-    &:focus {
-      border-color: var(--color-primario);
-      box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.1);
-    }
-  }
-
-  /* Cuando escribís, pintamos el ícono de azul */
-  &:focus-within {
-    .top-icon { color: var(--color-primario); }
-  }
-}
-
-/* Footer del input (hint) */
-.footer-hint {
-  display: flex; justify-content: space-between;
-  margin-top: 6px; padding-left: 10px;
-  
-  small { 
-    color: #64748b; font-size: 0.85rem; font-weight: 500; 
-  }
-}
-
-/* Scrollbar personalizada (para que no se vea fea) */
-textarea::-webkit-scrollbar {
-  width: 8px;
-}
-textarea::-webkit-scrollbar-track {
-  background: #f1f5f9;
-  border-radius: 4px;
-}
-textarea::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 4px;
-}
-textarea::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
-}
-
-/* Clase utilitaria por si querés que ocupe todo el ancho en desktop */
-.full-width {
-  grid-column: 1 / -1; /* Si estás usando CSS Grid */
-  width: 100%;
-}
-
-.info-subtitle {
-  font-size: 0.9rem;
-  color: #64748b;
-  margin-bottom: 10px;
-}
-
-.info-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  align-items: center;
-  
-  .link-descarga {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    background-color: #f1f5f9;
-    color: #0f172a;
-    padding: 8px 12px;
-    border-radius: 6px;
-    font-weight: 500;
-    font-size: 0.9rem;
-    text-decoration: none;
-    transition: all 0.2s;
-    border: 1px solid #e2e8f0;
-
-    svg {
-      width: 16px;
-      height: 16px;
-    }
-
-    &:hover {
-      background-color: #e2e8f0;
-      color: #000;
-      border-color: #cbd5e1;
-    }
-  }
-
-  .separator {
-    display: none; // Ocultamos el separador viejo si usamos botones
-  }
+  .form-grid { grid-template-columns: 1fr; }
+  .code-ticket .code-row { flex-direction: column; gap: 1rem; .the-code { font-size: 2rem; } .btn-copy { width: 100%; justify-content: center; padding: 0.8rem; } }
 }
