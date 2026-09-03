@@ -1,45 +1,4 @@
-<div class="page-container anim-fade-in">
-
-  <app-card [titulo]="'Seguimiento de Expediente'">
-
-    <ng-container *ngIf="!resultado && !isLoading">
-      <div class="search-header">
-        <h2>Consultá el estado de tu trámite</h2>
-        <p>Ingresá el código de seguimiento que recibiste por email.</p>
-      </div>
-      
-      <form class="consulta-form" [formGroup]="consultaForm" (ngSubmit)="onSubmit()">
-        <div class="form-field">
-          <div class="input-wrapper-hero">
-            <span class="search-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" /></svg>
-            </span>
-            <input id="codigo" type="text" formControlName="codigo" placeholder="Ingresá tu código aquí..." autocomplete="off">
-          </div>
-          <div *ngIf="consultaForm.get('codigo')?.touched && consultaForm.get('codigo')?.invalid" class="error-msg">
-            El código es requerido.
-          </div>
-        </div>
-
-        <button type="submit" class="btn btn-primary btn-hero" [disabled]="consultaForm.invalid">
-          Buscar Expediente
-        </button>
-      </form>
-
-      <div *ngIf="errorMensaje" class="alert-error anim-slide-up">
-        <div class="icon-error">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" /></svg>
-        </div>
-        <span>{{ errorMensaje }}</span>
-      </div>
-    </ng-container>
-
-    <div *ngIf="isLoading" class="loading-container anim-fade-in">
-      <div class="spinner-grande"></div>
-      <p>Consultando base de datos...</p>
-    </div>
-
-    <div *ngIf="resultado" class="resultado-container anim-slide-up">
+<div *ngIf="resultado" class="resultado-container anim-slide-up">
       
       <div class="result-meta">
         <div class="code-badge">
@@ -51,39 +10,46 @@
         </div>
       </div>
 
-      <div class="current-status-box" [ngClass]="resultado.estado.toLowerCase().replace(' ', '-')">
+      <!-- Caja de Estado Actual -->
+      <div class="current-status-box" [ngClass]="isEstadoExcepcion(resultado.estado) ? 'estado-excepcion' : 'estado-normal'">
         <div class="status-icon-large">
-          <svg *ngIf="resultado.estado === 'Recibido'" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 15L6 9m0 0l3-3m-3 3h15M6 9l3-3m-3 3h15" /></svg>
-          <svg *ngIf="resultado.estado === 'En Proceso'" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-          <svg *ngIf="resultado.estado === 'Finalizado'" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" /></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" /></svg>
         </div>
         <div class="status-texts">
           <span class="label">Estado Actual</span>
-          <h3>{{ resultado.estado }}</h3>
+          <h3>{{ getDatosEstado(resultado.estado).titulo }}</h3>
         </div>
       </div>
 
+      <!-- LÍNEA DE TIEMPO DINÁMICA -->
       <div class="timeline-container">
-        <div class="step" [class.active]="true"> <div class="dot"></div> <span>Recibido</span> </div>
-        <div class="line" [class.active]="resultado.estado === 'En Proceso' || resultado.estado === 'Finalizado'"></div>
-        
-        <div class="step" [class.active]="resultado.estado === 'En Proceso' || resultado.estado === 'Finalizado'"> <div class="dot"></div> <span>En Proceso</span> </div>
-        <div class="line" [class.active]="resultado.estado === 'Finalizado'"></div>
-
-        <div class="step" [class.active]="resultado.estado === 'Finalizado'"> <div class="dot"></div> <span>Finalizado</span> </div>
+        <ng-container *ngFor="let paso of pasosNormales; let i = index; let last = last">
+          <div class="step" [class.active]="i <= getCurrentStepIndex(resultado.estado)"> 
+            <div class="dot"></div> 
+            <span class="d-none d-md-block">{{ paso }}</span>
+          </div>
+          <div class="line" *ngIf="!last" [class.active]="i < getCurrentStepIndex(resultado.estado)"></div>
+        </ng-container>
       </div>
 
+      <!-- Texto descriptivo largo -->
       <p class="result-message">
-        <span *ngIf="resultado.estado === 'Recibido'">Recibimos tu solicitud. Un abogado revisará tu caso pronto.</span>
-        <span *ngIf="resultado.estado === 'En Proceso'">Estamos gestionando tu trámite. Te contactaremos si necesitamos más datos.</span>
-        <span *ngIf="resultado.estado === 'Finalizado'">El trámite ha concluido. Revisá tu email para ver la resolución.</span>
+        {{ getDatosEstado(resultado.estado).descripcion }}
       </p>
+
+      <!-- Botón de WhatsApp dinámico -->
+      <div style="margin-bottom: 1.5rem;">
+        <a [href]="'https://wa.me/5491100000000?text=Hola,%20quiero%20consultar%20por%20un%20reclamo.%20Mi%20código%20es%20' + resultado.codigo_seguimiento" 
+           target="_blank" 
+           rel="noopener noreferrer" 
+           class="btn-whatsapp-dynamic">
+           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="icon"><path d="M19.05 4.91A9.816 9.816 0 0012.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.8 3.08 1.23 4.79 1.23 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.03zM12.04 19.8c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a7.846 7.846 0 01-1.2-4.14c0-4.35 3.54-7.89 7.89-7.89 2.11 0 4.09.82 5.58 2.32 1.49 1.49 2.32 3.47 2.32 5.58 0 4.35-3.54 7.89-7.89 7.89zm4.33-5.91c-.24-.12-1.41-.7-1.63-.78-.22-.08-.38-.12-.54.12s-.61.78-.75.94c-.14.16-.29.18-.52.06-.24-.12-1.01-.37-1.92-1.18-.71-.63-1.19-1.41-1.33-1.65-.14-.24-.02-.37.1-.49.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.3-.74-1.78-.19-.47-.39-.41-.54-.42h-.46c-.16 0-.42.06-.64.3-.22.24-.85.83-.85 2.03s.87 2.36.99 2.52c.12.16 1.72 2.62 4.16 3.67.58.25 1.03.4 1.38.51.58.19 1.11.16 1.53.1.47-.07 1.41-.58 1.61-1.13.2-.55.2-1.02.14-1.12-.06-.1-.22-.16-.46-.28z"/></svg>
+           Consultar por WhatsApp
+        </a>
+      </div>
 
       <button (click)="resetForm()" class="btn btn-secondary btn-outline">
         Consultar otro código
       </button>
 
     </div>
-
-  </app-card>
-</div>

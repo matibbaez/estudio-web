@@ -9,7 +9,7 @@ export interface IReclamo {
   dni: string;
   email: string;
   codigo_seguimiento: string;
-  estado: 'Recibido' | 'En Proceso' | 'Finalizado';
+  estado: string;
   fecha_creacion: string;
   
   // Archivos

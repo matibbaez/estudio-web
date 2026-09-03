@@ -110,9 +110,17 @@
       <div class="form-field">
         <label for="estado">Actualizar Estado:</label>
         <select id="estado" formControlName="estado">
+          <!-- Estados de la línea de tiempo normal -->
           <option value="Recibido">Recibido</option>
-          <option value="En Proceso">En Proceso</option>
-          <option value="Finalizado">Finalizado</option>
+          <option value="En revisión">En revisión</option>
+          <option value="Presentado">Presentado</option>
+          <option value="Con fecha">Con fecha</option>
+          <option value="Audiencia hecha">Audiencia hecha</option>
+          <option value="Dictamen">Dictamen</option>
+          <option value="Cerrado">Cerrado</option>
+          <!-- Estados de excepción -->
+          <option value="Falta documentación">Falta documentación</option>
+          <option value="No podemos tomarlo">No podemos tomarlo</option>
         </select>
       </div>
     </form>

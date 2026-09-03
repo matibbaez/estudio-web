@@ -10,7 +10,7 @@ export interface IReclamo {
   dni: string;
   email: string;
   codigo_seguimiento: string;
-  estado: 'Recibido' | 'En Proceso' | 'Finalizado';
+  estado: string;
   fecha_creacion: string;
   
   // Archivos Base
@@ -132,7 +132,7 @@ export class AdminDashboardComponent implements OnInit {
     this.reclamoSeleccionado = null;
   }
 
-  guardarCambiosModal(nuevoEstado: 'Recibido' | 'En Proceso' | 'Finalizado') {
+  guardarCambiosModal(nuevoEstado: string) {
     if (!this.reclamoSeleccionado) return;
     
     const id = this.reclamoSeleccionado.id;

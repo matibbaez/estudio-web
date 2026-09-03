@@ -21,7 +21,7 @@ export class GestionarReclamoModalComponent implements OnInit {
 
   @Input() reclamo!: IReclamo; 
   @Output() close = new EventEmitter<void>();
-  @Output() save = new EventEmitter<'Recibido' | 'En Proceso' | 'Finalizado'>();
+  @Output() save = new EventEmitter<string>();
 
   private fb = inject(FormBuilder);
   private http = inject(HttpClient); 
@@ -77,7 +77,7 @@ export class GestionarReclamoModalComponent implements OnInit {
   // ------------------------------------------------------------------
   guardarCambios() {
     if (this.estadoForm.valid) {
-      this.save.emit(this.estadoForm.value.estado as 'Recibido' | 'En Proceso' | 'Finalizado');
+      this.save.emit(this.estadoForm.value.estado as string);
     }
   }
 

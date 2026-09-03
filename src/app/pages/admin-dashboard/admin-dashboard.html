@@ -15,8 +15,10 @@
         <div class="status-tabs">
           <button class="tab-btn" [class.active]="filtroEstado === ''" (click)="cambiarEstado('')">Todos</button>
           <button class="tab-btn" [class.active]="filtroEstado === 'Recibido'" (click)="cambiarEstado('Recibido')">Recibidos</button>
-          <button class="tab-btn" [class.active]="filtroEstado === 'En Proceso'" (click)="cambiarEstado('En Proceso')">En Proceso</button>
-          <button class="tab-btn" [class.active]="filtroEstado === 'Finalizado'" (click)="cambiarEstado('Finalizado')">Finalizados</button>
+          <button class="tab-btn" [class.active]="filtroEstado === 'En revisión'" (click)="cambiarEstado('En revisión')">En Revisión</button>
+          <button class="tab-btn" [class.active]="filtroEstado === 'Falta documentación'" (click)="cambiarEstado('Falta documentación')">Falta Doc</button>
+          <button class="tab-btn" [class.active]="filtroEstado === 'No podemos tomarlo'" (click)="cambiarEstado('No podemos tomarlo')">Rechazados</button>
+          <button class="tab-btn" [class.active]="filtroEstado === 'Cerrado'" (click)="cambiarEstado('Cerrado')">Cerrados</button>
         </div>
 
         <div class="filters-right">

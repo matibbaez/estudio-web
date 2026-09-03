@@ -30,6 +30,37 @@ export class ConsultarTramiteComponent {
     codigo: ['', Validators.required]
   });
 
+  // 1. Diccionario con los textos exactos solicitados
+  readonly diccionarioEstados: { [key: string]: { titulo: string, descripcion: string } } = {
+    'Recibido': { titulo: 'Recibido', descripcion: 'Recibimos tu caso. En las próximas 48 horas hábiles revisamos la documentación.' },
+    'En revisión': { titulo: 'En revisión', descripcion: 'Un abogado está revisando lo que cargaste. Si falta algo te escribimos por WhatsApp.' },
+    'Presentado': { titulo: 'Presentado', descripcion: 'Presentamos tu reclamo. A partir de acá los tiempos los marca el organismo.' },
+    'Con fecha': { titulo: 'Con fecha', descripcion: 'Ya tenés fecha de audiencia. Te vamos a avisar qué llevar y a qué hora.' },
+    'Audiencia hecha': { titulo: 'Audiencia hecha', descripcion: 'Se hizo la audiencia. Ahora esperamos el dictamen.' },
+    'Dictamen': { titulo: 'Dictamen', descripcion: 'Salió el dictamen. Un abogado te va a explicar qué dice y cómo sigue.' },
+    'Cerrado': { titulo: 'Cerrado', descripcion: 'Tu trámite terminó.' },
+    'Falta documentación': { titulo: 'Falta documentación', descripcion: 'Necesitamos que nos acerques algo para seguir. Te escribimos por WhatsApp con el detalle.' },
+    'No podemos tomarlo': { titulo: 'No podemos tomarlo', descripcion: 'Revisamos tu caso y no podemos tomarlo. Te explicamos por qué y te orientamos sobre cómo seguir.' }
+  };
+
+  // 2. Array de la línea de tiempo normal
+  readonly pasosNormales = [
+    'Recibido', 'En revisión', 'Presentado', 'Con fecha', 'Audiencia hecha', 'Dictamen', 'Cerrado'
+  ];
+
+  // Helpers para la vista
+  getDatosEstado(estado: string) {
+    return this.diccionarioEstados[estado] || { titulo: estado, descripcion: 'Estamos gestionando tu trámite.' };
+  }
+
+  isEstadoExcepcion(estado: string): boolean {
+    return estado === 'Falta documentación' || estado === 'No podemos tomarlo';
+  }
+
+  getCurrentStepIndex(estado: string): number {
+    return this.pasosNormales.indexOf(estado);
+  }
+
   constructor() {}
 
   onSubmit() {

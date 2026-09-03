@@ -197,3 +197,34 @@
   
   .result-message { font-size: 0.9rem; padding: 0; }
 }
+
+/* Estilos dinámicos para los nuevos estados */
+.estado-normal {
+  background-color: #eff6ff; 
+  color: var(--color-primario); 
+  .status-icon-large { background: #dbeafe; }
+}
+
+.estado-excepcion {
+  background-color: #fef2f2; 
+  color: #b91c1c; 
+  border: 1px solid #fecaca;
+  .status-icon-large { background: #fee2e2; }
+}
+
+/* Botón WhatsApp */
+.btn-whatsapp-dynamic {
+  display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+  width: 100%; padding: 1rem;
+  background-color: #25d366; /* Verde oficial de WhatsApp */
+  color: white; border-radius: 50px; font-weight: 700;
+  text-decoration: none; transition: all 0.2s;
+  
+  .icon { width: 24px; height: 24px; }
+  
+  &:hover {
+    background-color: #1ebc56;
+    transform: translateY(-2px);
+    color: white;
+  }
+}
