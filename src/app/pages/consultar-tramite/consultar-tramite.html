@@ -1,4 +1,48 @@
-<div *ngIf="resultado" class="resultado-container anim-slide-up">
+<div class="page-container anim-fade-in">
+
+  <app-card [titulo]="'Seguimiento de Expediente'">
+
+    <!-- ESTADO 1: FORMULARIO DE BÚSQUEDA -->
+    <ng-container *ngIf="!resultado && !isLoading">
+      <div class="search-header">
+        <h2>Consultá el estado de tu trámite</h2>
+        <p>Ingresá el código de seguimiento que recibiste por email.</p>
+      </div>
+      
+      <form class="consulta-form" [formGroup]="consultaForm" (ngSubmit)="onSubmit()">
+        <div class="form-field">
+          <div class="input-wrapper-hero">
+            <span class="search-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" /></svg>
+            </span>
+            <input id="codigo" type="text" formControlName="codigo" placeholder="Ingresá tu código aquí..." autocomplete="off">
+          </div>
+          <div *ngIf="consultaForm.get('codigo')?.touched && consultaForm.get('codigo')?.invalid" class="error-msg">
+            El código es requerido.
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-hero" [disabled]="consultaForm.invalid">
+          Buscar Expediente
+        </button>
+      </form>
+
+      <div *ngIf="errorMensaje" class="alert-error anim-slide-up">
+        <div class="icon-error">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" /></svg>
+        </div>
+        <span>{{ errorMensaje }}</span>
+      </div>
+    </ng-container>
+
+    <!-- ESTADO 2: CARGANDO -->
+    <div *ngIf="isLoading" class="loading-container anim-fade-in">
+      <div class="spinner-grande"></div>
+      <p>Consultando base de datos...</p>
+    </div>
+
+    <!-- ESTADO 3: RESULTADOS CON LA LÍNEA DE TIEMPO NUEVA -->
+    <div *ngIf="resultado" class="resultado-container anim-slide-up">
       
       <div class="result-meta">
         <div class="code-badge">
@@ -53,3 +97,6 @@
       </button>
 
     </div>
+
+  </app-card>
+</div>
