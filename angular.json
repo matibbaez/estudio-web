@@ -35,7 +35,9 @@
             ],
             "server": "src/main.server.ts",
             "outputMode": "server",
-            "ssr": true
+            "ssr": {
+              "entry": "src/server.ts"
+            }
           },
           "configurations": {
             "production": {
