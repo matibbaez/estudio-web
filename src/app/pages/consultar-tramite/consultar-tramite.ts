@@ -1,26 +1,28 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { forkJoin, timer, of } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-import { CardComponent } from '../../components/card/card'; // <--- ¡IMPORTANTE!
+import { CardComponent } from '../../components/card/card'; 
 import { NotificacionService } from '../../services/notificacion';
 import { RouterModule } from '@angular/router';
+import { SeoService } from '../../core/seo.service'; // <-- Importamos el servicio SEO
 
 @Component({
   selector: 'app-consultar-tramite',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule, CardComponent], // <--- ¡AGREGADO!
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, CardComponent], 
   templateUrl: './consultar-tramite.html',
   styleUrl: './consultar-tramite.scss'
 })
-export class ConsultarTramiteComponent {
+export class ConsultarTramiteComponent implements OnInit {
   
   private fb = inject(FormBuilder);
   private http = inject(HttpClient);
   private notificacionService = inject(NotificacionService);
+  private seoService = inject(SeoService); // <-- Inyectamos el servicio SEO
 
   resultado: any = null;
   errorMensaje: string | null = null;
@@ -48,6 +50,16 @@ export class ConsultarTramiteComponent {
     'Recibido', 'En revisión', 'Presentado', 'Con fecha', 'Audiencia hecha', 'Dictamen', 'Cerrado'
   ];
 
+  ngOnInit(): void {
+    // --- SEO TAGS ---
+    this.seoService.generarTags({
+      title: 'Seguimiento de Expediente | ReclamARTe',
+      description: 'Ingresá tu código y conocé el estado actualizado de tu trámite al instante, sin tener que llamar al estudio.',
+      image: 'https://reclamarte.ar/logo-seo-compartir.png', 
+      url: 'https://reclamarte.ar/consultar-tramite'
+    });
+  }
+
   // Helpers para la vista
   getDatosEstado(estado: string) {
     return this.diccionarioEstados[estado] || { titulo: estado, descripcion: 'Estamos gestionando tu trámite.' };
@@ -60,8 +72,6 @@ export class ConsultarTramiteComponent {
   getCurrentStepIndex(estado: string): number {
     return this.pasosNormales.indexOf(estado);
   }
-
-  constructor() {}
 
   onSubmit() {
     this.resultado = null;

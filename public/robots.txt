@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# Rutas privadas bloqueadas para los bots
+Disallow: /admin-dashboard
+Disallow: /login
+Disallow: /perfil
+
+# Ubicación del sitemap
+Sitemap: https://reclamarte.ar/sitemap.xml

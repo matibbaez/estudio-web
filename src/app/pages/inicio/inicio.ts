@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { SeoService } from '../../core/seo.service'; // Importamos el servicio
 
 @Component({
   selector: 'app-inicio',
@@ -9,7 +10,20 @@ import { RouterModule } from '@angular/router';
   templateUrl: './inicio.html',
   styleUrl: './inicio.scss'
 })
-export class InicioComponent {
+export class InicioComponent implements OnInit {
+
+  // Inyectamos el servicio de SEO en el constructor
+  constructor(private seoService: SeoService) {}
+
+  ngOnInit(): void {
+    // Disparamos las etiquetas apenas carga el componente
+    this.seoService.generarTags({
+      title: 'ReclamARTe | Plataforma de Gestión Legal',
+      description: 'Iniciá tu reclamo de ART de forma rápida, segura y 100% online. Simplificamos el proceso legal sin vueltas ni burocracia.',
+      image: 'https://reclamarte.ar/logo-seo-compartir.png', // URL absoluta con tu dominio
+      url: 'https://reclamarte.ar/'
+    });
+  }
 
   // Datos de las preguntas frecuentes
   faqs = [

@@ -4,6 +4,7 @@ import { provideRouter, withInMemoryScrolling, withRouterConfig } from '@angular
 import { jwtInterceptor } from './auth/jwt-interceptor';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { routes } from './app.routes';
+import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -21,6 +22,6 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(
       withInterceptors([jwtInterceptor])
     ),
-    provideAnimations()
+    provideAnimations(), provideClientHydration(withEventReplay())
   ]
 };

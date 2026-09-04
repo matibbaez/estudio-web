@@ -7,6 +7,7 @@ import { environment } from '../../../environments/environment';
 import { CardComponent } from '../../components/card/card';
 import { NotificacionService } from '../../services/notificacion';
 import { ImageCompressService } from '../../services/image-compress.service';
+import { SeoService } from '../../core/seo.service'; // <-- Importamos el servicio SEO
 
 const MAX_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB
 const ALLOWED_MIME_TYPES = ['application/pdf', 'image/jpeg', 'image/png'];
@@ -25,6 +26,7 @@ export class IniciarReclamoComponent implements OnInit {
   private notificacionService = inject(NotificacionService);
   private route = inject(ActivatedRoute);
   private imageCompress = inject(ImageCompressService);
+  private seoService = inject(SeoService); // <-- Inyectamos el servicio SEO
 
   isLoading = false;
   isSubmitted = false; 
@@ -65,6 +67,14 @@ export class IniciarReclamoComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    // --- SEO TAGS ---
+    this.seoService.generarTags({
+      title: 'Iniciar Trámite | ReclamARTe',
+      description: 'Seleccioná tu tipo de reclamo, cargá la documentación desde tu celular y nosotros nos encargamos del resto.',
+      image: 'https://reclamarte.ar/logo-seo-compartir.png', 
+      url: 'https://reclamarte.ar/iniciar-reclamo'
+    });
+
     this.route.queryParams.subscribe(params => {
       if (params['revoca'] === 'true') {
         this.activarModoRevoca();
