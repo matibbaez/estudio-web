@@ -11,7 +11,7 @@ import { environment } from '../../../environments/environment';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule, CardComponent], // ¡Importamos la Card!
+  imports: [CommonModule, ReactiveFormsModule, RouterModule], // ¡Importamos la Card!
   templateUrl: './login.html',
   styleUrl: './login.scss'
 })
