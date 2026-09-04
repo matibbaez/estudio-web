@@ -14,11 +14,19 @@
         
         <div class="status-tabs">
           <button class="tab-btn" [class.active]="filtroEstado === ''" (click)="cambiarEstado('')">Todos</button>
+          
+          <!-- Estados Normales (Línea de tiempo) -->
           <button class="tab-btn" [class.active]="filtroEstado === 'Recibido'" (click)="cambiarEstado('Recibido')">Recibidos</button>
           <button class="tab-btn" [class.active]="filtroEstado === 'En revisión'" (click)="cambiarEstado('En revisión')">En Revisión</button>
-          <button class="tab-btn" [class.active]="filtroEstado === 'Falta documentación'" (click)="cambiarEstado('Falta documentación')">Falta Doc</button>
-          <button class="tab-btn" [class.active]="filtroEstado === 'No podemos tomarlo'" (click)="cambiarEstado('No podemos tomarlo')">Rechazados</button>
+          <button class="tab-btn" [class.active]="filtroEstado === 'Presentado'" (click)="cambiarEstado('Presentado')">Presentados</button>
+          <button class="tab-btn" [class.active]="filtroEstado === 'Con fecha'" (click)="cambiarEstado('Con fecha')">Con Fecha</button>
+          <button class="tab-btn" [class.active]="filtroEstado === 'Audiencia hecha'" (click)="cambiarEstado('Audiencia hecha')">Audiencia Hecha</button>
+          <button class="tab-btn" [class.active]="filtroEstado === 'Dictamen'" (click)="cambiarEstado('Dictamen')">Dictamen</button>
           <button class="tab-btn" [class.active]="filtroEstado === 'Cerrado'" (click)="cambiarEstado('Cerrado')">Cerrados</button>
+          
+          <!-- Estados de Excepción -->
+          <button class="tab-btn btn-warning-tab" [class.active]="filtroEstado === 'Falta documentación'" (click)="cambiarEstado('Falta documentación')">Falta Doc</button>
+          <button class="tab-btn btn-danger-tab" [class.active]="filtroEstado === 'No podemos tomarlo'" (click)="cambiarEstado('No podemos tomarlo')">Rechazados</button>
         </div>
 
         <div class="filters-right">

@@ -423,3 +423,16 @@
   .status-tabs { overflow-x: auto; }
   .select-profesional { width: 100%; }
 }
+
+/* Resalte sutil para las pestañas de excepción en la barra de filtros */
+.btn-warning-tab {
+  color: #b45309; /* Naranja/Ámbar oscuro */
+  &.active { background-color: #fffbeb; color: #b45309; box-shadow: 0 1px 3px rgba(217, 119, 6, 0.2); border: 1px solid #fde68a; }
+  &:hover:not(.active) { color: #d97706; background-color: #fef3c7; }
+}
+
+.btn-danger-tab {
+  color: #b91c1c; /* Rojo oscuro */
+  &.active { background-color: #fef2f2; color: #b91c1c; box-shadow: 0 1px 3px rgba(239, 68, 68, 0.2); border: 1px solid #fca5a5; }
+  &:hover:not(.active) { color: #dc2626; background-color: #fee2e2; }
+}

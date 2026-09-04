@@ -48,11 +48,12 @@
   
   /* ESTILO DEL NUEVO LOGO */
   .logo-img {
-    height: 60px; /* Tamaño ideal para encabezado de tarjeta */
+    height: 60px; /* Tamaño base */
     width: auto;
     display: block;
-    margin: 0 auto 1rem auto; /* Centrado horizontal con margen abajo */
+    margin: 0 auto 1.5rem auto; /* Más margen abajo para compensar el zoom */
     object-fit: contain;
+    transform: scale(1.4); /* Zoom para comerse el margen transparente de la imagen */
   }
 
   p {
@@ -100,7 +101,7 @@
 
   input {
     width: 100%;
-    padding: 0.9rem 1rem 0.9rem 3rem; /* Espacio a la izquierda para el ícono */
+    padding: 0.9rem 1rem 0.9rem 3rem; 
     border: 2px solid #e2e8f0;
     border-radius: 10px;
     font-size: 1rem;
@@ -113,13 +114,13 @@
     &:focus {
       outline: none;
       background-color: white;
-      border-color: var(--color-primario);
-      box-shadow: 0 0 0 4px rgba(34, 39, 97, 0.1); 
+      border-color: var(--color-acento); /* Ahora usa el Azul Corporativo */
+      box-shadow: 0 0 0 4px rgba(5, 90, 154, 0.15); /* Sombra en Azul ReclamARTe */
     }
     
-    /* Al enfocar el input, pintamos el ícono del color primario */
+    /* Al enfocar el input, pintamos el ícono del color acento */
     &:focus + .icon, &:focus ~ .icon {
-        color: var(--color-primario);
+        color: var(--color-acento);
     }
   }
 
@@ -151,7 +152,7 @@
 .btn-login {
   width: 100%;
   padding: 1rem;
-  background-color: var(--color-primario);
+  background-color: var(--color-primario); /* Gris/Azul muy oscuro */
   color: white;
   border: none;
   border-radius: 10px;
@@ -164,12 +165,12 @@
   justify-content: center;
   align-items: center;
   min-height: 54px; 
-  box-shadow: 0 4px 6px -1px rgba(26, 35, 126, 0.2);
+  box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.2); /* Sombra Slate */
 
   &:hover {
     background-color: var(--color-primario-hover);
     transform: translateY(-2px);
-    box-shadow: 0 10px 15px -3px rgba(26, 35, 126, 0.3);
+    box-shadow: 0 10px 15px -3px rgba(15, 23, 42, 0.3);
   }
 
   &:active {
@@ -181,7 +182,7 @@
     cursor: not-allowed;
     transform: none;
     box-shadow: none;
-    background-color: #cbd5e1; /* Gris desactivado */
+    background-color: #cbd5e1;
     color: #64748b;
   }
 }
