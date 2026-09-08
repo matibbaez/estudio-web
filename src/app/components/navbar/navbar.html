@@ -43,7 +43,7 @@
     <!-- SECCIÓN PRIVADA MÓVIL -->
     <ng-container *ngIf="usuarioLogueado">
       <div class="divider"></div>
-      <a routerLink="/admin" routerLinkActive="active" (click)="cerrarMenu()" class="link-admin">Panel Admin</a>
+      <a routerLink="/admin-dashboard" routerLinkActive="active" (click)="cerrarMenu()" class="link-admin">Panel Admin</a>
       <a routerLink="/perfil" routerLinkActive="active" (click)="cerrarMenu()">Mi Perfil</a>
       <a class="link-logout" (click)="cerrarSesion()">Cerrar Sesión</a>
     </ng-container>

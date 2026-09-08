@@ -28,4 +28,11 @@ export class SeoService {
     this.meta.updateTag({ name: 'twitter:description', content: config.description });
     this.meta.updateTag({ name: 'twitter:image', content: config.image });
   }
+
+  // 🔒 Refuerzo además del Disallow de robots.txt: si por algún motivo
+  // Google llega a rastrear una ruta privada, esta etiqueta le pide
+  // explícitamente que no la indexe.
+  bloquearIndexacion() {
+    this.meta.updateTag({ name: 'robots', content: 'noindex, nofollow' });
+  }
 }

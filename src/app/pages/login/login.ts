@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
@@ -7,6 +7,7 @@ import { NotificacionService } from '../../services/notificacion';
 import { Router } from '@angular/router';
 import { RouterModule } from '@angular/router';
 import { environment } from '../../../environments/environment';
+import { SeoService } from '../../core/seo.service'; // <-- Importamos el servicio SEO
 
 @Component({
   selector: 'app-login',
@@ -15,12 +16,13 @@ import { environment } from '../../../environments/environment';
   templateUrl: './login.html',
   styleUrl: './login.scss'
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
 
   private fb = inject(FormBuilder);
   private http = inject(HttpClient);
   private notificacionService = inject(NotificacionService);
   private router = inject(Router); // 2. ¡Inyectamos el Router!
+  private seoService = inject(SeoService); // <-- Inyectamos el servicio SEO
 
   isLoading = false;
 
@@ -30,6 +32,17 @@ export class LoginComponent {
   });
 
   constructor() {}
+
+  ngOnInit(): void {
+    // --- SEO: título propio + noindex (página privada) ---
+    this.seoService.generarTags({
+      title: 'Ingresar | ReclamARTe',
+      description: 'Portal administrativo de ReclamARTe.',
+      image: 'https://reclamarte.ar/logo-seo-compartir.png',
+      url: 'https://reclamarte.ar/login'
+    });
+    this.seoService.bloquearIndexacion();
+  }
 
   onSubmit() {
     if (this.loginForm.invalid) {

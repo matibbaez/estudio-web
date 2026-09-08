@@ -4,6 +4,7 @@ import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { NotificacionService } from '../../services/notificacion';
+import { SeoService } from '../../core/seo.service'; // <-- Importamos el servicio SEO
 
 @Component({
   selector: 'app-perfil',
@@ -16,6 +17,7 @@ export class PerfilComponent implements OnInit {
   private fb = inject(FormBuilder);
   private http = inject(HttpClient);
   private notificacionService = inject(NotificacionService);
+  private seoService = inject(SeoService); // <-- Inyectamos el servicio SEO
 
   isLoading = false;
 
@@ -34,6 +36,15 @@ export class PerfilComponent implements OnInit {
   }, { validators: this.passwordsMatchValidator });
 
   ngOnInit() {
+    // --- SEO: título propio + noindex (página privada) ---
+    this.seoService.generarTags({
+      title: 'Mi Perfil | ReclamARTe',
+      description: 'Gestión de perfil y seguridad de la cuenta.',
+      image: 'https://reclamarte.ar/logo-seo-compartir.png',
+      url: 'https://reclamarte.ar/perfil'
+    });
+    this.seoService.bloquearIndexacion();
+
     this.cargarDatosUsuario();
   }
 

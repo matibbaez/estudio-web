@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReclamosService } from '../../services/reclamos.service';
 import { CardComponent } from '../../components/card/card';
 import { GestionarReclamoModalComponent } from '../../components/gestionar-reclamo-modal/gestionar-reclamo-modal';
+import { SeoService } from '../../core/seo.service'; // <-- Importamos el servicio SEO
 
 export interface IReclamo {
   id: string;
@@ -44,6 +45,7 @@ export interface IReclamo {
 export class AdminDashboardComponent implements OnInit {
 
   private reclamosService = inject(ReclamosService);
+  private seoService = inject(SeoService); // <-- Inyectamos el servicio SEO
 
   // Variables de Datos
   ordenDescendente = true;
@@ -60,6 +62,15 @@ export class AdminDashboardComponent implements OnInit {
   actualizandoId: string | null = null;
 
   ngOnInit() {
+    // --- SEO: título propio + noindex (página privada) ---
+    this.seoService.generarTags({
+      title: 'Panel de Administración | ReclamARTe',
+      description: 'Panel interno de gestión de trámites de ReclamARTe.',
+      image: 'https://reclamarte.ar/logo-seo-compartir.png',
+      url: 'https://reclamarte.ar/admin-dashboard'
+    });
+    this.seoService.bloquearIndexacion();
+
     this.cargarDatos();
   }
 
