@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { SeoService } from '../../core/seo.service'; // Importamos el servicio
@@ -8,6 +8,7 @@ import { SeoService } from '../../core/seo.service'; // Importamos el servicio
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './inicio.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './inicio.scss'
 })
 export class InicioComponent implements OnInit {

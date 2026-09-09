@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
@@ -15,6 +15,7 @@ import { SeoService } from '../../core/seo.service'; // <-- Importamos el servic
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterModule, CardComponent], 
   templateUrl: './consultar-tramite.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './consultar-tramite.scss'
 })
 export class ConsultarTramiteComponent implements OnInit {

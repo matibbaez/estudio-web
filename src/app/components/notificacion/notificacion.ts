@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Notificacion } from '../../services/notificacion'; // Importamos la "forma"
 
@@ -7,6 +7,7 @@ import { Notificacion } from '../../services/notificacion'; // Importamos la "fo
   standalone: true,
   imports: [CommonModule],
   templateUrl: './notificacion.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './notificacion.scss'
 })
 export class NotificacionComponent {

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReclamosService } from '../../services/reclamos.service';
 import { CardComponent } from '../../components/card/card';
@@ -40,6 +40,7 @@ export interface IReclamo {
   standalone: true,
   imports: [CommonModule, CardComponent, GestionarReclamoModalComponent],
   templateUrl: './admin-dashboard.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './admin-dashboard.scss'
 })
 export class AdminDashboardComponent implements OnInit {

@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit, inject } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
@@ -15,6 +15,7 @@ type TipoArchivo = 'dni' | 'recibo' | 'alta' | 'formSRT' | 'carta_documento' | '
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './gestionar-reclamo-modal.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './gestionar-reclamo-modal.scss'
 })
 export class GestionarReclamoModalComponent implements OnInit {

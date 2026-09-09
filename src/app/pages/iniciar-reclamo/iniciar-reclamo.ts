@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms'; 
 import { HttpClient } from '@angular/common/http';
@@ -17,6 +17,7 @@ const ALLOWED_MIME_TYPES = ['application/pdf', 'image/jpeg', 'image/png'];
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, CardComponent], 
   templateUrl: './iniciar-reclamo.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './iniciar-reclamo.scss'
 })
 export class IniciarReclamoComponent implements OnInit {

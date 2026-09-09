@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { RouterOutlet, Router, NavigationEnd } from '@angular/router'; // IMPORTAR ROUTER
 import { NavbarComponent } from './components/navbar/navbar';
 import { CommonModule } from '@angular/common';
@@ -21,6 +21,7 @@ import { filter } from 'rxjs/operators'; // IMPORTAR FILTER
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   animations: [fadeAnimation]
 })
 export class AppComponent implements OnInit {

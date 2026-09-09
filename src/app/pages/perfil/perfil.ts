@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
@@ -11,6 +11,7 @@ import { SeoService } from '../../core/seo.service'; // <-- Importamos el servic
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './perfil.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './perfil.scss'
 })
 export class PerfilComponent implements OnInit {
